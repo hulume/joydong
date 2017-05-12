@@ -16,9 +16,7 @@
 				</ul>
 				<div class="tab-content">
 					<div class="tab-pane active" id="first">
-						<a @click.prevent="addMenu"  class="btn btn-primary">
-							<i class="fa fa-plus"></i> 选取图文素材
-						</a>
+						<welink :list="partOne" :model="partOne"></welink>
 					</div>
 					<div class="tab-pane" id="second">
 						SITE
@@ -32,15 +30,17 @@
 	</div>
 </template>
 <script>
+	import welink from '../components/WesiteLink'
 	export default {
 		data () {
 			return {
-				menu: {
-					title: '',
-					icon: '',
-					color: ''
-				}
+				partOne: [],
+				partTwo: [],
+				partThree: []
 			}
+		},
+		components: {
+			welink
 		}
 	}
 </script>

@@ -46,12 +46,12 @@ export default [
             {
                 path: 'weixin',
                 name: '微信管理',
-                component: require('./views/Weixin.vue')
+                component: require('./views/Wesite.vue')
             },
             {
                 path: 'aged',
                 name: '老年人口管理',
-                component: require('./views/Weixin.vue')
+                component: require('./views/Wesite.vue')
             },
             {
                 path: 'pops',

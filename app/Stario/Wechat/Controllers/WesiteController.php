@@ -3,7 +3,8 @@
 namespace Star\Wechat\Controllers;
 
 use App\Http\Controllers\Controller;
-use Star\utils\StarJson;
+use EasyWeChat;
+use Illuminate\Http\Request;
 use Star\Wechat\Wesite;
 
 class WesiteController extends Controller {
@@ -13,17 +14,13 @@ class WesiteController extends Controller {
 		$this->settings = $wesite->first()->settings();
 	}
 
-	public function getFocus() {
-		return $this->settings->all();
-	}
-
-	public function createFocus() {
-		if ($this->settings->set('focus', [['title' => 'aaa', 'url' => 'http://www.baidu.com'], ['title' => 'bbb', 'url' => 'http://stario.net']])) {
-			StarJson::create('设置成功', 200);
+	public function linkMaterial(Request $request) {
+		$thumb_ids = array_pluck($request->except('id'), 'thumb_media_id');
+		$material = EasyWeChat::material();
+		foreach ($thumb_ids as $id) {
+			$thumb = $material->get($id);
+			response()->download(public_path() . '/wesite/', $thumb, $headers);
 		}
-	}
-
-	public function createMenu() {
-
+		// $thumb = $material->get();
 	}
 }

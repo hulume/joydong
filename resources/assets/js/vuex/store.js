@@ -23,7 +23,7 @@ const getters = {
     getProfile: () => state.userInfo.profile,
     // getNotification: () => state.userInfo.notifications,
     getWeather: state => state.weather,
-    getPermissions: () => state.userInfo.rolemission,
+    getPermissions: () => state.userInfo.rolemission
 }
 
 export default new Vuex.Store({

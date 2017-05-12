@@ -11,7 +11,7 @@
     <link rel="shortcut icon" href="/favicon.ico" />
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>{{ config('app.name', 'Wemesh') }}登录</title>
-    <link href={{asset('css/app.css')}} rel="stylesheet">
+    <link href={{mix('css/app.css')}} rel="stylesheet">
     <script>
         window.Wemesh = <?php echo json_encode(['csrfToken' => csrf_token()]); ?>
     </script>
@@ -30,6 +30,6 @@
     		</div>
     	</div>
     </div>
-    <script src={{asset('js/mini.js')}}></script>
+    <script src={{mix('js/mini.js')}}></script>
 </body>
 </html>

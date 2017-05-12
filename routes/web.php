@@ -18,7 +18,7 @@ Route::get('/', function () {
 /*
 Wechat
  */
-Route::group(['prefix' => 'wechat', 'middleware' => 'auth:api'], function () {
+Route::group(['prefix' => 'wechat', 'middleware' => 'auth'], function () {
 	Route::any('/', '\Star\Wechat\Controllers\WechatController@serve');
 	Route::get('user', '\Star\Wechat\Controllers\WechatController@user')->middleware('wechat.oauth');
 	Route::get('material', '\Star\Wechat\Controllers\WechatController@material');

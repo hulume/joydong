@@ -4,3 +4,6 @@ Route::get('wechat/user', '\Star\Wechat\Controllers\WechatController@user')->mid
 Route::get('wechat/material', '\Star\Wechat\Controllers\WechatController@material');
 Route::get('wechat/summary', '\Star\Wechat\Controllers\WechatController@summary');
 Route::get('wechat/menu', '\Star\Wechat\Controllers\WechatController@menu');
+
+// 微网站
+Route::post('wesite/link', '\Star\Wechat\Controllers\WesiteController@linkMaterial');
