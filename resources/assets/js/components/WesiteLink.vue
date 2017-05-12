@@ -63,7 +63,7 @@
 		methods: {
 			loadMaterial () {
 				this.$store.commit('loading')
-				axios.get('http://demo2098390.mockable.io/wechat')
+				axios.get('wechat/material')
 				.then((response) => {
 					this.material = response.data.item
 					this.$store.commit('loaded')
