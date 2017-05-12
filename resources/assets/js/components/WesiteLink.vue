@@ -63,7 +63,7 @@
 		methods: {
 			loadMaterial () {
 				this.$store.commit('loading')
-				axios.get('/wechat/material')
+				axios.get('http://demo2098390.mockable.io/wechat')
 				.then((response) => {
 					this.material = response.data.item
 					this.$store.commit('loaded')
@@ -92,7 +92,7 @@
 			},
 			onSave () {
 				this.$store.commit('loading')
-				let data = _.map(this.selected, _.partialRight(_.pick, ['title', 'digest', 'url', 'thumb_media_id']))
+				let data = _.map(this.selected, _.partialRight(_.pick, ['title', 'digest', 'url', 'thumb_media_id', 'thumb_url']))
 				axios.post('/wesite/link', data)
 					.then((response) => {
 						toastr.success(response.data)

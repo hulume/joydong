@@ -15,12 +15,17 @@ class WesiteController extends Controller {
 	}
 
 	public function linkMaterial(Request $request) {
-		$thumb_ids = array_pluck($request->except('id'), 'thumb_media_id');
+		// $thumb_ids = array_pluck($request->except('id'), 'thumb_media_id');
+		$data = $request->except('id');
 		$material = EasyWeChat::material();
-		foreach ($thumb_ids as $id) {
-			$thumb = $material->get($id);
-			file_put_contents(public_path() . '/upload/wechat' . $id, $thumb);
+		foreach ($data as $key => $item) {
+			$thumb = $material->get($item['thumb_media_id']);
+			$type = $this->findWxfmt($item['thumb_url']);
+			file_put_contents(public_path() . '/upload/wesite/' . $id . $type, $thumb);
 		}
 		// $thumb = $material->get();
+	}
+	private function findWxfmt($url) {
+		return explode('?wx_fmt=', $url)[1];
 	}
 }
