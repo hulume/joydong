@@ -11,7 +11,7 @@
     <link rel="shortcut icon" href="/favicon.ico" />
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>{{ config('app.name', 'Wemesh') }}</title>
-    <link href={{assets('css/app.css')}} rel="stylesheet">
+    <link href={{asset('css/app.css')}} rel="stylesheet">
     <script>
         window.Wemesh = {csrfToken: "{{ csrf_token() }}", id: "{{ Auth::id()}}"}
         window.app = "{{config('app.name', 'Wemesh')}}"
@@ -19,7 +19,7 @@
 </head>
 <body class="skin-blue fixed">
     <div id="app"></div>
-    <script src={{assets('js/app.js')}}></script>
+    <script src={{asset('js/app.js')}}></script>
     @yield('scripts')
 </body>
 </html>
