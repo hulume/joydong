@@ -4,8 +4,8 @@ use App\User;
 use Illuminate\Database\Seeder;
 use Star\ICenter\Models\Profile;
 use Star\ICenter\Models\Unit;
-use Star\Icenter\Permission\Models\Permission;
-use Star\Icenter\Permission\Models\Role;
+use Star\ICenter\Permission\Models\Permission;
+use Star\ICenter\Permission\Models\Role;
 
 class IcenterSeeder extends Seeder {
 	/**
