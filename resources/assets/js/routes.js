@@ -45,7 +45,7 @@ export default [
             },
             {
                 path: 'weixin',
-                name: '微信管理',
+                name: '微网站管理',
                 component: require('./views/Wesite.vue')
             },
             {

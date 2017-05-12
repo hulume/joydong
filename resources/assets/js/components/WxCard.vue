@@ -29,7 +29,7 @@
 			return {
 				cumulate: {
 					title: {
-						text: '微信近七天关注用户数量'
+						text: '微信近期关注用户数量'
 					},
 					xAxis:  {
 						type: 'category',
