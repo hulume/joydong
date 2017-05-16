@@ -6,9 +6,7 @@ import * as mutations from './mutations.js';
 Vue.use(Vuex);
 
 const state = {
-    loading: {
-        fired: false
-    },
+    loading: false,
     userInfo: {
       profile: {},
       // unreadNotifications: {},

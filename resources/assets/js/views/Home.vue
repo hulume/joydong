@@ -1,76 +1,38 @@
 <template>
-		<section class="content">
-			<div class="row">
-			        <div class="col-lg-3 col-xs-6">
-			          <!-- small box -->
-			          <div class="small-box bg-aqua">
-			            <div class="inner">
-			              <h3>{{statistics.users}} 人</h3>
-			              <p>系统人数</p>
-			            </div>
-			            <div class="icon">
-			              <i class="fa fa-user"></i>
-			            </div>
-			          </div>
-			        </div>
-			        <!-- ./col -->
-			        <div class="col-lg-3 col-xs-6">
-			          <!-- small box -->
-			          <div class="small-box bg-green">
-			            <div class="inner">
-			              <h3>{{statistics.units}} 个</h3>
-			              <p>部门总数</p>
-			            </div>
-			            <div class="icon">
-			              <i class="fa fa-group"></i>
-			            </div>
-			          </div>
-			        </div>
-			        <!-- ./col -->
-			        <div class="col-lg-3 col-xs-6">
-			          <!-- small box -->
-			          <div class="small-box bg-yellow">
-			            <div class="inner">
-			              <h3>{{statistics.pops}} 人</h3>
-			              <p>流动人口数量</p>
-			            </div>
-			            <div class="icon">
-			              <i class="fa fa-street-view"></i>
-			            </div>
-			          </div>
-			        </div>
-			        <!-- ./col -->
-			        <div class="col-lg-3 col-xs-6">
-			          <!-- small box -->
-			          <div class="small-box bg-red">
-			            <div class="inner">
-			              <h3>{{statistics.aged}} 人</h3>
-
-			              <p>老年人口数量</p>
-			            </div>
-			            <div class="icon">
-			              <i class="fa fa-blind"></i>
-			            </div>
-			          </div>
-			        </div>
-			        <!-- ./col -->
-			      </div>
-			      			<wx-card></wx-card>
-		</section>
+	<div>
+		<el-row :gutter="15">
+			<el-col :span="6">
+				<widget :title="statistics.users+' 人'" digest="管理人员" icon="user" color="info"></widget>
+			</el-col>
+			<el-col :span="6">
+				<widget :title="statistics.units+' 个'" digest="部门总数" icon="users" color="success"></widget>
+			</el-col>
+			<el-col :span="6">
+				<widget :title="statistics.pops+' 人'" digest="流动人口数量" icon="street-view" color="warning"></widget>
+			</el-col>
+			<el-col :span="6">
+				<widget :title="statistics.aged+' 人'" digest="老年人口数量" icon="blind" color="danger"></widget>
+			</el-col>
+		</el-row>
+		<wx-card></wx-card>
+	</div>
 </template>
 <script>
 	import WxCard from '../components/WxCard'
+	import Widget from '../components/Widget'
 	export default {
 		data () {
 			return {
-				statistics: {}
+				statistics: {
+					users: '0',
+					units: '0',
+					pops: '0',
+					aged: '0'
+				}
 			}
 		},
 		created () {
 			this.fetchData()
-		},
-		watch: {
-			'$route': 'fetchData'
 		},
 		methods: {
 			fetchData () {
@@ -83,8 +45,7 @@
 			}
 		},
 		components: {
-			WxCard
+			WxCard, Widget
 		}
 	}
 </script>
-

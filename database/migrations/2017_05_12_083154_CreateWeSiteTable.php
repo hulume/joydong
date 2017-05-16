@@ -10,33 +10,35 @@ class CreateWeSiteTable extends Migration {
 	 *
 	 * @return void
 	 */
-	Schema::create('wx_menus', function (Blueprint $table) {
-		$table->increments('id');
-		$table->string('label', 30);
-		$table->unsignedTinyInteger('order')->nullable();
-		$table->string('route', 20)->nullable();
-		$table->string('icon', 20)->nullable();
-		$talbe->string('color', 10)->nullable();
-		$table->timestamps();
-	});
+	public function up() {
+		Schema::create('wesite_menus', function (Blueprint $table) {
+			$table->increments('id');
+			$table->string('label', 30);
+			$table->boolean('is_mainbar')->defalut(false);
+			$table->unsignedTinyInteger('order')->nullable();
+			$table->string('route', 20)->nullable();
+			$table->string('icon', 20)->nullable();
+			$table->string('color', 10)->nullable();
+			$table->timestamps();
+		});
 
-	Schema::create('wx_posts', function (Blueprint $table) {
-		$table->increments('id');
-		$table->string('title', 30);
-		$table->string('thumb_url');
-		$table->string('url');
-		$talbe->string('digest')->nullable();
-		$table->string()
-		$table->timestamps();
-	});
-
+		Schema::create('wesite_posts', function (Blueprint $table) {
+			$table->increments('id');
+			$table->string('title', 30);
+			$table->string('thumb_url');
+			$table->string('url');
+			$table->string('digest')->nullable();
+			$table->string('author', 20)->nullable();
+			$table->timestamps();
+		});
+	}
 	/**
 	 * Reverse the migrations.
 	 *
 	 * @return void
 	 */
 	public function down() {
-		Schema::dropIfExists('wx_menus');
-		Schema::dropIfExists('wx_posts');
+		Schema::dropIfExists('wesite_menus');
+		Schema::dropIfExists('wesite_posts');
 	}
 }

@@ -2,7 +2,7 @@
   <button class="btn" :class="'btn-' + color" id="getAuthcode" @click.prevent="getAuthcode($event)"><slot>获取短信验证码</slot></button>
 </template>
 <script>
-  import {countdown} from '../plugins/utils'
+  import {countdown} from '../utils/utils'
   export default {
     props: {
       duration: {

@@ -62,7 +62,7 @@ class IcenterSeeder extends Seeder {
 		$profile = Profile::create([
 			'nickname' => 'Partoo',
 			'avatar' => 'http://tva3.sinaimg.cn/crop.0.0.996.996.180/7b9ce441jw8f6jzisiqduj20ro0roq4k.jpg',
-			'sex' => true,
+			'sex' => '男',
 			'birthplace' => 'LA',
 			'qq' => '123321',
 		]);

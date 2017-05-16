@@ -47,7 +47,7 @@ class CreateIcenterTables extends Migration {
 			$table->string('nickname', 12)->default('未名')->nullable();
 			$table->integer('user_id')->nullable();
 			$table->string('avatar')->default('http://static.stario.net/images/avatar.png');
-			$table->boolean('sex')->default(0);
+			$table->string('sex', 5)->default('女');
 			$table->string('qq', 15)->nullable();
 			$table->string('wechat')->nullable();
 			$table->string('birthplace', 30)->nullable();

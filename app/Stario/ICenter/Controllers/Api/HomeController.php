@@ -8,7 +8,7 @@ use Star\ICenter\Repository\Eloquent\SiteRepo;
 use Star\ICenter\Repository\Eloquent\UserRepo;
 use Star\ICenter\Requests\UserSecurityFormRequest;
 use Star\ICenter\Transformers\MeInfoTransformer;
-use Star\utils\StarJson;
+use Star\Utils\StarJson;
 
 class HomeController extends ApiController {
 

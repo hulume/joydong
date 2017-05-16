@@ -36,8 +36,8 @@
 </template>
 <script>
   import AuthCode from './AuthCode.vue'
-  import {isMobile, required} from '../validator'
-  import xhr from '../xhr'
+  import {isMobile, required} from '../utils/validator'
+  // import xhr from '../xhr'
   export default {
     data () {
       return {
@@ -70,7 +70,33 @@
           password: this.user.password,
           authCode: this.user.authCode
         }
-        xhr('post', 'signup?findpass', user, this.message)
+        // xhr('post', 'signup?findpass', user, this.message)
+        axios.post('signup?findpass', user)
+          this.$store.commit('loading')
+          .then((response) => {
+            this.$store.commit('loaded')
+            swal({
+              title: '密码重置成功',
+              text: '您现在可以使用新的密码登录了',
+              type: 'success',
+              allowOutsideClick: false,
+              confirmButtonText: '返回登录'
+            }, function () {
+              window.location.href = '/login'
+            })
+          })
+          .catch((error) => {
+            this.$store.commit('loaded')
+            swal({
+              title: '操作失败',
+              text: error.response.error,
+              type: 'error',
+              allowOutsideClick: false,
+              confirmButtonText: '返回'
+            }, function () {
+              window.location.href = '/login'
+            })
+          })
       }
     },
     components: {

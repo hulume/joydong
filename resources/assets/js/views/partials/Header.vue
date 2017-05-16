@@ -1,158 +1,235 @@
 <template>
-  <header class="main-header">
-    <a href="/" class="logo">
-      <span class="logo-mini">logo</span>
-      <span class="logo-lg"><i class="fa fa-podcast"></i> {{app}}</span>
-    </a>
-    <nav class="navbar navbar-static-top">
-      <a href="" class="sidebar-toggle" data-toggle="offcanvas" role="button">
-        <span class="sr-only">切换菜单</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </a>
-
-      <div class="navbar-custom-menu">
-        <ul class="nav navbar-nav">
-          <!-- <li class="dropdown messages-menu">
-            <a href="" data-toggle="dropdown" class="dropdown-toggle">
-              <i class="fa fa-envelope-o"></i>
-              <span class="label label-success">4</span>
-            </a>
-            <ul class="dropdown-menu">
-              <li class="header">你收到了消息</li>
-              <li>
-                <ul class="menu">
-                  <li>
-                    <a href="#">
-                      <div class="pull-left">
-                        <img src="http://static.stario.net/images/avatar.png" class="img-circle" alt="User Image">
-                      </div>
-                      <h4>
-                        测试消息
-                        <small><i class="fa fa-clock-o"></i> 5 分钟前</small>
-                      </h4>
-                      <p>嫩不能看一下？</p>
-                    </a>
-                  </li>
-                </ul>
-              </li>
-              <li class="footer"><a href="#">全部消息</a></li>
-            </ul>
-          </li> -->
-          <!-- <li class="dropdown notifications-menu">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-              <i class="fa fa-bell-o"></i>
-              <span class="label label-warning" v-show="unreadNotifications.length > 0">{{unreadNotifications.length}}</span>
-            </a>
-            <ul class="dropdown-menu">
-              <li class="header" v-if="unreadNotifications.length > 0">
-              您有{{unreadNotifications.length}}条未读提醒
-              </li>
-              <li class="header" v-else>
-              您没有未读的提醒
-              </li>
-              <li>
-                <ul class="menu">
-                <li v-for="item in unreadNotifications">
-                  <a href="" data-toggle="tooltip" :title="item.data.title">
-                  <i class="fa fa-user-circle" :class="'text-' + item.data.type" v-if="notificationType(item.type) === 'User'"></i> 
-                  <i class="fa fa-street-view" :class="'text-' + item.data.type" v-else-if="notificationType(item.type) === 'Pop'"></i> 
-                  <i class="fa fa-blind" :class="'text-' + item.data.type" v-else-if="notificationType(item.type) === 'Aged'"></i> 
-                  <i class="fa fa-cog" :class="'text-' + item.data.type" v-else="notificationType(item.type) === 'Site'"></i> 
-                  {{item.data.title}}
-                  </a>
-                </li>
-                </ul>
-              </li>
-              <li class="footer"><router-link to="/dashboard/me/event">查看通知中心</router-link></li>
-            </ul>
-          </li> -->
-          <!-- <li class="dropdown tasks-menu"><a href="" data-toggle="dropdown" class="dropdown-toggle">
-            <i class="fa fa-flag-o"></i>
-            <span class="label label-danger">9</span>
-          </a>
-          <ul class="dropdown-menu">
-            <li class="header">您有9项任务正在进行中</li>
-            <li>
-              <ul class="menu">
-                <li><a href="">
-                  <h3>编写年终报告
-                  <small class="pull-right">20%</small>
-                  </h3>
-                  <div class="progress xs">
-                    <div class="progress-bar progress-bar-aqua" style="width:20%" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">
-                      <span class="sr-only">已完成20%</span>
-                    </div>
-                  </div>
-                </a>
-                </li>
-              </ul>
-            </li>
-            <li class="footer">
-              <a href="">全部任务</a>
-            </li>
-          </ul>
-          </li> -->
-          <li class="dropdown user user-menu">
-            <a href="" data-toggle="dropdown" class="dropdown-toggle">
-              <img :src="profile.avatar" alt="用户头像" class="user-image">
-              <span class="hidden-xs">{{userInfo.name}}</span>
-            </a>
-            <ul class="dropdown-menu">
-              <li class="user-header">
-                <img :src="profile.avatar" alt="用户头像" class="img-circle">
-                <p>
-                  {{profile.nickname}} - {{userInfo.unit}}
-                  <small>自{{userInfo.created_at}}加入</small>
-                </p>
-              </li>
-              <li class="user-body">
-                <div class="row">
-                  <div class="col-xs-12 text-center">
-                    <i class="fa fa-birthday-cake text-red"></i> 您的生日在 <span class="text-blue">{{userInfo.diffMyDays}}</span> 
-                  </div>
-                </div>
-              </li>
-              <li class="user-footer">
-                <div class="pull-left">
-                <router-link to="/dashboard/me/profile" class="btn btn-default btn-flat">个人资料</router-link>
-                </div>
-                <div class="pull-right">
-                  <a href="/logout" class="btn btn-default btn-flat">退出系统</a>
-                </div>
-              </li>
-            </ul>
-          </li>
-        </ul>
-      </div>
-    </nav>
-
-  </header>
+	<el-row class="container">
+		<el-col :span="24" class="header" style="position:fixed">
+			<a href="/home" class="logo">
+				<el-col v-if="collapsed" class="logo-mini" :span="10">
+					<i class="fa fa-podcast"></i>
+				</el-col>
+				<el-col v-else class="logo-lg" :span="10">
+					<i class="fa fa-podcast"></i> <span>{{app}}</span>
+				</el-col>
+			</a>
+			<div class="navbar-wrapper">
+				<el-col :span="10">
+					<div class="sidebar-toggle" @click.prevent="collapse">
+						<i class="fa fa-align-justify"></i>
+					</div>
+				</el-col>
+				<el-col :span="4" class="navbar">
+					<div class="navbar-nav">
+						<el-dropdown trigger="click" class="user-menu">
+							<a class="el-dropdown-link userinfo-inner"><img :src="profile.avatar" /> {{userInfo.name}}</a>
+							<el-dropdown-menu slot="dropdown">
+								<el-dropdown-item>我的消息</el-dropdown-item>
+								<el-dropdown-item>设置</el-dropdown-item>
+								<el-dropdown-item divided @click.native="logout">退出登录</el-dropdown-item>
+							</el-dropdown-menu>
+						</el-dropdown>
+					</div>
+				</el-col>
+			</div>
+		</el-col>
+	</el-row>
 </template>
-
 <script>
-  export default {
-    data () {
-      return {
-        app: window.app
-      }
-    },
-    computed: {
-      userInfo () {
-        return this.$store.getters.getUserInfo
-      },
-      profile () {
-        return this.$store.getters.getProfile
-      }
-      // unreadNotifications() {
-      //   return this.$store.getters.getNotification
-      // }
-    },
-    // methods: {
-    //   notificationType (str) {
-    //     return _.last(_.split(str, '\\'))
-    //   }
-    // }
-  }
+	export default {
+		data () {
+			return {
+				collapsed: false,
+				app: window.app
+			}
+		},
+		methods: {
+			collapse:function(){
+				this.collapsed=!this.collapsed;
+			}
+		},
+		computed: {
+			userInfo () {
+				return this.$store.getters.getUserInfo
+			},
+			profile () {
+				return this.$store.getters.getProfile
+			}
+		}
+	}
 </script>
+<style scoped lang="scss">
+	$color-primary: #3c8dbc;
+	.container {
+		position: absolute;
+		top: 0px;
+		bottom: 0px;
+		width: 100%;
+		.header {
+			height: 50px;
+			line-height: 50px;
+			background: $color-primary;
+			color:#fff;
+			.navbar-wrapper {
+				-webkit-transition: margin-left .3s ease-in-out;
+				    -o-transition: margin-left .3s ease-in-out;
+				    transition: margin-left .3s ease-in-out;
+				    margin-bottom: 0;
+				    margin-left: 230px;
+				    border: none;
+				    min-height: 50px;
+				    border-radius: 0;
+				.navbar {
+					float: right;
+					.navbar-nav {
+						float: right;
+						margin: 0;
+						padding-left: 0;
+						list-style: none;
+						.el-dropdown {
+							float: left;
+							:hover {
+								background: rgba(0,0,0,0.1);
+								color: #f6f6f6;
+							}
+							a {
+								color: #fff;
+								padding: 15px;
+								line-height: 20px;
+								position: relative;
+								display: block;
+								img {
+									float: left;
+									width: 25px;
+									height: 25px;
+									border-radius: 50%;
+									margin-right: 10px;
+									margin-top: -2px;
+									max-width: none;
+									border: 0;
+									vertical-align: middle;
+								}
+							}
+						}
+					}
+				}
+			}
+			
+			.logo {
+				color: #fff;
+				-webkit-transition: width .3s ease-in-out;
+				    -o-transition: width .3s ease-in-out;
+				    transition: width .3s ease-in-out;
+				.logo-lg {
+					width:230px;
+					height:50px;
+					font-size: 18px;
+					padding-left:20px;
+					padding-right:20px;
+					text-align: center;
+					border-color: rgba(238,241,146,0.3);
+					border-right-width: 1px;
+					border-right-style: solid;
+
+					// transition: width .3s ease-in-out,-webkit-transform .3s ease-in-out;
+					// transition: transform .3s ease-in-out,width .3s ease-in-out;
+					// transition: transform .3s ease-in-out,width .3s ease-in-out,-webkit-transform .3s ease-in-out;
+
+					span {
+					}
+					img {
+						width: 40px;
+						float: left;
+						margin: 10px 10px 10px 18px;
+					}
+					.txt {
+						color:#fff;
+					}
+				}
+				// .logo-lg{
+				// 	width:230px;
+				// 	transition: width 0.5s;
+				// }
+				.logo-mini{
+					background: rgba(0, 0, 0, 0.1);
+					width: 50px;
+					text-align: center;
+					// display: block;
+					// margin-left: -15px;
+					// margin-right: -15px;
+					font-size: 18px;
+				}
+			}
+			.sidebar-toggle{
+				padding: 0px 18px;
+				width:14px;
+				height: 50px;
+				line-height: 50px;
+				cursor: pointer;
+			}
+		}
+		.main {
+			display: flex;
+			// background: #324057;
+			position: absolute;
+			top: 50px;
+			bottom: 0px;
+			overflow: hidden;
+			aside {
+				flex:0 0 230px;
+				width: 230px;
+				// position: absolute;
+				// top: 0px;
+				// bottom: 0px;
+				.el-menu{
+					height: 100%;
+				}
+				.collapsed{
+					width:60px;
+					.item{
+						position: relative;
+					}
+					.submenu{
+						position:absolute;
+						top:0px;
+						left:60px;
+						z-index:99999;
+						height:auto;
+						display:none;
+					}
+
+				}
+			}
+			.menu-collapsed{
+				flex:0 0 50px;
+				width: 60px;
+			}
+			.menu-expanded{
+				flex:0 0 230px;
+				width: 230px;
+			}
+			.content-container {
+				// background: #f1f2f7;
+				flex:1;
+				// position: absolute;
+				// right: 0px;
+				// top: 0px;
+				// bottom: 0px;
+				// left: 230px;
+				overflow-y: scroll;
+				padding: 20px;
+				.breadcrumb-container {
+					//margin-bottom: 15px;
+					.title {
+						width: 200px;
+						float: left;
+						color: #475669;
+					}
+					.breadcrumb-inner {
+						float: right;
+					}
+				}
+				.content-wrapper {
+					background-color: #fff;
+					box-sizing: border-box;
+				}
+			}
+		}
+	}
+</style>

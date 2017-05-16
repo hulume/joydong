@@ -44,7 +44,7 @@
 </template>
 <script>
   import AuthCode from './AuthCode.vue'
-  import {isMobile, required} from '../validator'
+  import {isMobile, required} from '../utils/validator'
   export default {
     data () {
       return {

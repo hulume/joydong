@@ -1,21 +1,21 @@
 <template>
 	<!-- 信息卡片开始 -->
-	<div class="row">
-		<div class="col-md-6">
+	<el-row :gutter="15">
+		<el-col :span="12">
 		<div class="box box-primary">
 			<div class="box-body">
 				<e-charts :options="cumulate" auto-resize></e-charts>
 			</div>
 		</div>
-		</div>
-		<div class="col-md-6">
+		</el-col>
+		<el-col :span="12">
 			<div class="box box-primary">
 			<div class="box-body">
 				<e-charts :options="summary" auto-resize></e-charts>
 			</div>
 			</div>
-		</div>
-	</div>
+		</el-col>
+	</el-row>
 	<!-- 信息卡片END -->
 
 </template>
@@ -73,7 +73,7 @@
 				},
 				summary: {
 					title: {
-						text: '微信近七天图文分享'
+						text: '微信近期图文分享次数'
 					},
 					xAxis:  {
 						type: 'category',

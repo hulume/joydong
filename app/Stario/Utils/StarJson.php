@@ -1,5 +1,5 @@
 <?php
-namespace Star\utils;
+namespace Star\Utils;
 
 /**
  * 生成Json静态类

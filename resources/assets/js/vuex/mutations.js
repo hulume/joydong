@@ -1,9 +1,9 @@
 export const loading = state => {
-    return state.loading.fired = true
+    return state.loading = true
 }
 
 export const loaded = state => {
-    return state.loading.fired = false
+    return state.loading = false
 }
 
 export const userInfo = ( state, data ) => {
