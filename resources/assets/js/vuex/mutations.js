@@ -7,7 +7,9 @@ export const loaded = state => {
 }
 
 export const userInfo = ( state, data ) => {
-	return state.userInfo = data
+	let userInfo = data
+	userInfo.profile.birthday = new Date(userInfo.profile.birthday)
+	return state.userInfo = userInfo
 }
 
 export const profile = ( state, data ) => {

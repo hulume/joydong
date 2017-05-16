@@ -44393,7 +44393,7 @@ module.exports = Component.exports
 /* WEBPACK VAR INJECTION */(function(process) {/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return API_ROOT; });
 /* unused harmony export COLOR_BG */
 /* unused harmony export COLOR_BS */
-/* unused harmony export COLOR_SB */
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return COLOR_SB; });
 /* unused harmony export ICON_MAP */
 /* unused harmony export PAY_TYPE */
 /* unused harmony export RANGE */
@@ -44878,7 +44878,9 @@ var loaded = function loaded(state) {
 };
 
 var userInfo = function userInfo(state, data) {
-	return state.userInfo = data;
+	var userInfo = data;
+	userInfo.profile.birthday = new Date(userInfo.profile.birthday);
+	return state.userInfo = userInfo;
 };
 
 var profile = function profile(state, data) {

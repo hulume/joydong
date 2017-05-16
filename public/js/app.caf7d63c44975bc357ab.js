@@ -4075,13 +4075,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 				name: [{
 					required: true, message: '请输入您的真实姓名', trigger: 'blur'
 				}],
-				birthday: [{
-					required: true, message: '请填写您的出生日期', trigger: 'blur'
+				'profile.birthday': [{
+					type: 'date', required: true, message: '请输入正确的出生日期', trigger: 'blur'
 				}],
 				email: [{
-					required: true, message: '请填写您的电子邮箱地址', trigger: 'blur'
-				}, {
-					type: 'email', message: '您输入的电子邮箱地址不正确', trigger: 'blur'
+					type: 'email', required: true, message: '请填写正确的电子邮箱地址', trigger: 'blur'
 				}]
 			}
 		};
@@ -4095,32 +4093,26 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			set: function set(value) {
 				this.$store.commit('userInfo', value);
 			}
-		},
-		profile: {
-			get: function get() {
-				return this.$store.getters.getProfile;
-			},
-			set: function set(value) {
-				this.$store.commit('profile', value);
-			}
 		}
 	},
 	methods: {
 		onTabChange: function onTabChange(tab) {
 			window.console.log(tab.name);
 		},
-		onSubmit: function onSubmit() {
+		onSubmit: function onSubmit(form) {
 			// this.$store.commit('loading')
-			var baseInfo = {
-				email: this.userInfo.email
-			};
-			var profile = {
-				nickname: this.profile.nickname,
-				birthday: this.profile.birthday,
-				qq: this.profile.qq,
-				sex: this.profile.sex
-			};
-			window.console.log(profile);
+			// let baseInfo = {
+			// 	email: this.userInfo.email
+			// }
+			// let profile = {
+			// 	nickname: this.profile.nickname,
+			// 	birthday: this.profile.birthday,
+			// 	qq: this.profile.qq,
+			// 	sex: this.profile.sex
+			// }
+			this.$refs['userInfo'].validate(function (valid) {
+				window.console.log(valid);
+			});
 		},
 		onChangePass: function onChangePass() {
 			var _this = this;
@@ -80227,7 +80219,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "name": "edit"
     }
   }, [_c('el-form', {
-    ref: "form",
+    ref: "userInfo",
     staticStyle: {
       "margin": "20px",
       "width": "60%",
@@ -80246,7 +80238,8 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }, [_c('el-form-item', {
     attrs: {
-      "label": "姓名"
+      "label": "姓名",
+      "prop": "name"
     }
   }, [_c('el-input', {
     attrs: {
@@ -80269,23 +80262,24 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "placeholder": "可以选填昵称"
     },
     model: {
-      value: (_vm.profile.nickname),
+      value: (_vm.userInfo.profile.nickname),
       callback: function($$v) {
-        _vm.profile.nickname = $$v
+        _vm.userInfo.profile.nickname = $$v
       },
-      expression: "profile.nickname"
+      expression: "userInfo.profile.nickname"
     }
   })], 1), _vm._v(" "), _c('el-form-item', {
     attrs: {
-      "label": "性别"
+      "label": "性别",
+      "prop": "sex"
     }
   }, [_c('el-radio-group', {
     model: {
-      value: (_vm.profile.sex),
+      value: (_vm.userInfo.profile.sex),
       callback: function($$v) {
-        _vm.profile.sex = $$v
+        _vm.userInfo.profile.sex = $$v
       },
-      expression: "profile.sex"
+      expression: "userInfo.profile.sex"
     }
   }, [_c('el-radio', {
     attrs: {
@@ -80297,7 +80291,8 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   })], 1)], 1), _vm._v(" "), _c('el-form-item', {
     attrs: {
-      "label": "出生日期"
+      "label": "出生日期",
+      "prop": "profile.birthday"
     }
   }, [_c('el-date-picker', {
     staticStyle: {
@@ -80308,15 +80303,16 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "placeholder": "选择出生日期"
     },
     model: {
-      value: (_vm.profile.birthday),
+      value: (_vm.userInfo.profile.birthday),
       callback: function($$v) {
-        _vm.profile.birthday = $$v
+        _vm.userInfo.profile.birthday = $$v
       },
-      expression: "profile.birthday"
+      expression: "userInfo.profile.birthday"
     }
   })], 1), _vm._v(" "), _c('el-form-item', {
     attrs: {
-      "label": "电子邮件"
+      "label": "电子邮件",
+      "prop": "email"
     }
   }, [_c('el-input', {
     attrs: {
@@ -80338,11 +80334,11 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "placeholder": "可以选填QQ号码"
     },
     model: {
-      value: (_vm.profile.qq),
+      value: (_vm.userInfo.profile.qq),
       callback: function($$v) {
-        _vm.profile.qq = $$v
+        _vm.userInfo.profile.qq = $$v
       },
-      expression: "profile.qq"
+      expression: "userInfo.profile.qq"
     }
   })], 1), _vm._v(" "), _c('el-form-item', [_c('el-button', {
     attrs: {
@@ -80350,7 +80346,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     },
     nativeOn: {
       "click": function($event) {
-        _vm.onSubmit($event)
+        _vm.onSubmit(_vm.userInfo)
       }
     }
   }, [_vm._v("提交修改")])], 1)], 1)], 1), _vm._v(" "), _c('el-tab-pane', {
@@ -109478,7 +109474,9 @@ var loaded = function loaded(state) {
 };
 
 var userInfo = function userInfo(state, data) {
-	return state.userInfo = data;
+	var userInfo = data;
+	userInfo.profile.birthday = new Date(userInfo.profile.birthday);
+	return state.userInfo = userInfo;
 };
 
 var profile = function profile(state, data) {
