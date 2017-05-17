@@ -44538,7 +44538,7 @@ function getQueryStringByName(name) {
 /**
  * 格式化日期，常用于datepicker
  */
-/* harmony default export */ __webpack_exports__["b"] = ({
+/* unused harmony default export */ var _unused_webpack_default_export = ({
   formatDate: {
     format: function format(date, pattern) {
       pattern = pattern || DEFAULT_PATTERN;
@@ -44867,7 +44867,10 @@ var state = {
         profile: {},
         // unreadNotifications: {},
         // notifications: {},
-        rolemission: {}
+        rolemission: {
+            permissions: {},
+            roles: {}
+        }
     },
     weather: {}
 };
@@ -44876,16 +44879,12 @@ var getters = {
     getUserInfo: function getUserInfo(state) {
         return state.userInfo;
     },
-    getProfile: function getProfile() {
-        return state.userInfo.profile;
-    },
+    // getProfile: state => state.userInfo.profile,
     // getNotification: () => state.userInfo.notifications,
     getWeather: function getWeather(state) {
         return state.weather;
-    },
-    getPermissions: function getPermissions() {
-        return state.userInfo.rolemission;
     }
+    // getPermissions: state => state.userInfo.rolemission.permissions
 };
 
 /* harmony default export */ __webpack_exports__["a"] = (new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({

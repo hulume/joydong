@@ -16,6 +16,10 @@ export const getWechatSummary = () => {
 }
 export const getNotification = params => { return axios.get('home/notification', { params: params }) }
 export const markNotification = params => { return axios.post('home/notification/mark', params ) }
+export const deleteNotification = params => { return axios.post('home/notification/delete', params ) }
+export const clearNotification = () => { return axios.get('home/notification/clear') }
+
+
 export const getUserList = params => { return axios.get('user/list', { params: params }) }
 
 export const getUserListPage = params => { return axios.get('user/listpage', { params: params }) }

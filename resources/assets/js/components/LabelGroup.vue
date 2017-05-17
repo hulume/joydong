@@ -14,7 +14,7 @@
 			}
 		},
 		props: {
-			lists: Array
+			lists: null
 		}
 	}
 </script>

@@ -52,19 +52,25 @@ class NotificationController extends Controller {
 		$ids = explode(',', request()->input('ids'));
 		$user = auth()->user();
 		foreach ($ids as $id) {
-			$mark = $user->notifications()->where('id', $id)->update(['read_at' => Carbon::now()]);
+			$user->notifications()->where('id', $id)->update(['read_at' => Carbon::now()]);
 		}
 	}
-
+	/**
+	 * 消息删除（单条、批量）处理
+	 */
 	public function delete() {
-		$ids = request()->input('ids');
-		dd($ids);
+		// 前端传来的id有可能是字符串或数组
+		if (is_string(request()->input('ids'))) {
+			$ids = explode(',', request()->input('ids'));
+		} else {
+			$ids = request()->input('ids');
+		}
 		$user = auth()->user();
 		$delete = $user->notifications()->where('id', $ids)->delete();
-		if ($delete) {
-			return StarJson::create('成功将' . $delete . '条记录删除', 200);
+		foreach ($ids as $id) {
+			$user->notifications()->where('id', $id)->delete();
 		}
-		return StarJson::create(403);
+		return StarJson::create('成功删除', 200);
 	}
 
 	/**

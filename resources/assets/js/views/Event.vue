@@ -13,24 +13,25 @@
 				<template scope="scope">
 					<template v-if="scope.row.read_at">{{scope.row.data.title}}</template>
 					<template v-else>
-						{{scope.row.data.title}}<el-badge is-dot class="mark"/>
+						{{scope.row.data.title}}<el-badge value="未读" />
 					</template>
 				</template>
 			</el-table-column>
 
-			<el-table-column prop="created_at" label="发送时间" width="220"  sortable>
+			<el-table-column prop="created_at" label="发送时间" width="170"  sortable>
 			</el-table-column>
 			<el-table-column label="操作" width="150">
 				<template scope="scope">
 					<el-button size="small" @click="handleView(scope.$index, scope.row)">查看</el-button>
-					<el-button type="danger" size="small" @click="handleDel(scope.$index, scope.row)">删除</el-button>
+					<el-button type="danger" size="small" @click="delBtnClick(scope.row)">删除</el-button>
 				</template>
 			</el-table-column>
 		</el-table>
 
 		<!--工具条-->
 		<el-col :span="24" class="toolbar">
-			<el-button type="danger" @click="batchRemove" :disabled="this.sels.length===0">批量删除</el-button>
+			<el-button type="danger" @click.native="handleDel" :disabled="this.sels.length===0">批量删除</el-button>
+			<el-button type="primary" @click.native="handleClear" :disabled="this.notifications.length===0">全部清空</el-button>
 			<el-pagination layout="sizes, total, prev, pager, next" @size-change="handleSizeChange" @current-change="handleCurrentChange" :page-sizes="[15, 50, 100]" :page-size="page.per_page" :total="page.total" style="float:right;">
 			</el-pagination>
 		</el-col>
@@ -49,7 +50,7 @@
 				</div>
 				<div slot="footer" class="dialog-footer">
 					<el-button @click.native="viewDetailVisible = false">返回</el-button>
-					<el-button type="danger" @click="handleDel(scope.$index, scope.row)" :loading="loading">删除</el-button>
+					<el-button type="danger" @click="delBtnClick(scope.$index, scope.row)" :loading="loading">删除</el-button>
 				</div>
 			</el-dialog>
 		</section>
@@ -57,7 +58,7 @@
 
 	<script>
 		import util from '../utils/utils'
-		import { getNotification, markNotification } from '../api/api'
+		import { getNotification, markNotification, deleteNotification, clearNotification } from '../api/api'
 		export default {
 			data() {
 				return {
@@ -84,27 +85,62 @@
 				this.page.per_page = val
 				this.getNotifications()
 			},
-			
-			//删除
-			handleDel: function (index, row) {
-				this.$confirm('确认删除该记录吗?', '提示', {
-					type: 'warning'
+			delBtnClick (row) {
+				this.handleDel(row.id)
+			},
+			// 删除处理，不传入ids则为this.sels(即批量)
+			handleDel (ids) {
+				ids = (typeof ids === 'undefined') ? this.sels : ids
+				this.$confirm('确认删除选中记录吗？', '提示', {
+					type: 'error'
 				}).then(() => {
-					this.loading = true
-					let para = { id: row.id }
-					removeUser(para).then((res) => {
+					let para = { ids: ids }
+					this.$store.commit('loading')
+					deleteNotification(para)
+					.then((res) => {
+						this.$store.commit('loaded')
 						this.$message({
 							message: '删除成功',
 							type: 'success'
 						})
 						this.getNotifications()
 					})
-				}).catch(() => {
-
+					.catch((error) => {
+						this.$store.commit('loaded')
+						this.$message({
+							message: error.response.data,
+							type: 'error'
+						})
+					})
 				})
 			},
+			handleClear () {
+				this.$store.commit('loading')
+				this.$confirm('确定清空所有的消息吗？', '提示', {
+					type: 'error'
+				}).then(() => {
+					this.$store.commit('loading')
+					clearNotification()
+					.then((response) => {
+						this.$store.commit('loaded')
+						this.$message({
+							message: response.data.data,
+							type: 'success'
+						})
+						this.getNotifications()
+					})
+					.catch((error) => {
+						this.$store.commit('loaded')
+						this.$message({
+							message: error.response.data.error,
+							type: 'error'
+						})
+					})
+				})
+				
+			},
 			//显示界面
-			handleView: function (index, row) {
+			handleView (index, row) {
 				this.viewDetailVisible = true
 				this.viewDetailData = Object.assign({}, row)
 				markNotification({ids: row.id})
@@ -121,28 +157,7 @@
 			selsChange (sels) {
 				this.sels = _.map(sels, 'id')
 			},
-			//批量删除
-			batchRemove () {
-				var ids = this.sels.map(item => item.id).toString()
-				this.$confirm('确认删除选中记录吗？', '提示', {
-					type: 'warning'
-				}).then(() => {
-					this.listLoading = true
-					//NProgress.start()
-					let para = { ids: ids }
-					batchRemoveUser(para).then((res) => {
-						this.listLoading = false
-						//NProgress.done()
-						this.$message({
-							message: '删除成功',
-							type: 'success'
-						})
-						this.getNotifications()
-					})
-				}).catch(() => {
-
-				})
-			},
+			
 			//获取列表
 			getNotifications () {
 				this.$store.commit('loading')
@@ -160,9 +175,3 @@
 	}
 
 </script>
-
-<style>
-	.el-table tr:hover {
-		cursor: pointer;
-	}
-</style>

@@ -124,14 +124,14 @@
 				}
 			}
 			var validatePass2 = (rule, value, callback) => {
-			        if (value === '') {
-			          callback(new Error('请再次输入密码'));
-			        } else if (value !== this.password.newpass) {
-			          callback(new Error('两次输入密码不一致!'));
-			        } else {
-			          callback();
-			        }
-			      };
+				if (value === '') {
+					callback(new Error('请再次输入密码'));
+				} else if (value !== this.password.newpass) {
+					callback(new Error('两次输入密码不一致!'));
+				} else {
+					callback();
+				}
+			};
 			return {
 				active: 'edit',
 				password: {
@@ -156,7 +156,7 @@
 				passwordRules: {
 					oldpass: [{required: true, message: '输入当前密码', trigger: 'blur'}],
 					newpass: [{ validator: validatePass, trigger: 'blur', required: true }],
-			               newpass2: [{ validator: validatePass2, trigger: 'blur', required: true }]
+					newpass2: [{ validator: validatePass2, trigger: 'blur', required: true }]
 				}
 			}
 		},
@@ -206,7 +206,8 @@
 			},
 			onChangePass () {
 				this.$store.commit('loading')
-				editPassword({ password: this.password }).then((response) => {
+				changePassword({ password: {oldpass: this.password.oldpass, newpass: this.password.newpass, newpass_confirmation: this.password.newpass2} })
+				.then((response) => {
 					this.$message({
 						message: response.data.data,
 						type: 'success'

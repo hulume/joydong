@@ -34,7 +34,8 @@ class UserSecurityFormRequest extends FormRequest {
 		if (array_key_exists('password', request()->all())) {
 			return [
 				'password.oldpass' => 'required',
-				'password.newpass' => 'required|min:6',
+				'password.newpass' => 'required|min:6|confirmed',
+				'password.newpass_confirmation' => 'required|min:6',
 			];
 		}
 		return [

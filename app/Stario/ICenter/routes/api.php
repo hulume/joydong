@@ -27,7 +27,7 @@ Route::group([
 		Route::get('timeline', 'HomeController@timeline');
 		// Notifications
 		Route::get('notification', 'NotificationController@index');
-		Route::post('notification/clear', 'NotificationController@clear');
+		Route::get('notification/clear', 'NotificationController@clear');
 		Route::post('notification/mark', 'NotificationController@mark');
 		Route::post('notification/delete', 'NotificationController@delete');
 	});

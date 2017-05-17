@@ -42,7 +42,7 @@
 					<p v-else class="weather">{{weather.date}} {{weather.week}} {{weather.weather}} <a class="btn" @click="fetchWeather"><i class="fa fa-refresh"></i></a></p>
 					<!--导航菜单-->
 					<el-menu :default-active="$route.path" class="sidebar-menu" unique-opened router v-show="!collapsed" theme="dark">
-						<template v-for="(item,index) in $router.options.routes" v-if="!item.hidden">
+						<template v-for="(item,index) in menu" v-if="!item.hidden">
 							<el-submenu :index="index+''" v-if="!item.single">
 								<template slot="title"><i :class="'fa fa-' + item.icon"></i> {{item.name}}</template>
 								<el-menu-item v-for="child in item.children" :index="child.path" :key="child.path" v-if="!child.hidden">{{child.name}}</el-menu-item>
@@ -52,7 +52,7 @@
 					</el-menu>
 					<!--导航菜单-折叠后-->
 					<ul class="el-menu el-menu--dark sidebar-collapsed" v-show="collapsed" ref="menuCollapsed">
-						<li v-for="(item,index) in $router.options.routes" v-if="!item.hidden" class="el-submenu item">
+						<li v-for="(item,index) in menu" v-if="!item.hidden" class="el-submenu item">
 							<template v-if="!item.single">
 								<div class="el-submenu__title" style="padding-left: 20px;" @mouseover="showMenu(index,true)" @mouseout="showMenu(index,false)"><i :class="'fa fa-'+item.icon"></i></div>
 								<ul class="el-menu submenu" :class="'submenu-hook-'+index" @mouseover="showMenu(index,true)" @mouseout="showMenu(index,false)"> 
@@ -94,7 +94,9 @@
 			return {
 				collapsed: window.localStorage.getItem('wemesh_sidebar') === 'collapsed',
 				app: window.app,
-				noWeather: true
+				noWeather: true,
+				menu: [],
+				permissions: {}
 			}
 		},
 		methods: {
@@ -115,6 +117,19 @@
 			},
 			showMenu(i,status){
 				this.$refs.menuCollapsed.getElementsByClassName('submenu-hook-'+i)[0].style.display=status?'block':'none';
+			},
+			makeMenu () {
+				// window.console.log(this.permissions)
+				let routes = this.$router.options.routes
+				var list = []
+				_.forEach(this.permissions, function(permission) {
+				  	_.forEach(routes, function (route) {
+				  		if (permission.name === route.permission ) {
+				  			list.push(route)
+				  		}
+				  	})
+				})
+				this.menu = list
 			}
 		},
 		computed: {
@@ -128,7 +143,7 @@
 				return this.$store.getters.getUserInfo
 			},
 			profile () {
-				return this.$store.getters.getProfile
+				return this.userInfo.profile
 			}
 		},
 		mounted () {
@@ -139,6 +154,8 @@
 			this.$store.commit('loading')
 			getMe().then((response) => {
 				this.$store.commit('userInfo', response.data.data)
+				this.permissions = Object.assign({}, response.data.data.rolemission.permissions)
+				this.makeMenu()
 				this.$store.commit('loaded')
 			})
 			.catch((error) => {

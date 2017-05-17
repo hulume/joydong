@@ -818,7 +818,7 @@
     background-color: #fff
 }
 .el-radio__input.is-disabled+.el-radio__label {
-    color: #bbb;
+    color: #333;
     cursor: not-allowed
 }
 .el-radio__inner {
@@ -2798,7 +2798,7 @@
     cursor: pointer
 }
 .el-tabs__item.is-disabled {
-    color: #bbb;
+    color: #333;
     cursor: default
 }
 .el-tabs__item.is-active {
@@ -6761,7 +6761,7 @@
 }
 .el-cascader.is-disabled .el-cascader__label {
     z-index: 2;
-    color: #bbb
+    color: #333;
 }
 .el-cascader__label {
     position: absolute;
@@ -7107,7 +7107,7 @@
 .el-input.is-disabled .el-input__inner {
     background-color: #eef1f6;
     border-color: #d1dbe5;
-    color: #bbb;
+    color: #333;
     cursor: not-allowed
 }
 .el-input.is-disabled .el-input__inner::-webkit-input-placeholder {
@@ -7295,7 +7295,7 @@
 .el-textarea.is-disabled .el-textarea__inner {
     background-color: #eef1f6;
     border-color: #d1dbe5;
-    color: #bbb;
+    color: #333;
     cursor: not-allowed
 }
 .el-textarea.is-disabled .el-textarea__inner::-webkit-input-placeholder {
@@ -7794,7 +7794,7 @@
     border-color: #fff
 }
 .el-checkbox__input.is-disabled+.el-checkbox__label {
-    color: #bbb;
+    color: #333;
     cursor: not-allowed
 }
 .el-checkbox__inner {
