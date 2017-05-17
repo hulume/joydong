@@ -1,5 +1,5 @@
 <template>
-  <button class="btn" :class="'btn-' + color" id="getAuthcode" @click.prevent="getAuthcode($event)"><slot>获取短信验证码</slot></button>
+<el-button type="success" id="getAuthcode" ref="button" @click.native="getAuthcode"><slot>获取短信验证码</slot></el-button>
 </template>
 <script>
   import {countdown} from '../utils/utils'
@@ -13,8 +13,8 @@
       }
     },
     methods: {
-      getAuthcode (e) {
-        countdown(e.target, this.duration)
+      getAuthcode () {
+        countdown(document.getElementById('getAuthcode'), this.duration)
         this.$emit('event')
       }
     }

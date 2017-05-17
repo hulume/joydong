@@ -12,7 +12,7 @@
 					<div class="navbar-custom-menu">
 						<ul class="nav navbar-nav">
 							<li class="dropdown user user-menu">
-								<el-dropdown trigger="click">
+								<el-dropdown trigger="hover">
 									<a class="el-dropdown-link userinfo-inner"><img :src="profile.avatar" class="user-image" /> {{userInfo.name}}</a>
 									<el-dropdown-menu slot="dropdown">
 										<el-dropdown-item><i class="fa fa-vcard"></i> <router-link to="/home/me/profile">个人资料</router-link></el-dropdown-item>
@@ -88,6 +88,7 @@
 	</div>
 </template>
 <script>
+	import { getWeather, getMe } from '../api/api'
 	export default {
 		data () {
 			return {
@@ -103,8 +104,7 @@
 			},
 			fetchWeather () {
 				this.noWeather = true
-				axios.get('weather')
-				.then((response) => {
+				getWeather().then((response) => {
 					this.$store.commit('weather', response.data.result)
 					this.noWeather = !this.noWeather
 				})
@@ -137,8 +137,7 @@
 				window.localStorage.setItem('wemesh_sidebar', 'normal')
 			}
 			this.$store.commit('loading')
-			axios.get('home')
-			.then((response) => {
+			getMe().then((response) => {
 				this.$store.commit('userInfo', response.data.data)
 				this.$store.commit('loaded')
 			})

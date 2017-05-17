@@ -2,6 +2,7 @@
 
 namespace Star\ICenter\Controllers\Api;
 
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Star\ICenter\Repository\Eloquent\NotificationsRepo;
 use Star\ICenter\Repository\Eloquent\SiteRepo;
@@ -37,6 +38,11 @@ class HomeController extends ApiController {
 	 */
 	public function update() {
 		$profile = request()->input('profile');
+		if ($profile['birthday'] !== false) {
+			$birthday = Carbon::parse($profile['birthday']);
+			$birthday->tz = 'Asia/Shanghai';
+			$profile['birthday'] = $birthday->toDateString();
+		}
 		$base = request()->input('baseInfo');
 		$saveProfile = $this->userRepo->saveProfile($this->user->id, $profile);
 		$saveBase = $this->userRepo->update($this->user->id, $base);

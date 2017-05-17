@@ -16,6 +16,9 @@
     .content-header {
       position: relative;
       padding: 15px 15px 0 15px;
+      .title {
+        font-size: 16px;
+      }
       .breadcrumb-inner {
         float: right;
         height: 20px;

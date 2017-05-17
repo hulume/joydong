@@ -1,67 +1,9 @@
-import _ from 'lodash'
-
-/**
- * 从对象中取出第一条
- */
-export function findFirst (obj) {
-  for (var k in obj) {
-    if (obj[k].length) {
-      return obj[k][0]
-    }
-  }
-}
-export function findObj (obj) {
-  for (var k in obj) {
-    if (obj[k].length) {
-      return obj[k]
-    }
-  }
-}
-
-/**
- * 从当前的url中提取指定部分名称
- * @param 传入的路径,得有/.../这种斜杠喔
- * @param  {int} index [位置,通常0为父级]
- */
-export function getPartFromPath (path = window.location.href, index = 0) {
-  var re = /\/\w+/g
-  var route = path.match(re)[index]
-  return route.split('/').pop()
-}
-
-export function hasClass (el, className) {
-  return el.classList ? el.classList.contains(className) : new RegExp('\\b' + className + '\\b').test(el.className)
-}
-
-export function addClass (el, className) {
-  if (el.classList) el.classList.add(className)
-  else if (!hasClass(el, className)) el.className += ' ' + className
-}
-
-export function removeClass (el, className) {
-  if (el.classList) el.classList.remove(className)
-  else el.className = el.className.replace(new RegExp('\\b' + className + '\\b', 'g'), '')
-}
-
-export function shake (el) {
-  el.classList.add('shake')
-  setTimeout(() => {
-    el.classList.remove('shake')
-  }, 650)
-}
-
-export function toggle (el) {
-  var display = (window.getComputedStyle ? window.getComputedStyle(el, null) : el.currentStyle).display
-  if (display === 'none') {
-    el.style.display = 'block'
-  } else {
-    el.style.display = 'none'
-  }
-}
-
-export function hasId (el) {
-  var element = document.getElementById(el)
-  return typeof (element) !== 'undefined' && element != null
+var SIGN_REGEXP = /([yMdhsm])(\1*)/g
+var DEFAULT_PATTERN = 'yyyy-MM-dd'
+function padding(s, len) {
+  var len = len - (s + '').length
+  for (var i = 0; i < len; i++) { s = '0' + s }
+    return s
 }
 /**
  * 在指定元素加上倒计时
@@ -69,12 +11,12 @@ export function hasId (el) {
  * @param  {[type]} seconds [倒计时的秒数]
  * @return {[type]}        [description]
  */
-export function countdown (ele, seconds) {
+ export function countdown (ele, seconds) {
   var timer
   var originTxt = ele.innerHTML
   timer = setInterval(function () {
     seconds--
-    if (seconds < 0) {
+    if (seconds < 1) {
       ele.innerHTML = originTxt
       clearInterval(timer)
       ele.disabled = false
@@ -84,57 +26,66 @@ export function countdown (ele, seconds) {
     }
   }, 1000)
 }
-
-export function toggleClass (wrapperSelector, targetSelector, className) {
-  var target = document.querySelectorAll(wrapperSelector)
-  for (var i = 0; i < target.length; i++) {
-    target[i].classList.remove(className)
-    targetSelector.classList.add(className)
+/**
+ * 获取url中的http参数
+ */
+ export function getQueryStringByName (name) {
+  var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i")
+  var r = window.location.search.substr(1).match(reg)
+  var context = ""
+  if (r != null) {
+    context = r[2]
   }
+  reg = null
+  r = null
+  return context == null || context == "" || context == "undefined" ? "" : context
 }
 
-export function pickDeep (collection, predicate, thisArg) {
-  if (_.isFunction(predicate)) {
-    predicate = _.iteratee(predicate, thisArg)
-  } else {
-    var keys = _.flatten(_.rest(arguments))
-    predicate = function (val, key) {
-      return _.contains(keys, key)
-    }
-  }
-  return _.mapObject(collection, function (memo, val, key) {
-    var include = predicate(val, key)
-    if (!include && _.isObject(val)) {
-      val = pickDeep(val, predicate)
-      include = !_.isEmpty(val)
-    }
-    if (include) {
-      _.isArray(collection) ? memo.push(val) : memo[key] = val
-    }
-  })
-}
-
-export function serialize (form) {
-  var field = []
-  var l = []
-  var s = []
-  if (typeof form === 'object' && form.nodeName === 'FORM') {
-    var len = form.elements.length
-    for (var i = 0; i < len; i++) {
-      field = form.elements[i]
-      if (field.name && !field.disabled && field.type !== 'file' && field.type !== 'reset' && field.type !== 'button' && field.type !== 'submit') {
-        if (field.type === 'select-multiple') {
-          l = form.elements[i].options.length
-          for (var j = 0; j < l; j++) {
-            if (field.options[j].selected) {
-              s[s.length] = encodeURIComponent(field.name) + '=' + encodeURIComponent(field.options[j].value)
-            } else if ((field.type !== 'checkbox' && field.type !== 'radio') || field.checked) {
-              s[s.length] = encodeURIComponent(field.name) + '=' + encodeURIComponent(field.value)
-            }
+/**
+ * 格式化日期，常用于datepicker
+ */
+ export default {
+  formatDate: {
+    format: function (date, pattern) {
+      pattern = pattern || DEFAULT_PATTERN
+      return pattern.replace(SIGN_REGEXP, function ($0) {
+        switch ($0.charAt(0)) {
+          case 'y': return padding(date.getFullYear(), $0.length)
+          case 'M': return padding(date.getMonth() + 1, $0.length)
+          case 'd': return padding(date.getDate(), $0.length)
+          case 'w': return date.getDay() + 1
+          case 'h': return padding(date.getHours(), $0.length)
+          case 'm': return padding(date.getMinutes(), $0.length)
+          case 's': return padding(date.getSeconds(), $0.length)
+        }
+      });
+    },
+    parse: function (dateString, pattern) {
+      var matchs1 = pattern.match(SIGN_REGEXP)
+      var matchs2 = dateString.match(/(\d)+/g)
+      if (matchs1.length == matchs2.length) {
+        var _date = new Date(1970, 0, 1)
+        for (var i = 0; i < matchs1.length; i++) {
+          var _int = parseInt(matchs2[i])
+          var sign = matchs1[i]
+          switch (sign.charAt(0)) {
+            case 'y': _date.setFullYear(_int) 
+            break
+            case 'M': _date.setMonth(_int - 1)
+            break
+            case 'd': _date.setDate(_int)
+            break
+            case 'h': _date.setHours(_int)
+            break
+            case 'm': _date.setMinutes(_int)
+            break
+            case 's': _date.setSeconds(_int)
+            break
           }
         }
+        return _date;
       }
-      return s.join('&').replace(/%20/g, '+')
+      return null;
     }
-  }
+  } 
 }

@@ -18,6 +18,7 @@
 	</div>
 </template>
 <script>
+	import { getStastics } from '../api/api'
 	import WxCard from '../components/WxCard'
 	import Widget from '../components/Widget'
 	export default {
@@ -37,8 +38,7 @@
 		methods: {
 			fetchData () {
 				this.$store.commit('loading')
-				axios.get('home/statistics')
-				.then((response) => {
+				getStastics().then((response) => {
 					this.statistics = response.data
 					this.$store.commit('loaded')
 				})

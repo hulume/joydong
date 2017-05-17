@@ -20,6 +20,7 @@
 
 </template>
 <script>
+	import { getWechatSummary } from '../api/api'
 	import ECharts from '../components/Chart/ECharts.vue'
 	import 'echarts/lib/chart/line'
 	import 'echarts/lib/component/title'
@@ -119,26 +120,13 @@
 		},
 		mounted () {
 			this.$store.commit('loading')
-			function getCumulate() {
-				return axios.get('wechat/summary?type=cumulate')
-			}
-			function getSummary() {
-				return axios.get('wechat/summary')
-			}
-			axios.all([getCumulate(), getSummary()])
-				.then(axios.spread((cumulate, summary) => {
+			getWechatSummary().then(axios.spread((cumulate, summary) => {
 					this.cumulate.series[0].data = _.map(cumulate.data.list, 'cumulate_user')
 					this.cumulate.xAxis.data = _.map(cumulate.data.list, 'ref_date')
 					this.summary.series[0].data = _.map(summary.data.list, 'share_count')
 					this.summary.xAxis.data = _.map(summary.data.list, 'ref_date')
 					this.$store.commit('loaded')
 				}))
-			// axios.get('wechat/summary')
-			// .then((response) => {
-			// 	this.$store.commit('loaded')
-			// 	this.cumulate.series[0].data = _.map(response.data.list, 'cumulate_user')
-			// 	this.cumulate.xAxis.data = _.map(response.data.list, 'ref_date')
-			// })
 		},
 		components: {
 			ECharts

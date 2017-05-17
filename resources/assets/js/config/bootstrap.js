@@ -1,5 +1,5 @@
 import {API_ROOT} from './config'
-import '../../../../theme/index.css'
+import '../../theme-default/index.css'
 
 // window.$ = window.jQuery = require('jquery')
 window._ = require('lodash')
@@ -34,4 +34,3 @@ window.axios.interceptors.response.use(
     // }
     return Promise.reject(error)
   })
-Vue.prototype.$http = axios

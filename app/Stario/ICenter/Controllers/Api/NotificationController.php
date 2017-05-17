@@ -11,7 +11,6 @@ use Star\utils\StarJson;
 
 class NotificationController extends Controller {
 	protected $notification;
-	protected $user;
 
 	public function __construct(NotificationsRepo $notification) {
 		$this->notification = $notification;
@@ -23,15 +22,17 @@ class NotificationController extends Controller {
 	 * @return \Illuminate\Http\Response
 	 */
 	public function index() {
-		$request = request()->all();
+		$request = request()->input('per_page');
 		$user = auth()->user();
-		$notifications = $user->notifications()->paginate($request['per_page']);
-		$unreadNotifications = $user->unreadNotifications->take(50)->map(function ($item) {
+		$notifications = $user->notifications()->paginate($request);
+		// 定期清理，只保留200条
+		$unreadNotifications = $user->unreadNotifications->take(200)->map(function ($item) {
 			return [
 				'type' => $item->notifiable_type,
 				'data' => $item->data,
 			];
 		});
+		// 返回包含一个独立的未读数据集合
 		return collect($this->notification->transform($notifications))->merge(['unreadNotifications' => $unreadNotifications]);
 	}
 
@@ -48,20 +49,20 @@ class NotificationController extends Controller {
 	 * 将消息设置为已读
 	 */
 	public function mark() {
-		$ids = request()->all()['ids'];
+		$ids = explode(',', request()->input('ids'));
 		$user = auth()->user();
-		$mark = $user->notifications()->where('id', $ids)->update(['read_at' => Carbon::now()]);
-		if (!$mark) {
-			return StarJson::create(403);
+		foreach ($ids as $id) {
+			$mark = $user->notifications()->where('id', $id)->update(['read_at' => Carbon::now()]);
 		}
 	}
 
 	public function delete() {
-		$ids = request()->all()['ids'];
+		$ids = request()->input('ids');
+		dd($ids);
 		$user = auth()->user();
 		$delete = $user->notifications()->where('id', $ids)->delete();
 		if ($delete) {
-			return StarJson::create('成功将' . $delete . '条记录设为删除', 200);
+			return StarJson::create('成功将' . $delete . '条记录删除', 200);
 		}
 		return StarJson::create(403);
 	}

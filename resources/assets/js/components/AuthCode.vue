@@ -1,6 +1,6 @@
 <template>
   <div>
-    <count-down v-on:event="getAuthCode" :disabled="disabled" :color="color"><slot>获取短信验证码</slot></count-down>
+    <count-down v-on:event="getAuthCode" :color="color"><slot>获取短信验证码</slot></count-down>
   </div>
 </template>
 <script>
@@ -9,10 +9,6 @@
     props: {
       data: {
         type: Object,
-        require: true
-      },
-      disabled: {
-        type: Boolean,
         require: true
       },
       color: {
@@ -33,11 +29,13 @@
         } else {
             axios.post('getsms', this.data)
               .then((response) => {
-                swal('操作成功', response.data.data, 'success')
+                this.$message({
+                  message: '短信验证码已发送，请注意查收'
+                })
               })
               .catch((error) => {
                 let data = error.response.data
-                swal('操作失败', data[Object.keys(data) [0]], 'error')
+                this.$alert(data, '出错了！')
               })
         }
       }
