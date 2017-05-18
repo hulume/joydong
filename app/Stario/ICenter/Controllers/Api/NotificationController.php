@@ -66,7 +66,6 @@ class NotificationController extends Controller {
 			$ids = request()->input('ids');
 		}
 		$user = auth()->user();
-		$delete = $user->notifications()->where('id', $ids)->delete();
 		foreach ($ids as $id) {
 			$user->notifications()->where('id', $id)->delete();
 		}

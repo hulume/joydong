@@ -1,15 +1,15 @@
 <?php
 
+use App\User;
 use Illuminate\Database\Seeder;
 
-class DatabaseSeeder extends Seeder {
+class UserSeeder extends Seeder {
 	/**
 	 * Run the database seeds.
 	 *
 	 * @return void
 	 */
 	public function run() {
-		// $this->call(IcenterSeeder::class);
-		// $this->call(UserSeeder::class);
+		factory(User::class, 60)->create();
 	}
 }

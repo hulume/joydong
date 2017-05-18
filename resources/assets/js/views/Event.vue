@@ -30,7 +30,7 @@
 
 		<!--工具条-->
 		<el-col :span="24" class="toolbar">
-			<el-button type="danger" @click.native="handleDel" :disabled="this.sels.length===0">批量删除</el-button>
+			<el-button type="danger" @click.native="handleDel('batch')" :disabled="this.sels.length===0">批量删除</el-button>
 			<el-button type="primary" @click.native="handleClear" :disabled="this.notifications.length===0">全部清空</el-button>
 			<el-pagination layout="sizes, total, prev, pager, next" @size-change="handleSizeChange" @current-change="handleCurrentChange" :page-sizes="[15, 50, 100]" :page-size="page.per_page" :total="page.total" style="float:right;">
 			</el-pagination>
@@ -60,7 +60,7 @@
 		import util from '../utils/utils'
 		import { getNotification, markNotification, deleteNotification, clearNotification } from '../api/api'
 		export default {
-			data() {
+			data () {
 				return {
 				loading: false, //全局可以使用vuex，局部如增删改可以用在button上
 				notifications: [],
@@ -90,7 +90,7 @@
 			},
 			// 删除处理，不传入ids则为this.sels(即批量)
 			handleDel (ids) {
-				ids = (typeof ids === 'undefined') ? this.sels : ids
+				ids = (ids === 'batch') ? this.sels : ids
 				this.$confirm('确认删除选中记录吗？', '提示', {
 					type: 'error'
 				}).then(() => {

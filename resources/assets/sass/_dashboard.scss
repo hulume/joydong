@@ -1,5 +1,9 @@
 @import "./vars";
 .wrapper {
+  min-height: 100%;
+  width: 100%;
+  position: relative;
+  display: inline-block;
   &:before, &:after {
     content: " ";
     display: table;
@@ -115,7 +119,7 @@
           }
           .main-sidebar {
             background-color: $dark;
-            position: absolute;
+            position: fixed;
             top: 0;
             left: 0;
             padding-top: 50px;
@@ -128,7 +132,7 @@
             transition: transform .3s ease-in-out,width .3s ease-in-out;
             .sidebar {
               padding-bottom: 10px;
-              height: auto;
+              height: 100%;
               .user-panel {
                 white-space: nowrap;
                 overflow: hidden;

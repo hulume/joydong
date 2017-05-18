@@ -59,6 +59,7 @@ class UserManageFormRequest extends FormRequest {
 		$profile = $this->input('profile');
 		$base = $this->input('baseInfo');
 		$unit_id = $this->input('unit');
+		$permissions = $this->input('permissions');
 		$info = array_merge($base, ['unit_id' => $unit_id]);
 		// 如果有password则加密
 		if (array_has($info, 'password')) {
@@ -72,7 +73,9 @@ class UserManageFormRequest extends FormRequest {
 			$user = $this->userRepo->find($id);
 			$saveProfile = $this->userRepo->saveProfile($id, $profile);
 			$saveBase = $this->userRepo->update($id, $info);
+
 			if ($saveProfile && $saveBase) {
+				$this->userRepo->assignPermissions($user, $permissions);
 				return StarJson::create('用户资料修改成功', 200);
 			}
 			// 如果是创建
@@ -80,6 +83,8 @@ class UserManageFormRequest extends FormRequest {
 			$saveBase = $this->userRepo->create($info);
 			$saveProfile = $this->userRepo->saveProfile($saveBase->id, $profile);
 			if ($saveProfile && $saveBase) {
+				$user = $this->userRepo->find($saveBase->id);
+				$this->userRepo->assignPermissions($user, $permissions);
 				return StarJson::create('用户创建成功', 200);
 			}
 		}

@@ -19,10 +19,11 @@ export const markNotification = params => { return axios.post('home/notification
 export const deleteNotification = params => { return axios.post('home/notification/delete', params ) }
 export const clearNotification = () => { return axios.get('home/notification/clear') }
 
-
-export const getUserList = params => { return axios.get('user/list', { params: params }) }
-
-export const getUserListPage = params => { return axios.get('user/listpage', { params: params }) }
+export const getUserList = params => { return axios.get('user', { params: params }) }
+export const showUser = id => { return axios.get('user'), { params: { id: id }}}
+export const deleteUser = params => { return axios.post('user/delete', params) }
+export const createUser = params => { return axios.post('user/create', params) }
+export const updateUser = params => { return axios.post('user/update', params) }
 
 export const removeUser = params => { return axios.get('user/remove', { params: params }) }
 

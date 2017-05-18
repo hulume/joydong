@@ -51,6 +51,18 @@ let routes = [
     {
         path: '/',
         component: Dashboard,
+        name: '内部人员管理',
+        permission: 'manage_users',
+        icon: 'user-plus',
+        children: [
+            { path: '/home/users/', component: require('../views/user/index.vue'), name: '内部人员概览' },
+            { path: '/home/users/:id(\\d+)/edit', component: require('../views/user/edit.vue'), name: '管理人员修改', hidden: true },
+            { path: '/home/users/create', component: require('../views/user/create.vue'), name: '新增内部管理人员' },
+        ]
+    },
+    {
+        path: '/',
+        component: Dashboard,
         name: '',
         single: true,
         permission: 'manage_units',
@@ -91,18 +103,6 @@ let routes = [
             { path: '/home/pop/', component: require('../views/pop/index.vue'), name: '流动人口概览' },
             { path: '/home/pop/create', component: require('../views/pop/create.vue'), name: '添加人口管理' },
             { path: '/home/pop/:id/edit', component: require('../views/pop/index.vue'), name: '编辑流动人口' }
-        ]
-    },
-    {
-        path: '/',
-        component: Dashboard,
-        name: '内部人员管理',
-        permission: 'manage_users',
-        icon: 'user-plus',
-        children: [
-            { path: '/home/users/', component: require('../views/user/index.vue'), name: '内部人员概览' },
-            { path: '/home/user/create', component: require('../views/user/create.vue'), name: '创建内部人员' },
-            { path: '/home/user/:id/edit', component: require('../views/user/index.vue'), name: '编辑内部人员' }
         ]
     },
     {

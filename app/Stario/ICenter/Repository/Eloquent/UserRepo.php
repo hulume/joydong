@@ -32,6 +32,20 @@ class UserRepo extends BaseRepository {
 		return StarJson::create('密码修改失败，请联系管理员', 403);
 	}
 
+	/**
+	 * 将权限直接分配给用户，支持单条和批量，字符传过来需要以逗号分隔
+	 * @param  $user 被分配用户的实例
+	 * @param  $permissions 权限的label值
+	 */
+	public function assignPermissions($user, $permissions) {
+		if (!is_array($permissions)) {
+			$permissions = explode(',', $permissions);
+		}
+		foreach ($permissions as $permission) {
+			$user->givePermissionTo($permission);
+		}
+	}
+
 	public function avatar($user, $avatar) {
 		$validator = \Validator::make(['file' => $avatar], ['file' => 'image']);
 		if ($validator->fails()) {

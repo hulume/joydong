@@ -15,7 +15,7 @@ class UserController extends ApiController {
 	public function __construct(UserRepo $userRepo) {
 		parent::__construct();
 		$this->userRepo = $userRepo;
-		// $this->middleware('permission:manage_users');
+		$this->middleware('permission:manage_users');
 	}
 
 	public function index() {
@@ -34,11 +34,17 @@ class UserController extends ApiController {
 	public function store(UserManageFormRequest $request) {
 		return $request->persist();
 	}
-	public function destroy($id) {
-		$deleted = $this->userRepo->delete($id);
-		if ($deleted) {
-			return StarJson::create('成功删除用户', 200);
+	public function destroy() {
+		// 前端传来的id有可能是字符串或数组
+		if (!is_array(request()->input('ids'))) {
+			$ids = explode(',', request()->input('ids'));
+		} else {
+			$ids = request()->input('ids');
 		}
+		foreach ($ids as $id) {
+			$this->userRepo->delete($id);
+		}
+		return StarJson::create('成功删除用户', 200);
 	}
 
 	// export excel
