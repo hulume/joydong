@@ -3,6 +3,7 @@
 namespace Star\ICenter\Controllers\Api;
 
 use Excel;
+use Route;
 use Star\ICenter\Repository\Eloquent\UserRepo;
 use Star\ICenter\Requests\UserManageFormRequest;
 use Star\ICenter\Transformers\UserInfoTransformer;
@@ -23,8 +24,9 @@ class UserController extends ApiController {
 		return $this->respondWithPaginator($users, new UserTransformer());
 	}
 
-	public function update(UserManageFormRequest $request, $id) {
-		$this->userRepo->find($id)->syncPermissions($request->permissions);
+	public function update(UserManageFormRequest $request) {
+		$id = Route::current()->parameter('user');
+		// $this->userRepo->find($id)->syncPermissions($request->permissions);
 		return $request->persist($id);
 	}
 	public function edit($id) {

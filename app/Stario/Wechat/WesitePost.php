@@ -4,11 +4,11 @@ namespace Star\Wechat;
 
 use Illuminate\Database\Eloquent\Model;
 
-class WesitePost extends Model {
-	protected $table = 'wesite_posts';
+class WePage extends Model {
+	protected $table = 'we_pages';
 	protected $guarded = ['id'];
 
-	public function wesiteMenu() {
-		return $this->belongsTo('Star\Wechat\WesiteMenu');
+	public function menus() {
+		return $this->belongsToMany('Star\Wechat\WeMenu');
 	}
 }

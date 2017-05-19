@@ -4786,11 +4786,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 					nickname: '',
 					sex: '女'
 				},
-				selectedUnit: '',
 				units: {},
-				permissions: {},
-				checkedPermission: ['general']
+				permissions: {}
 			},
+			selectedUnit: '',
+			checkedPermission: ['general'],
 			rules: {
 				name: [{ required: true, message: '请输入姓名', trigger: 'blur' }],
 				mobile: [{ required: true, message: '请输入手机号码', trigger: 'blur' }],
@@ -4814,7 +4814,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 			axios.all([getUnits(), getPermissions()]).then(axios.spread(function (units, permissions) {
 				_this.form.units = units.data.data;
-				_this.form.selectedUnit = _this.form.units[0].id;
+				_this.selectedUnit = _this.form.units[0].id;
 				_this.form.permissions = permissions.data;
 				_this.$store.commit('loaded');
 			})).catch(function (error) {
@@ -4839,8 +4839,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 						password: _this2.form.password,
 						status: parseInt(_this2.form.status)
 					};
-					var unit = _this2.form.selectedUnit;
-					var permissions = _this2.form.checkedPermission;
+					var unit = _this2.selectedUnit;
+					var permissions = _this2.checkedPermission;
 
 					_this2.$store.commit('loading');
 
@@ -4967,7 +4967,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
 
 
 
@@ -4986,11 +4985,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 					nickname: '',
 					sex: '女'
 				},
-				selectedUnit: '',
 				units: {},
-				permissions: {},
-				checkedPermission: []
+				permissions: {}
 			},
+			checkedPermission: ['general'],
+			selectedUnit: '',
 			rules: {
 				name: [{ required: true, message: '请输入姓名', trigger: 'blur' }],
 				mobile: [{ required: true, message: '请输入手机号码', trigger: 'blur' }],
@@ -5017,15 +5016,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 			axios.all([getUser(), getUnits(), getPermissions()]).then(axios.spread(function (user, units, permissions) {
 				_this.form = _this.formatData(user.data.data);
-				_this.form.checkedPermission = user.data.data.rolemission.permissions;
-				_this.form.selectedUnit = user.data.data.unit;
+				_this.checkedPermission = user.data.data.rolemission.permissions;
+				_this.selectedUnit = user.data.data.unit;
 				_this.form.units = units.data.data;
 				_this.form.permissions = permissions.data;
 				_this.$store.commit('loaded');
 			})).catch(function (error) {
 				var data = error.response.data;
 				_this.$message.error('读取失败，错误代码:' + error.response.status);
-				// toastr.error(data[Object.keys(data)[0]])
 			});
 		},
 		onSubmit: function onSubmit() {
@@ -5048,8 +5046,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 					if (_this2.showPassword) {
 						baseInfo.password = _this2.form.password;
 					}
-					var unit = _this2.form.selectedUnit;
-					var permissions = _this2.form.checkedPermission;
+					var unit = _this2.selectedUnit;
+					var permissions = _this2.checkedPermission;
 
 					_this2.$store.commit('loading');
 
@@ -97959,19 +97957,18 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   })], 1) : _vm._e()], 1)], 1)], 1), _vm._v(" "), _c('fieldset', [_c('legend', [_vm._v("角色权限")]), _vm._v(" "), _c('el-form-item', {
     attrs: {
-      "label": "所在部门:",
-      "prop": "selectedUnit"
+      "label": "所在部门:"
     }
   }, [_c('el-select', {
     attrs: {
       "placeholder": "请选择所在部门"
     },
     model: {
-      value: (_vm.form.selectedUnit),
+      value: (_vm.selectedUnit),
       callback: function($$v) {
-        _vm.form.selectedUnit = $$v
+        _vm.selectedUnit = $$v
       },
-      expression: "form.selectedUnit"
+      expression: "selectedUnit"
     }
   }, _vm._l((_vm.form.units), function(unit) {
     return _c('el-option', {
@@ -97987,11 +97984,11 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }, [_c('el-checkbox-group', {
     model: {
-      value: (_vm.form.checkedPermission),
+      value: (_vm.checkedPermission),
       callback: function($$v) {
-        _vm.form.checkedPermission = $$v
+        _vm.checkedPermission = $$v
       },
-      expression: "form.checkedPermission"
+      expression: "checkedPermission"
     }
   }, _vm._l((_vm.form.permissions), function(permission) {
     return _c('el-checkbox', {
@@ -98000,7 +97997,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         "label": permission.name,
         "disabled": permission.name === 'general'
       }
-    }, [_vm._v("\n\t\t\t\t\t\t\t" + _vm._s(permission.label) + "\n\t\t\t\t\t\t")])
+    }, [_vm._v("\n\t\t\t\t\t\t" + _vm._s(permission.label) + "\n\t\t\t\t\t")])
   }))], 1)], 1), _vm._v(" "), _c('el-form-item', [_c('el-button', {
     attrs: {
       "type": "primary"
@@ -98008,7 +98005,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     on: {
       "click": _vm.onSubmit
     }
-  }, [_vm._v("立即创建")]), _vm._v(" "), _c('el-button', [_vm._v("取消")])], 1)], 1)], 1)
+  }, [_vm._v("修改用户")])], 1)], 1)], 1)
 },staticRenderFns: []}
 module.exports.render._withStripped = true
 if (false) {
@@ -98866,11 +98863,11 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "placeholder": "请选择所在部门"
     },
     model: {
-      value: (_vm.form.selectedUnit),
+      value: (_vm.selectedUnit),
       callback: function($$v) {
-        _vm.form.selectedUnit = $$v
+        _vm.selectedUnit = $$v
       },
-      expression: "form.selectedUnit"
+      expression: "selectedUnit"
     }
   }, _vm._l((_vm.form.units), function(unit) {
     return _c('el-option', {
@@ -98886,11 +98883,11 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }, [_c('el-checkbox-group', {
     model: {
-      value: (_vm.form.checkedPermission),
+      value: (_vm.checkedPermission),
       callback: function($$v) {
-        _vm.form.checkedPermission = $$v
+        _vm.checkedPermission = $$v
       },
-      expression: "form.checkedPermission"
+      expression: "checkedPermission"
     }
   }, _vm._l((_vm.form.permissions), function(permission) {
     return _c('el-checkbox', {
@@ -98899,7 +98896,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         "label": permission.name,
         "disabled": permission.name === 'general'
       }
-    }, [_vm._v("\n\t\t\t\t\t\t\t" + _vm._s(permission.label) + "\n\t\t\t\t\t\t")])
+    }, [_vm._v("\n\t\t\t\t\t" + _vm._s(permission.label) + "\n\t\t\t\t")])
   }))], 1)], 1), _vm._v(" "), _c('el-form-item', [_c('el-button', {
     attrs: {
       "type": "primary"
@@ -127001,8 +126998,8 @@ var clearNotification = function clearNotification() {
 };
 
 // 内部管理
-var getUserList = function getUserList() {
-	return axios.get('user');
+var getUserList = function getUserList(params) {
+	return axios.get('user', { params: params });
 };
 // export const showUser = id => { return axios.get('user'), { params: { id: id }}}
 var deleteUser = function deleteUser(params) {

@@ -50,9 +50,9 @@ class UserManageFormRequest extends FormRequest {
 	}
 
 	/**
-	 * 自动判断update还是create
+	 * 根据是否传递过来$id自动判断update还是create
 	 *
-	 * @param  $id
+	 * @param  $id 传入则为更新，否则为创建
 	 * @return void
 	 */
 	public function persist($id = null) {
@@ -71,6 +71,7 @@ class UserManageFormRequest extends FormRequest {
 		// 如果是更新
 		if ($id != null) {
 			$user = $this->userRepo->find($id);
+			$saveBase = $user->update($info);
 			$saveProfile = $this->userRepo->saveProfile($id, $profile);
 			$saveBase = $this->userRepo->update($id, $info);
 

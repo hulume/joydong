@@ -11,7 +11,7 @@ class CreateWeSiteTable extends Migration {
 	 * @return void
 	 */
 	public function up() {
-		Schema::create('wesite_menus', function (Blueprint $table) {
+		Schema::create('we_menus', function (Blueprint $table) {
 			$table->increments('id');
 			$table->string('label', 30);
 			$table->boolean('is_mainbar')->defalut(false);
@@ -22,7 +22,7 @@ class CreateWeSiteTable extends Migration {
 			$table->timestamps();
 		});
 
-		Schema::create('wesite_posts', function (Blueprint $table) {
+		Schema::create('we_pages', function (Blueprint $table) {
 			$table->increments('id');
 			$table->string('title', 30);
 			$table->string('thumb_url');

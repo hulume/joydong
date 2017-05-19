@@ -21,7 +21,7 @@ export const deleteNotification = params => { return axios.post('home/notificati
 export const clearNotification = () => { return axios.get('home/notification/clear') }
 
 // 内部管理
-export const getUserList = () => { return axios.get('user') }
+export const getUserList = params => { return axios.get('user', { params: params }) }
 // export const showUser = id => { return axios.get('user'), { params: { id: id }}}
 export const deleteUser = params => { return axios.post('user/delete', params) }
 export const createUser = params => { return axios.post('user', params) }
