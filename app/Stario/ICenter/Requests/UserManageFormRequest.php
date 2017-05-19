@@ -31,7 +31,7 @@ class UserManageFormRequest extends FormRequest {
 			];
 		} elseif ($this->isMethod('put')) {
 			return [
-				'baseInfo.mobile' => ['regex:/^1[3|4|5|7|8]\d{9}$/', 'unique:users,mobile'],
+				'baseInfo.mobile' => ['regex:/^1[3|4|5|7|8]\d{9}$/'],
 				'baseInfo.email' => ['required', 'email'],
 				'baseInfo.name' => ['required', 'regex:/[\x{4e00}-\x{9fa5}]+.*/u'],
 				'baseInfo.status' => 'required',
@@ -75,7 +75,7 @@ class UserManageFormRequest extends FormRequest {
 			$saveBase = $this->userRepo->update($id, $info);
 
 			if ($saveProfile && $saveBase) {
-				$this->userRepo->assignPermissions($user, $permissions);
+				$this->userRepo->updatePermissions($user, $permissions);
 				return StarJson::create('用户资料修改成功', 200);
 			}
 			// 如果是创建

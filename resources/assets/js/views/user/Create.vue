@@ -1,8 +1,8 @@
 <template>
-	<el-row>
+	<!-- <el-row> -->
 
 		<el-form ref="form" :model="form" :rules="rules" :inline="true" label-width="100px">
-			<el-col :span="24">
+			<!-- <el-col :span="24"> -->
 				<fieldset>
 					<legend>管理人员资料</legend>
 
@@ -15,7 +15,7 @@
 					</el-form-item>
 
 					<el-form-item label="邮箱:" prop="email">
-						<el-input v-model="form.email"></el-input>
+						<el-input v-model="form.email" style="width: 218px"></el-input>
 					</el-form-item>
 
 					<el-form-item label="出生日期:">
@@ -36,8 +36,8 @@
 
 					<el-form-item label="性别:" prop="sex">
 						<el-radio-group v-model="form.profile.sex">
-							<el-radio label="1">男</el-radio>
-							<el-radio label="0">女</el-radio>
+							<el-radio label="男"></el-radio>
+							<el-radio label="女"></el-radio>
 						</el-radio-group>
 					</el-form-item>
 
@@ -51,7 +51,7 @@
 				</fieldset>
 
 			</el-col>
-			<el-col :span="24">
+			<!-- <el-col :span="24"> -->
 				<fieldset>
 					<legend>角色权限</legend>
 					<el-form-item label="所在部门:" prop="selectedUnit">
@@ -68,14 +68,14 @@
 						</el-checkbox-group>
 					</el-form-item>
 				</fieldset>	
-			</el-col>
+			<!-- </el-col> -->
 
 			<el-form-item>
 				<el-button type="primary" @click="onSubmit">立即创建</el-button>
 				<el-button>取消</el-button>
 			</el-form-item>
 		</el-form>
-	</el-row>
+	<!-- </el-row> -->
 </template>
 <script>
 	import { createUser } from '../../api/api'
@@ -92,7 +92,7 @@
 					profile: {
 						birthday: new Date('1980-01-01'),
 						nickname: '',
-						sex: '0'
+						sex: '女'
 					},
 					selectedUnit: '',
 					units: {},
@@ -177,6 +177,9 @@
 				})
 				
 			}
+		},
+		mounted () {
+			this.loadData()
 		}
 	}
 </script>

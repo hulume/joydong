@@ -38,7 +38,7 @@ class UserInfoTransformer extends TransformerAbstract {
 				'qq' => $profile == null ? '' : $profile->qq,
 				'avatar' => $profile == null ? 'http://static.stario.net/images/avatar.png' : $profile->avatar,
 				'birthday' => $profile == null ? '1976-01-01' : $profile->birthday,
-				'sex' => $profile == null ? 0 : $profile->sex,
+				'sex' => $profile == null ? '女' : $profile->sex,
 			],
 			'rolemission' => [
 				'permissions' => $permissions->toArray(),

@@ -14,16 +14,18 @@ export const getWechatSummary = () => {
 	}
 	return axios.all([getCumulate(), getSummary()])
 }
+// 消息事件
 export const getNotification = params => { return axios.get('home/notification', { params: params }) }
 export const markNotification = params => { return axios.post('home/notification/mark', params ) }
 export const deleteNotification = params => { return axios.post('home/notification/delete', params ) }
 export const clearNotification = () => { return axios.get('home/notification/clear') }
 
-export const getUserList = params => { return axios.get('user', { params: params }) }
-export const showUser = id => { return axios.get('user'), { params: { id: id }}}
+// 内部管理
+export const getUserList = () => { return axios.get('user') }
+// export const showUser = id => { return axios.get('user'), { params: { id: id }}}
 export const deleteUser = params => { return axios.post('user/delete', params) }
-export const createUser = params => { return axios.post('user/create', params) }
-export const updateUser = params => { return axios.post('user/update', params) }
+export const createUser = params => { return axios.post('user', params) }
+// export const updateUser = params => { return axios.put('user/update', params) }
 
 export const removeUser = params => { return axios.get('user/remove', { params: params }) }
 

@@ -4784,7 +4784,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 				profile: {
 					birthday: new Date('1980-01-01'),
 					nickname: '',
-					sex: '0'
+					sex: '女'
 				},
 				selectedUnit: '',
 				units: {},
@@ -4869,6 +4869,224 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 				}
 			});
 		}
+	},
+	mounted: function mounted() {
+		this.loadData();
+	}
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/views/user/edit.vue":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__api_api__ = __webpack_require__("./resources/assets/js/api/api.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utils_utils__ = __webpack_require__("./resources/assets/js/utils/utils.js");
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+	data: function data() {
+		return {
+			showPassword: false,
+			form: {
+				name: '',
+				mobile: '',
+				email: '',
+				status: '',
+				password: '',
+				profile: {
+					birthday: '',
+					nickname: '',
+					sex: '女'
+				},
+				selectedUnit: '',
+				units: {},
+				permissions: {},
+				checkedPermission: []
+			},
+			rules: {
+				name: [{ required: true, message: '请输入姓名', trigger: 'blur' }],
+				mobile: [{ required: true, message: '请输入手机号码', trigger: 'blur' }],
+				email: [{ required: true, message: '请输入正确的邮箱地址', trigger: 'blur', type: 'email' }],
+				password: [{ required: true, message: '请输入初始密码', trigger: 'blur' }]
+			}
+		};
+	},
+
+	methods: {
+		loadData: function loadData() {
+			var _this = this;
+
+			this.$store.commit('loading');
+			var getUser = function getUser() {
+				return axios.get('user/' + _this.$route.params.id + '/edit');
+			};
+			var getUnits = function getUnits() {
+				return axios.get('unit');
+			};
+			var getPermissions = function getPermissions() {
+				return axios.get('permission');
+			};
+
+			axios.all([getUser(), getUnits(), getPermissions()]).then(axios.spread(function (user, units, permissions) {
+				_this.form = _this.formatData(user.data.data);
+				_this.form.checkedPermission = user.data.data.rolemission.permissions;
+				_this.form.selectedUnit = user.data.data.unit;
+				_this.form.units = units.data.data;
+				_this.form.permissions = permissions.data;
+				_this.$store.commit('loaded');
+			})).catch(function (error) {
+				var data = error.response.data;
+				_this.$message.error('读取失败，错误代码:' + error.response.status);
+				// toastr.error(data[Object.keys(data)[0]])
+			});
+		},
+		onSubmit: function onSubmit() {
+			var _this2 = this;
+
+			this.$refs.form.validate(function (valid) {
+				if (valid) {
+					var profile = {
+						nickname: _this2.form.profile.nickname,
+						birthday: __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1__utils_utils__["b" /* formatDate */])(_this2.form.profile.birthday),
+						qq: _this2.form.profile.qq,
+						sex: _this2.form.profile.sex
+					};
+					var baseInfo = {
+						name: _this2.form.name,
+						mobile: _this2.form.mobile,
+						email: _this2.form.email,
+						status: parseInt(_this2.form.status)
+					};
+					if (_this2.showPassword) {
+						baseInfo.password = _this2.form.password;
+					}
+					var unit = _this2.form.selectedUnit;
+					var permissions = _this2.form.checkedPermission;
+
+					_this2.$store.commit('loading');
+
+					axios.put('user/' + _this2.$route.params.id, { profile: profile, baseInfo: baseInfo, unit: unit, permissions: permissions }).then(function (response) {
+
+						_this2.$store.commit('loaded');
+						_this2.$message.success('修改成功');
+						_this2.$router.push({ path: '/home/users' });
+					}).catch(function (error) {
+
+						_this2.$store.commit('loaded');
+
+						_this2.$alert(error.response.data, '操作错误');
+					});
+				} else {
+					_this2.$message.error('请完善必填项');
+					return false;
+				}
+			});
+		},
+		formatData: function formatData(user) {
+			return {
+				name: user.name,
+				mobile: user.mobile,
+				email: user.email,
+				status: user.status.toString(),
+				profile: {
+					birthday: new Date(user.profile.birthday),
+					nickname: user.profile.nickname,
+					qq: user.profile.qq,
+					sex: user.profile.sex
+				}
+			};
+		}
+	},
+	mounted: function mounted() {
+		this.loadData();
 	}
 });
 
@@ -97583,7 +97801,214 @@ if (false) {
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('div')
+  return _c('el-row', [_c('el-form', {
+    ref: "form",
+    attrs: {
+      "model": _vm.form,
+      "rules": _vm.rules,
+      "inline": true,
+      "label-width": "100px"
+    }
+  }, [_c('fieldset', [_c('legend', [_vm._v("管理人员资料")]), _vm._v(" "), _c('el-form-item', {
+    attrs: {
+      "label": "姓名:",
+      "prop": "name"
+    }
+  }, [_c('el-input', {
+    model: {
+      value: (_vm.form.name),
+      callback: function($$v) {
+        _vm.form.name = $$v
+      },
+      expression: "form.name"
+    }
+  })], 1), _vm._v(" "), _c('el-form-item', {
+    attrs: {
+      "label": "手机:",
+      "prop": "mobile"
+    }
+  }, [_c('el-input', {
+    model: {
+      value: (_vm.form.mobile),
+      callback: function($$v) {
+        _vm.form.mobile = $$v
+      },
+      expression: "form.mobile"
+    }
+  })], 1), _vm._v(" "), _c('el-form-item', {
+    attrs: {
+      "label": "邮箱:",
+      "prop": "email"
+    }
+  }, [_c('el-input', {
+    staticStyle: {
+      "width": "218px"
+    },
+    model: {
+      value: (_vm.form.email),
+      callback: function($$v) {
+        _vm.form.email = $$v
+      },
+      expression: "form.email"
+    }
+  })], 1), _vm._v(" "), _c('el-form-item', {
+    attrs: {
+      "label": "出生日期:"
+    }
+  }, [_c('el-date-picker', {
+    attrs: {
+      "type": "date",
+      "placeholder": "选择日期"
+    },
+    model: {
+      value: (_vm.form.profile.birthday),
+      callback: function($$v) {
+        _vm.form.profile.birthday = $$v
+      },
+      expression: "form.profile.birthday"
+    }
+  })], 1), _vm._v(" "), _c('el-form-item', {
+    attrs: {
+      "label": "昵称:"
+    }
+  }, [_c('el-input', {
+    model: {
+      value: (_vm.form.profile.nickname),
+      callback: function($$v) {
+        _vm.form.profile.nickname = $$v
+      },
+      expression: "form.profile.nickname"
+    }
+  })], 1), _vm._v(" "), _c('el-form-item', {
+    attrs: {
+      "label": "QQ:"
+    }
+  }, [_c('el-input', {
+    model: {
+      value: (_vm.form.qq),
+      callback: function($$v) {
+        _vm.form.qq = $$v
+      },
+      expression: "form.qq"
+    }
+  })], 1), _vm._v(" "), _c('el-form-item', {
+    attrs: {
+      "label": "性别:",
+      "prop": "sex"
+    }
+  }, [_c('el-radio-group', {
+    model: {
+      value: (_vm.form.profile.sex),
+      callback: function($$v) {
+        _vm.form.profile.sex = $$v
+      },
+      expression: "form.profile.sex"
+    }
+  }, [_c('el-radio', {
+    attrs: {
+      "label": "男"
+    }
+  }), _vm._v(" "), _c('el-radio', {
+    attrs: {
+      "label": "女"
+    }
+  })], 1)], 1), _vm._v(" "), _c('el-form-item', {
+    attrs: {
+      "label": "用户状态:",
+      "prop": "status"
+    }
+  }, [_c('el-radio-group', {
+    model: {
+      value: (_vm.form.status),
+      callback: function($$v) {
+        _vm.form.status = $$v
+      },
+      expression: "form.status"
+    }
+  }, [_c('el-radio', {
+    attrs: {
+      "label": "1"
+    }
+  }, [_vm._v("正常")]), _vm._v(" "), _c('el-radio', {
+    attrs: {
+      "label": "0"
+    }
+  }, [_vm._v("冻结")])], 1)], 1), _vm._v(" "), _c('el-row', [_c('el-col', {
+    attrs: {
+      "span": 24
+    }
+  }, [_c('el-form-item', {
+    attrs: {
+      "label": "修改密码"
+    }
+  }, [_c('el-switch', {
+    model: {
+      value: (_vm.showPassword),
+      callback: function($$v) {
+        _vm.showPassword = $$v
+      },
+      expression: "showPassword"
+    }
+  })], 1), _vm._v(" "), (_vm.showPassword) ? _c('el-form-item', [_c('el-input', {
+    model: {
+      value: (_vm.form.password),
+      callback: function($$v) {
+        _vm.form.password = $$v
+      },
+      expression: "form.password"
+    }
+  })], 1) : _vm._e()], 1)], 1)], 1), _vm._v(" "), _c('fieldset', [_c('legend', [_vm._v("角色权限")]), _vm._v(" "), _c('el-form-item', {
+    attrs: {
+      "label": "所在部门:",
+      "prop": "selectedUnit"
+    }
+  }, [_c('el-select', {
+    attrs: {
+      "placeholder": "请选择所在部门"
+    },
+    model: {
+      value: (_vm.form.selectedUnit),
+      callback: function($$v) {
+        _vm.form.selectedUnit = $$v
+      },
+      expression: "form.selectedUnit"
+    }
+  }, _vm._l((_vm.form.units), function(unit) {
+    return _c('el-option', {
+      key: unit.id,
+      attrs: {
+        "label": unit.name,
+        "value": unit.id
+      }
+    })
+  }))], 1), _vm._v(" "), _c('el-form-item', {
+    attrs: {
+      "label": "用户权限:"
+    }
+  }, [_c('el-checkbox-group', {
+    model: {
+      value: (_vm.form.checkedPermission),
+      callback: function($$v) {
+        _vm.form.checkedPermission = $$v
+      },
+      expression: "form.checkedPermission"
+    }
+  }, _vm._l((_vm.form.permissions), function(permission) {
+    return _c('el-checkbox', {
+      key: permission.id,
+      attrs: {
+        "label": permission.name,
+        "disabled": permission.name === 'general'
+      }
+    }, [_vm._v("\n\t\t\t\t\t\t\t" + _vm._s(permission.label) + "\n\t\t\t\t\t\t")])
+  }))], 1)], 1), _vm._v(" "), _c('el-form-item', [_c('el-button', {
+    attrs: {
+      "type": "primary"
+    },
+    on: {
+      "click": _vm.onSubmit
+    }
+  }, [_vm._v("立即创建")]), _vm._v(" "), _c('el-button', [_vm._v("取消")])], 1)], 1)], 1)
 },staticRenderFns: []}
 module.exports.render._withStripped = true
 if (false) {
@@ -98286,17 +98711,13 @@ if (false) {
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('el-row', [_c('el-form', {
+  return _c('el-form', {
     ref: "form",
     attrs: {
       "model": _vm.form,
       "rules": _vm.rules,
       "inline": true,
       "label-width": "100px"
-    }
-  }, [_c('el-col', {
-    attrs: {
-      "span": 24
     }
   }, [_c('fieldset', [_c('legend', [_vm._v("管理人员资料")]), _vm._v(" "), _c('el-form-item', {
     attrs: {
@@ -98330,6 +98751,9 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "prop": "email"
     }
   }, [_c('el-input', {
+    staticStyle: {
+      "width": "218px"
+    },
     model: {
       value: (_vm.form.email),
       callback: function($$v) {
@@ -98405,13 +98829,13 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }, [_c('el-radio', {
     attrs: {
-      "label": "1"
+      "label": "男"
     }
-  }, [_vm._v("男")]), _vm._v(" "), _c('el-radio', {
+  }), _vm._v(" "), _c('el-radio', {
     attrs: {
-      "label": "0"
+      "label": "女"
     }
-  }, [_vm._v("女")])], 1)], 1), _vm._v(" "), _c('el-form-item', {
+  })], 1)], 1), _vm._v(" "), _c('el-form-item', {
     attrs: {
       "label": "用户状态:",
       "prop": "status"
@@ -98432,11 +98856,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     attrs: {
       "label": "0"
     }
-  }, [_vm._v("冻结")])], 1)], 1)], 1)]), _vm._v(" "), _c('el-col', {
-    attrs: {
-      "span": 24
-    }
-  }, [_c('fieldset', [_c('legend', [_vm._v("角色权限")]), _vm._v(" "), _c('el-form-item', {
+  }, [_vm._v("冻结")])], 1)], 1)], 1), _vm._v(" "), _c('fieldset', [_c('legend', [_vm._v("角色权限")]), _vm._v(" "), _c('el-form-item', {
     attrs: {
       "label": "所在部门:",
       "prop": "selectedUnit"
@@ -98480,14 +98900,14 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         "disabled": permission.name === 'general'
       }
     }, [_vm._v("\n\t\t\t\t\t\t\t" + _vm._s(permission.label) + "\n\t\t\t\t\t\t")])
-  }))], 1)], 1)]), _vm._v(" "), _c('el-form-item', [_c('el-button', {
+  }))], 1)], 1), _vm._v(" "), _c('el-form-item', [_c('el-button', {
     attrs: {
       "type": "primary"
     },
     on: {
       "click": _vm.onSubmit
     }
-  }, [_vm._v("立即创建")]), _vm._v(" "), _c('el-button', [_vm._v("取消")])], 1)], 1)], 1)
+  }, [_vm._v("立即创建")]), _vm._v(" "), _c('el-button', [_vm._v("取消")])], 1)], 1)
 },staticRenderFns: []}
 module.exports.render._withStripped = true
 if (false) {
@@ -126532,10 +126952,8 @@ module.exports = Component.exports
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return deleteNotification; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return clearNotification; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return getUserList; });
-/* unused harmony export showUser */
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return deleteUser; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return createUser; });
-/* unused harmony export updateUser */
 /* unused harmony export removeUser */
 /* unused harmony export batchRemoveUser */
 /* unused harmony export editUser */
@@ -126568,6 +126986,7 @@ var getWechatSummary = function getWechatSummary() {
 	}
 	return axios.all([getCumulate(), getSummary()]);
 };
+// 消息事件
 var getNotification = function getNotification(params) {
 	return axios.get('home/notification', { params: params });
 };
@@ -126581,21 +127000,18 @@ var clearNotification = function clearNotification() {
 	return axios.get('home/notification/clear');
 };
 
-var getUserList = function getUserList(params) {
-	return axios.get('user', { params: params });
+// 内部管理
+var getUserList = function getUserList() {
+	return axios.get('user');
 };
-var showUser = function showUser(id) {
-	return axios.get('user'), { params: { id: id } };
-};
+// export const showUser = id => { return axios.get('user'), { params: { id: id }}}
 var deleteUser = function deleteUser(params) {
 	return axios.post('user/delete', params);
 };
 var createUser = function createUser(params) {
-	return axios.post('user/create', params);
+	return axios.post('user', params);
 };
-var updateUser = function updateUser(params) {
-	return axios.post('user/update', params);
-};
+// export const updateUser = params => { return axios.put('user/update', params) }
 
 var removeUser = function removeUser(params) {
 	return axios.get('user/remove', { params: params });
@@ -127589,7 +128005,7 @@ module.exports = Component.exports
 
 var Component = __webpack_require__("./node_modules/vue-loader/lib/component-normalizer.js")(
   /* script */
-  null,
+  __webpack_require__("./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/views/user/edit.vue"),
   /* template */
   __webpack_require__("./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-509e9353\"}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/views/user/edit.vue"),
   /* scopeId */

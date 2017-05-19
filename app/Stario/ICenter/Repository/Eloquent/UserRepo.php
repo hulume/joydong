@@ -41,9 +41,20 @@ class UserRepo extends BaseRepository {
 		if (!is_array($permissions)) {
 			$permissions = explode(',', $permissions);
 		}
-		foreach ($permissions as $permission) {
-			$user->givePermissionTo($permission);
+		return $user->givePermissionTo($permissions);
+	}
+
+	/**
+	 * 支持单条和批量更新用户权限，字符传过来需要以逗号分隔
+	 * @param  $user 被分配用户的实例
+	 * @param  $permissions 权限的label值
+	 */
+	public function updatePermissions($user, $permissions) {
+
+		if (!is_array($permissions)) {
+			$permissions = explode(',', $permissions);
 		}
+		return $user->syncPermissions($permissions);
 	}
 
 	public function avatar($user, $avatar) {

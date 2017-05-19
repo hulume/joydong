@@ -43,10 +43,11 @@ Route::group([
 	Route::post('users/excel', 'UserController@export');
 
 	// User
-	Route::get('user', 'UserController@index');
-	Route::post('user/delete', 'UserController@destroy');
-	Route::post('user/create', 'UserController@store');
-	Route::post('user/update', 'UserController@update');
+	Route::resource('user', 'UserController');
+	// Route::get('user/{id}/edit', 'UserController@edit');
+	// Route::post('user/delete', 'UserController@destroy');
+	// Route::post('user/create', 'UserController@store');
+	// Route::put('user/update', 'UserController@update');
 
 	Route::resource('unit', 'UnitController', ['except' => ['create', 'show']]);
 	Route::resource('permission', 'PermissionController', ['except' => ['create', 'show']]);
