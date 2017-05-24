@@ -27,10 +27,9 @@ export const deleteUser = params => { return axios.post('user/delete', params) }
 export const createUser = params => { return axios.post('user', params) }
 // export const updateUser = params => { return axios.put('user/update', params) }
 
-export const removeUser = params => { return axios.get('user/remove', { params: params }) }
+// 微网站
+export const getWeMenu = () => { return axios.get('wechat/menu')}
+export const createWeMenu = params => { return axios.post('wechat/menu', params)}
+// export const getMaterial = params => { return axios.get('wechat/material', { params: params })}
+export const getMaterial = params => { return axios.get('http://demo2098390.mockable.io/wechat', { params: params })}
 
-export const batchRemoveUser = params => { return axios.get('user/batchremove', { params: params }) }
-
-export const editUser = params => { return axios.get('user/edit', { params: params }) }
-
-export const addUser = params => { return axios.get('user/add', { params: params }) }

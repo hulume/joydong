@@ -112,7 +112,7 @@
 				})
 				.catch((error) => {
 					this.hasWeather = false
-					toastr.error('无法连接天气服务器：' + error)
+					this.$message.error('无法连接天气服务器：' + error)
 				})
 			},
 			showMenu(i,status){

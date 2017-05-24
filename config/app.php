@@ -165,23 +165,25 @@ return [
 		Illuminate\View\ViewServiceProvider::class,
 
 		/*
-			             * Package Service Providers...
+			               * Package Service Providers...
 		*/
-		Laravel\Tinker\TinkerServiceProvider::class,
-		Laravel\Passport\PassportServiceProvider::class,
-		Star\ICenter\ICenterServiceProvider::class,
-		Star\SimpleMessage\SmsServiceProvider::class,
-		Star\ICenter\Permission\PermissionServiceProvider::class,
-		Overtrue\LaravelWechat\ServiceProvider::class,
-		Maatwebsite\Excel\ExcelServiceProvider::class,
 		App\Providers\AppServiceProvider::class,
 		App\Providers\AuthServiceProvider::class,
 		// App\Providers\BroadcastServiceProvider::class,
 		App\Providers\EventServiceProvider::class,
 		App\Providers\RouteServiceProvider::class,
+
+		Laravel\Tinker\TinkerServiceProvider::class,
+		Laravel\Passport\PassportServiceProvider::class,
+
+		Star\ICenter\ICenterServiceProvider::class,
 		Star\ICenter\RouteServiceProvider::class,
-		Star\SimpleMessage\SmsServiceProvider::class,
 		Star\ICenter\Permission\PermissionServiceProvider::class,
+		Star\SimpleMessage\SmsServiceProvider::class,
+		Star\Wechat\RouteServiceProvider::class,
+
+		Overtrue\LaravelWechat\ServiceProvider::class,
+		Maatwebsite\Excel\ExcelServiceProvider::class,
 
 	],
 

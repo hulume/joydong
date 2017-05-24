@@ -9,6 +9,6 @@ class WePage extends Model {
 	protected $guarded = ['id'];
 
 	public function menus() {
-		return $this->belongsToMany('Star\Wechat\WeMenu');
+		return $this->belongTo('Star\Wechat\WeMenu', 'wx_menu_id');
 	}
 }

@@ -18,6 +18,10 @@
 		'post': 'edit'
 	}
 
+	export const ICONS = [
+		"user-md", "hand-o-up", "child", "medkit", "hospital-o", "paste", "id-card-o", "user-plus", "ambulance", "plus-square", "wheelchair-alt", "h-square", "heartbeat", "heart-o", "thermometer", "envelope-o", "flask", "home", "male", "female", "users", "phone-square"
+	]
+
 	export const PAY_TYPE = [
 		'城镇职工基本医疗保险', '城镇居民基本医疗保险', '新型农村合作医疗', '贫困救助', '商业医疗保险', '全公费', '全自费'
 	]

@@ -44,14 +44,10 @@ Route::group([
 
 	// User
 	Route::resource('user', 'UserController');
-	// Route::get('user/{id}/edit', 'UserController@edit');
-	// Route::post('user/delete', 'UserController@destroy');
-	// Route::post('user/create', 'UserController@store');
-	// Route::put('user/update', 'UserController@update');
-
+	// Unit
 	Route::resource('unit', 'UnitController', ['except' => ['create', 'show']]);
+	// Permission
 	Route::resource('permission', 'PermissionController', ['except' => ['create', 'show']]);
-
 	// 流动人口管理
 	// Route::resource('pop', 'PopController', ['except' => ['create', 'show']]);
 	// Route::post('lis', 'LisController@all');

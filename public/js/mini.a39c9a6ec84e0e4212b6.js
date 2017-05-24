@@ -60308,10 +60308,11 @@ module.exports = Component.exports
 
 "use strict";
 /* WEBPACK VAR INJECTION */(function(process) {/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return API_ROOT; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return COLOR_BG; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return COLOR_BG; });
 /* unused harmony export COLOR_BS */
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return COLOR_SB; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return ICON_MAP; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return COLOR_SB; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return ICON_MAP; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return ICONS; });
 /* unused harmony export PAY_TYPE */
 /* unused harmony export RANGE */
 var API_ROOT = process.env.NODE_ENV === 'production' ? 'http://jd.wemesh.cn/api/' : 'http://jiaodongHospital.dev/api/';
@@ -60325,6 +60326,8 @@ var ICON_MAP = {
 	'user': 'user',
 	'post': 'edit'
 };
+
+var ICONS = ["user-md", "hand-o-up", "child", "medkit", "hospital-o", "paste", "id-card-o", "user-plus", "ambulance", "plus-square", "wheelchair-alt", "h-square", "heartbeat", "heart-o", "thermometer", "envelope-o", "flask", "home", "male", "female", "users", "phone-square"];
 
 var PAY_TYPE = ['城镇职工基本医疗保险', '城镇居民基本医疗保险', '新型农村合作医疗', '贫困救助', '商业医疗保险', '全公费', '全自费'];
 

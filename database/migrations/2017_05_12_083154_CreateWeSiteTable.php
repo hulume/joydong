@@ -14,11 +14,12 @@ class CreateWeSiteTable extends Migration {
 		Schema::create('we_menus', function (Blueprint $table) {
 			$table->increments('id');
 			$table->string('label', 30);
-			$table->boolean('is_mainbar')->defalut(false);
-			$table->unsignedTinyInteger('order')->nullable();
+			$table->unsignedTinyInteger('type')->defalut(1); // 1.mainbar 2.guide 3.theme
+			$table->unsignedTinyInteger('order')->default(1);
 			$table->string('route', 20)->nullable();
 			$table->string('icon', 20)->nullable();
 			$table->string('color', 10)->nullable();
+			$table->string('theme_img')->nullable();
 			$table->timestamps();
 		});
 
@@ -27,6 +28,7 @@ class CreateWeSiteTable extends Migration {
 			$table->string('title', 30);
 			$table->string('thumb_url');
 			$table->string('url');
+			$table->unsignedTinyInteger('we_menu_id');
 			$table->string('digest')->nullable();
 			$table->string('author', 20)->nullable();
 			$table->timestamps();
@@ -38,7 +40,8 @@ class CreateWeSiteTable extends Migration {
 	 * @return void
 	 */
 	public function down() {
-		Schema::dropIfExists('wesite_menus');
-		Schema::dropIfExists('wesite_posts');
+		Schema::drop('page_menu');
+		Schema::dropIfExists('we_menus');
+		Schema::dropIfExists('we_pages');
 	}
 }

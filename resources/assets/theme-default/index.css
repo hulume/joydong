@@ -2566,7 +2566,7 @@
     color: #00c0ef
 }
 .el-message-box__status.el-icon-warning {
-    color: #f7ba2a
+    color: #ca961e
 }
 .el-message-box__status.el-icon-circle-cross {
     color: #dd4b39
@@ -3018,11 +3018,11 @@
     color: #fff;
 }
 .el-tag--warning .el-tag__close:hover {
-    background-color: #f7ba2a;
+    background-color: #ca961e;
     color: #fff
 }
 .el-tag--warning.is-hit {
-    border-color: #f7ba2a
+    border-color: #ca961e
 }
 .el-tag--danger {
     background-color: #dd4b39;
@@ -3145,7 +3145,7 @@
     background-color: #00c0ef
 }
 .el-alert--warning {
-    background-color: #f7ba2a
+    background-color: #ca961e
 }
 .el-alert--error {
     background-color: #dd4b39
@@ -3215,7 +3215,7 @@
     color: #00c0ef
 }
 .el-notification .el-icon-warning {
-    color: #f7ba2a
+    color: #ca961e
 }
 .el-notification__group {
     margin-left: 0
@@ -6188,7 +6188,7 @@
     color: #00c0ef
 }
 .el-message .el-icon-warning {
-    color: #f7ba2a
+    color: #ca961e
 }
 .el-message__group {
     margin-left: 38px;
@@ -7507,8 +7507,8 @@
 }
 .el-button--warning {
     color: #fff;
-    background-color: #f7ba2a;
-    border-color: #f7ba2a
+    background-color: #ca961e;
+    border-color: #ca961e
 }
 .el-button--warning:focus,
 .el-button--warning:hover {
@@ -7533,8 +7533,8 @@
 .el-button--warning.is-plain:focus,
 .el-button--warning.is-plain:hover {
     background: #fff;
-    border-color: #f7ba2a;
-    color: #f7ba2a
+    border-color: #ca961e;
+    color: #ca961e
 }
 .el-button--warning.is-plain:active {
     background: #fff;

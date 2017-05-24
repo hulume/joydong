@@ -18,7 +18,9 @@ class PermissionMiddleware {
 			return redirect('/login');
 		}
 		if (!$request->user()->can($permission)) {
-			abort(401);
+			return response()->json([
+				'error' => '您没有访问的权限',
+			], 401);
 		}
 		return $next($request);
 	}
