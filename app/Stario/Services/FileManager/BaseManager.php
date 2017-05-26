@@ -276,19 +276,25 @@ class BaseManager {
 	 *
 	 * @param \Symfony\Component\HttpFoundation\File\UploadedFile $file
 	 * @param string                                              $dir
-	 * @param Closure                                             $callback
+	 * @param 如果为真则hash一个文件名，否则用真实文件名       $hashName
 	 *
 	 * @return array|bool
 	 */
-	public function store(UploadedFile $file, $dir = '', Closure $callback = null) {
-		$hashName = str_ireplace('.jpeg', '.jpg', $file->hashName());
+	// public function store(UploadedFile $file, $dir = '', Closure $callback = null) {
+	public function store(UploadedFile $file, $dir = '', $filenameType = 'original') {
 
+		if ($filenameType == 'hash') {
+			$fileName = str_ireplace('.jpeg', '.jpg', $file->hashName());
+		} else {
+			$fileName = $file->getClientOriginalName();
+		}
 		$mime = $file->getMimeType();
 
-		$realname = $this->disk->putFileAs($dir, $file, $hashName);
+		// $realname = $this->disk->putFileAs($dir, $file, $hashName);
+		$realname = $this->disk->putFileAs($dir, $file, $fileName);
 		return [
 			'success' => true,
-			'filename' => $hashName,
+			'filename' => $fileName,
 			'original_name' => $file->getClientOriginalName(),
 			'mime' => $mime,
 			'size' => $file->getClientSize(),

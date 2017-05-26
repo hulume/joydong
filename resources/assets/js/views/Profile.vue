@@ -103,7 +103,7 @@
 	</el-row>
 </template>
 <script>
-	import { editMe, changePassword, changeMobile } from '../api/api'
+	import { changePassword, changeMobile } from '../api/api'
 	import Timeline from '../components/Timeline'
 	import Avatar from '../components/AvatarEditor'
 	import UserCard from '../components/UserCard'
@@ -163,7 +163,7 @@
 		computed: {
 			userInfo: {
 				get () {
-					return this.$store.getters.getUserInfo
+					return this.$store.getters.userInfo
 				},
 				set (value) {
 					this.$store.commit('userInfo', value)
@@ -184,17 +184,7 @@
 				}
 				this.$refs['userInfo'].validate((valid) => {
 					if (valid) {
-						editMe({profile: profile, baseInfo: baseInfo}).then((response) => {
-							this.$message({
-								message: '您的个人资料已成功修改',
-								type: 'success'
-							})
-							this.$store.commit('loaded')
-						})
-						.catch((error) => {
-							this.$alert(error.response.data.error)
-							this.$store.commit('loaded')
-						})
+						this.$store.dispatch('EDIT_PROFILE', {profile: profile, baseInfo: baseInfo})
 					} else {
 						this.$message({
 							message: '您有选项未填或格式不对',

@@ -3373,19 +3373,18 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     uploadChanges: function uploadChanges(e) {
       var _this = this;
 
-      this.$store.commit('loading');
       var files = e.target.files || e.dataTransfer.files;
       if (!files.length) {
         return;
       }
+      this.$store.commit('loading');
       this.newImg === '' ? this.tempImg = this.imgPath : this.tempImg = this.newImg;
       this.newImg = window.URL.createObjectURL(e.target.files[0]);
       var formData = new FormData();
       formData.append('id', window.Wemesh.id);
       formData.append('file', files[0]);
       axios.post(this.apiUrl, formData).then(function (response) {
-        _this.$store.commit('loaded');
-        window.location.reload();
+        _this.$store.dispatch('LOAD_USER_INFO');
       });
     },
     removeAvatar: function removeAvatar() {
@@ -3752,6 +3751,85 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 /***/ }),
 
+/***/ "./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/components/UploadImg.vue":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  data: function data() {
+    return {
+      newImg: '',
+      tempImg: ''
+    };
+  },
+
+  props: {
+    source: String,
+    apiUrl: String,
+    type: {
+      type: String,
+      default: 'normal'
+    },
+    params: {
+      type: Object,
+      default: function _default() {
+        return {};
+      }
+    }
+  },
+  methods: {
+    onUpload: function onUpload(e) {
+      var _this = this;
+
+      var files = e.target.files || e.dataTransfer.files;
+      if (!files.length) {
+        return;
+      }
+      this.$store.commit('loading');
+      // this.newImg === '' ? this.tempImg = this.source : this.tempImg = this.newImg
+      this.newImg = window.URL.createObjectURL(e.target.files[0]);
+      var formData = new FormData();
+      if (this.params.length > 0) {
+        formData.append(params);
+      }
+      formData.append('file', files[0]);
+      axios.post(this.apiUrl, formData).then(function (response) {
+        _this.$store.commit('loaded');
+        _this.$emit('update:source', response.data.url);
+        _this.$emit('update');
+      }).catch(function (error) {
+        _this.$store.commit('loaded');
+      });
+    },
+    removeAvatar: function removeAvatar() {
+      this.$emit('delete');
+    }
+  }
+});
+
+/***/ }),
+
 /***/ "./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/components/UserCard.vue":
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -3800,7 +3878,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 	},
 	computed: {
 		profile: function profile() {
-			return this.$store.getters.getUserInfo.profile;
+			return this.$store.getters.userInfo.profile;
 		}
 	},
 	components: {
@@ -3973,7 +4051,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 		var _this = this;
 
 		this.$store.commit('loading');
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__api_api__["o" /* getWechatSummary */])().then(axios.spread(function (cumulate, summary) {
+		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__api_api__["n" /* getWechatSummary */])().then(axios.spread(function (cumulate, summary) {
 			_this.cumulate.series[0].data = _.map(cumulate.data.list, 'cumulate_user');
 			_this.cumulate.xAxis.data = _.map(cumulate.data.list, 'ref_date');
 			_this.summary.series[0].data = _.map(summary.data.list, 'share_count');
@@ -3994,7 +4072,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__api_api__ = __webpack_require__("./resources/assets/js/api/api.js");
 //
 //
 //
@@ -4083,17 +4160,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-
 
 /* harmony default export */ __webpack_exports__["default"] = ({
 	data: function data() {
 		return {
 			collapsed: window.localStorage.getItem('wemesh_sidebar') === 'collapsed',
-			app: window.app,
-			noWeather: true,
-			menu: [],
-			permissions: {}
+			app: window.app
 		};
 	},
 
@@ -4103,16 +4175,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			this.collapsed ? window.localStorage.setItem('wemesh_sidebar', 'collapsed') : window.localStorage.setItem('wemesh_sidebar', 'normal');
 		},
 		fetchWeather: function fetchWeather() {
-			var _this = this;
-
-			this.noWeather = true;
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__api_api__["p" /* getWeather */])().then(function (response) {
-				_this.$store.commit('weather', response.data.result);
-				_this.noWeather = !_this.noWeather;
-			}).catch(function (error) {
-				_this.hasWeather = false;
-				_this.$message.error('无法连接天气服务器：' + error);
-			});
+			this.$store.dispatch('LOAD_WEATHER');
 		},
 		showMenu: function showMenu(i, status) {
 			this.$refs.menuCollapsed.getElementsByClassName('submenu-hook-' + i)[0].style.display = status ? 'block' : 'none';
@@ -4120,47 +4183,49 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 		makeMenu: function makeMenu() {
 			// window.console.log(this.permissions)
 			var routes = this.$router.options.routes;
-			var list = [];
-			_.forEach(this.permissions, function (permission) {
+			var permissions = this.$store.getters.getPermissions;
+			_.forEach(permissions, function (permission) {
 				_.forEach(routes, function (route) {
 					if (permission.name === route.permission) {
-						list.push(route);
+						this.menu.push(route);
 					}
 				});
 			});
-			this.menu = list;
 		}
 	},
 	computed: {
 		weather: function weather() {
-			return this.$store.getters.getWeather;
+			return this.$store.getters.weather;
 		},
 		loading: function loading() {
 			return this.$store.state.loading;
 		},
 		userInfo: function userInfo() {
-			return this.$store.getters.getUserInfo;
+			return this.$store.getters.userInfo;
 		},
 		profile: function profile() {
 			return this.userInfo.profile;
+		},
+		menu: function menu() {
+			var routes = this.$router.options.routes;
+			var menu = [];
+			var permissions = this.$store.getters.permissions;
+			_.forEach(permissions, function (permission) {
+				_.forEach(routes, function (route) {
+					if (permission.name === route.permission) {
+						menu.push(route);
+					}
+				});
+			});
+			return menu;
 		}
 	},
 	mounted: function mounted() {
-		var _this2 = this;
-
 		var localStorage = window.localStorage.getItem('wemesh_sidebar');
 		if (localStorage === null) {
 			window.localStorage.setItem('wemesh_sidebar', 'normal');
 		}
-		this.$store.commit('loading');
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__api_api__["q" /* getMe */])().then(function (response) {
-			_this2.$store.commit('userInfo', response.data.data);
-			_this2.permissions = Object.assign({}, response.data.data.rolemission.permissions);
-			_this2.makeMenu();
-			_this2.$store.commit('loaded');
-		}).catch(function (error) {
-			swal('出错了', '无法获取数据，请刷新页面或者联系管理员', 'error');
-		});
+		this.$store.dispatch('LOAD_USER_INFO');
 		this.fetchWeather();
 	}
 });
@@ -4410,7 +4475,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			var _this = this;
 
 			this.$store.commit('loading');
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__api_api__["n" /* getStastics */])().then(function (response) {
+			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__api_api__["m" /* getStastics */])().then(function (response) {
 				_this.statistics = response.data;
 				_this.$store.commit('loaded');
 			});
@@ -4605,7 +4670,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 	computed: {
 		userInfo: {
 			get: function get() {
-				return this.$store.getters.getUserInfo;
+				return this.$store.getters.userInfo;
 			},
 			set: function set(value) {
 				this.$store.commit('userInfo', value);
@@ -4628,16 +4693,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			};
 			this.$refs['userInfo'].validate(function (valid) {
 				if (valid) {
-					__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__api_api__["k" /* editMe */])({ profile: profile, baseInfo: baseInfo }).then(function (response) {
-						_this2.$message({
-							message: '您的个人资料已成功修改',
-							type: 'success'
-						});
-						_this2.$store.commit('loaded');
-					}).catch(function (error) {
-						_this2.$alert(error.response.data.error);
-						_this2.$store.commit('loaded');
-					});
+					_this2.$store.dispatch('EDIT_PROFILE', { profile: profile, baseInfo: baseInfo });
 				} else {
 					_this2.$message({
 						message: '您有选项未填或格式不对',
@@ -4651,7 +4707,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			var _this3 = this;
 
 			this.$store.commit('loading');
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__api_api__["l" /* changePassword */])({ password: { oldpass: this.password.oldpass, newpass: this.password.newpass, newpass_confirmation: this.password.newpass2 } }).then(function (response) {
+			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__api_api__["k" /* changePassword */])({ password: { oldpass: this.password.oldpass, newpass: this.password.newpass, newpass_confirmation: this.password.newpass2 } }).then(function (response) {
 				_this3.$message({
 					message: response.data.data,
 					type: 'success'
@@ -4667,7 +4723,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			var _this4 = this;
 
 			this.$store.commit('loading');
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__api_api__["m" /* changeMobile */])({ mobile: this.mobile }).then(function (response) {
+			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__api_api__["l" /* changeMobile */])({ mobile: this.mobile }).then(function (response) {
 				_this4.$message({
 					message: response.data.data,
 					type: 'success'
@@ -4690,6 +4746,67 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__api_api__ = __webpack_require__("./resources/assets/js/api/api.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__config_config__ = __webpack_require__("./resources/assets/js/config/config.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_UploadImg__ = __webpack_require__("./resources/assets/js/components/UploadImg.vue");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_UploadImg___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__components_UploadImg__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -4789,7 +4906,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 
-// import  Welink from '../components/WeLink'
+
 /* harmony default export */ __webpack_exports__["default"] = ({
 	data: function data() {
 		return {
@@ -4800,10 +4917,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 				theme: []
 			},
 			// 已选的图文
-			selectedMaterials: {
-				id: [],
-				data: []
-			},
+			selectedMaterialIds: [],
 			// 约束菜单数量
 			menuLimit: {
 				main: 4,
@@ -4821,7 +4935,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			// 当前所在TAB
 			activeTag: 'main',
 			// 初始菜单排序
-			activeMenuIndex: -1,
+			activeMenuId: -1,
 			materialVisible: false,
 			addMenuVisible: false,
 			editMenuVisible: false,
@@ -4836,6 +4950,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 				icon: '',
 				url: ''
 			},
+			themePath: '',
 			//新增菜单界面数据
 			addForm: {},
 			formRules: {
@@ -4865,7 +4980,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 		},
 
 		// 格式化图文素材为分页形式数据
-		materials: function materials() {
+		formaterials: function formaterials() {
 			var start = (this.materialsPaginate.page - 1) * this.materialsPaginate.size;
 			this.materialsPaginate.start = start;
 			return _.slice(this.materialsData, start, this.materialsPaginate.size * this.materialsPaginate.page);
@@ -4875,23 +4990,26 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 		// 初始化值
 		init: function init() {
 			this.addForm = { label: '', type: 1, order: 1, color: '#20a0ff', icon: 'child', route: '' };
+			this.editForm = { label: '', type: 1, order: 1, color: '#20a0ff', icon: 'child', route: '' };
 			this.materialVisible = false;
 			this.addMenuVisible = false;
 			this.editMenuVisible = false;
+			this.loading = false;
 		},
 
 		// modal中的图文在关闭modal后清空
 		initDialog: function initDialog() {
-			this.selectedMaterials.data = [];
-			this.selectedMaterials.id = [];
+			this.selectedMaterialIds = [];
 		},
 
 		// 读取菜单数据并调用初始方法
 		loadMenu: function loadMenu() {
 			var _this = this;
 
+			this.$store.commit('loading');
 			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__api_api__["a" /* getWeMenu */])().then(function (response) {
 				_this.menu = response.data.data;
+				_this.$store.commit('loaded');
 				_this.init();
 			});
 		},
@@ -4917,9 +5035,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 		},
 
 		// 选择图文素材显示状态
-		showSelectMaterials: function showSelectMaterials(index) {
+		showSelectMaterials: function showSelectMaterials(id) {
 			this.materialVisible = true;
-			this.activeMenuIndex = index;
+			this.activeMenuId = id;
 		},
 
 		// 监测图文素材当前页变化
@@ -4928,7 +5046,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 		},
 
 		// 删除modal相关操作
-		onDeleteMenu: function onDeleteMenu(index) {
+		onDeleteMenu: function onDeleteMenu(id) {
 			var _this3 = this;
 
 			this.$confirm('确认要删除这个菜单吗？', '删除菜单', {
@@ -4936,7 +5054,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 				cancelButtonText: '取消',
 				type: 'error'
 			}).then(function () {
-				_this3.onDeletedMenu(_this3.menu[_this3.activeTag][index].id);
+				_this3.onDeletedMenu(id);
 			}).catch(function () {
 				_this3.$message.info('已取消删除');
 			});
@@ -4947,7 +5065,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			var _this4 = this;
 
 			this.$store.commit('loading');
-			axios.delete('wechat/menu/' + id).then(function (response) {
+			axios.delete('wesite/menu/' + id).then(function (response) {
 				_this4.$store.commit('loaded');
 				_this4.$message.success('删除成功');
 				_this4.loadMenu();
@@ -4960,12 +5078,27 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 		pushMaterials: function pushMaterials() {
 			var _this5 = this;
 
-			var result = [];
-			_.forEach(this.selectedMaterials.id, function (value) {
-				result.push(_this5.materials[value]);
-			});
-			// push to database
-			// axios.post()
+			// 如果是主题图，则只把第一个选择的素材url放入菜单中
+			if (this.activeTag === 'theme') {
+				var link = _.find(this.materialsData, ['id', this.selectedMaterialIds[0]]).url;
+				this.loading = true;
+				axios.put('wesite/menu/' + this.activeMenuId + '?do=link', { link: link }).then(function (response) {
+					_this5.$message.success(response.data.data);
+					_this5.loadMenu();
+				});
+			} else {
+				var result = [];
+				_.forEach(this.selectedMaterialIds, function (value) {
+					result.push(_.find(_this5.materialsData, ['id', value]));
+				});
+				var wx_menu_id = this.activeMenuId;
+				this.loading = true;
+				// 只更新link
+				axios.put('wesite/menu/' + wx_menu_id + '?do=link', { link: result }).then(function (response) {
+					_this5.$message.success(response.data.data);
+					_this5.loadMenu();
+				});
+			}
 		},
 
 		// 添加菜单写入数据库
@@ -4974,9 +5107,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 			this.loading = true;
 			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__api_api__["c" /* createWeMenu */])(this.addForm).then(function (response) {
-				_this6.loading = false;
 				_this6.$message.success('菜单添加成功');
-				_this6.addMenuVisible = false;
 				_this6.loadMenu();
 			}).catch(function (error) {
 				_this6.loading = false;
@@ -4991,11 +5122,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			var _this7 = this;
 
 			this.loading = true;
-			axios.put('wechat/menu/' + this.editForm.id, this.editForm).then(function (response) {
-				_this7.loading = false;
+			axios.put('wesite/menu/' + this.editForm.id, this.editForm).then(function (response) {
 				_this7.$message.success('修改成功');
-				_this7.editMenuVisible = false;
-				_this7.editForm.isUrl = false;
 				_this7.loadMenu();
 			}).catch(function (error) {
 				_this7.loading = false;
@@ -5003,16 +5131,75 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 				_this7.editForm.isUrl = false;
 				_this7.$message.error('修改失败，请与管理员联系');
 			});
+		},
+
+		// 编辑所选内容
+		editLink: function editLink(index) {
+			var menu = this.menu[this.activeTag][index];
+			this.activeMenuId = menu.id;
+			this.selectedMaterialIds = _.map(menu.link, 'id');
+			this.materialVisible = true;
+		},
+
+		// 显示提交URL对话框
+		onSetUrl: function onSetUrl(id) {
+			var _this8 = this;
+
+			var currentUrl = _.find(this.menu[this.activeTag], ['id', id]).link;
+			this.$prompt('请输入有效的网址(须带如http://)', '指定跳转网页', {
+				confirmButtonText: '确定',
+				cancelButtonText: '取消',
+				inputPattern: /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/,
+				inputErrorMessage: '网页地址格式不正确',
+				inputValue: currentUrl
+			}).then(function (_ref) {
+				var value = _ref.value;
+
+				axios.put('wesite/menu/' + id + '?do=url', { url: value }).then(function (response) {
+					_this8.$message.success(response.data.data);
+					_this8.loadMenu();
+				});
+			}).catch(function () {
+				window.console.log('add url canceled');
+			});
+		},
+		onUpload: function onUpload(id) {
+			var _this9 = this;
+
+			var data = {
+				label: '主题图',
+				theme_img: this.menu,
+				type: this.addForm.type
+			};
+			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__api_api__["c" /* createWeMenu */])(data).then(function (response) {
+				_this9.$message.success('菜单添加成功');
+				_this9.loadMenu();
+			}).catch(function (error) {
+				_this9.loading = false;
+				_this9.addMenuVisible = false;
+				_this9.$message.error('添加失败，请与管理员联系');
+			});
+		},
+		onChangeTheme: function onChangeTheme(id) {
+			var _this10 = this;
+
+			var data = {
+				theme_img: _.find(this.menu['theme'], ['id', id])['theme_img']
+			};
+			axios.put('wesite/menu/' + id, data).then(function (response) {
+				_this10.$message.success(response.data.data);
+				_this10.loadMenu();
+			});
 		}
 	},
 	mounted: function mounted() {
 		this.loadMenu();
 		this.loadMaterial();
-	}
-	// components: {
-	// 	Welink
-	// }
+	},
 
+	components: {
+		Upload: __WEBPACK_IMPORTED_MODULE_2__components_UploadImg___default.a
+	}
 });
 
 /***/ }),
@@ -7522,6 +7709,14 @@ module.exports = Array.isArray || function (arr) {
 
 /***/ }),
 
+/***/ "./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"id\":\"data-v-05973933\",\"scoped\":true,\"hasInlineConfig\":true}!./node_modules/sass-loader/lib/loader.js!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/js/components/UploadImg.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/css-base.js")();
+exports.push([module.i, "\n.user-image[data-v-05973933] {\n  position: relative;\n  display: inline-block;\n}\n.user-image img[data-v-05973933] {\n    max-width: 500px;\n    width: 100%;\n    border: 0;\n    vertical-align: middle;\n}\n.thumbnail[data-v-05973933] {\n  padding: 4px;\n  line-height: 1.42857143;\n  background-color: #fff;\n  border: 1px solid #ddd;\n  border-radius: 4px;\n  transition: border .2s ease-in-out;\n  margin-bottom: 20px;\n  display: block;\n}\n.thumbnail a > img[data-v-05973933], .thumbnail > img[data-v-05973933] {\n  margin-right: auto;\n  margin-left: auto;\n  display: block;\n  height: auto;\n}\n.user-image:hover .user-image-buttons[data-v-05973933] {\n  display: block;\n}\n.user-image .user-image-buttons[data-v-05973933] {\n  position: absolute;\n  top: 10px;\n  right: 10px;\n  display: none;\n}\n.btn-file[data-v-05973933] {\n  position: relative;\n  overflow: hidden;\n}\n.btn-file input[type=file][data-v-05973933] {\n  position: absolute;\n  top: 0;\n  right: 0;\n  min-width: 100%;\n  min-height: 100%;\n  font-size: 100px;\n  text-align: right;\n  filter: alpha(opacity=0);\n  opacity: 0;\n  outline: 0;\n  background: #fff;\n  cursor: inherit;\n  display: block;\n}\n.inputfile[data-v-05973933] {\n  width: 0.1px;\n  height: 0.1px;\n  opacity: 0;\n  overflow: hidden;\n  position: absolute;\n  z-index: -1;\n}\n.uploader[data-v-05973933] {\n  border: 1px dashed #d9d9d9;\n  border-radius: 6px;\n  position: relative;\n  overflow: hidden;\n  display: inline-block;\n  text-align: center;\n}\n.uploader-icon[data-v-05973933] {\n  font-size: 58px;\n  color: #97a8be;\n  width: 178px;\n  height: 138px;\n  line-height: 138px;\n  text-align: center;\n  cursor: pointer;\n}\n", ""]);
+
+/***/ }),
+
 /***/ "./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"id\":\"data-v-25cc5c4c\",\"scoped\":false,\"hasInlineConfig\":true}!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/js/components/UserCard.vue":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -7566,7 +7761,7 @@ exports.push([module.i, "\n.echarts {\n\theight: 300px !important;\n\twidth: 100
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/css-base.js")();
-exports.push([module.i, "\n.el-radio-button[data-v-ebff3700] {\n\tmargin: 2px;\n\tborder-left: 1px solid #bfcbd9;\n}\n.el-radio-button[data-v-ebff3700]:first-child {\n\tborder-left: none;\n}\n.el-alert[data-v-ebff3700] {\n\tborder-radius: 0;\n}\n.el-button--small[data-v-ebff3700] {\n\tfloat: right;\n\t/*margin: 0 2px 0 0;*/\n\tmargin-left: 10px;\n}\n.el-checkbox[data-v-ebff3700] {\n\tborder-bottom: dotted 1px #eee;\n\tpadding: 10px;\n\tdisplay: block;\n\tmargin: 0!important;\n}\n.el-checkbox .digest[data-v-ebff3700] {\n\twidth: 270px;\n\toverflow: hidden;\n\ttext-align: right;\n\ttext-overflow: ellipsis;\n}\n.el-upload-dragger[data-v-ebff3700] {\n\twidth: auto;\n\tpadding: 10px;\n\tcursor: auto;\n}\n.el-upload-dragger .fa-plus[data-v-ebff3700] {\n\tfont-size: 67px;\n\tcolor: #97a8be;\n\tmargin: 40px 0 16px;\n\tline-height: 50px;\n}\n", ""]);
+exports.push([module.i, "\n.el-radio-button[data-v-ebff3700] {\n\tmargin: 2px;\n\tborder-left: 1px solid #bfcbd9;\n}\n.el-radio-button[data-v-ebff3700]:first-child {\n\tborder-left: none;\n}\n.el-alert[data-v-ebff3700] {\n\tborder-radius: 0;\n}\n.el-button--small[data-v-ebff3700] {\n\tfloat: right;\n\t/*margin: 0 2px 0 0;*/\n\tmargin-left: 10px;\n}\n.el-checkbox[data-v-ebff3700], li[data-v-ebff3700] {\n\tborder-bottom: dotted 1px #eee;\n\tpadding: 10px;\n\tdisplay: block;\n\tmargin: 0!important;\n}\nli[data-v-ebff3700] {\n\tlist-style-type: none;\n}\n.el-checkbox .digest[data-v-ebff3700] {\n\twidth: 270px;\n\toverflow: hidden;\n\ttext-align: right;\n\ttext-overflow: ellipsis;\n}\n.el-upload-dragger[data-v-ebff3700] {\n\twidth: auto;\n\tpadding: 10px;\n\tcursor: auto;\n}\n.el-upload-dragger .fa-plus[data-v-ebff3700] {\n\tfont-size: 67px;\n\tcolor: #97a8be;\n\tmargin: 40px 0 16px;\n\tline-height: 50px;\n}\n.box-card[data-v-ebff3700] {\n\tmargin-top: 15px;\n}\n", ""]);
 
 /***/ }),
 
@@ -97677,6 +97872,70 @@ if (false) {
 
 /***/ }),
 
+/***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-05973933\"}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/UploadImg.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('div', {
+    staticClass: "text-center"
+  }, [(_vm.type === 'button') ? _c('div', [_c('div', {
+    staticClass: "uploader uploader-text"
+  }, [_c('input', {
+    staticClass: "inputfile",
+    attrs: {
+      "type": "file",
+      "name": "file",
+      "id": "file",
+      "accept": "image/png, image/jpeg, image/gif, image/jpg"
+    },
+    on: {
+      "change": _vm.onUpload
+    }
+  }), _vm._v(" "), _c('label', {
+    attrs: {
+      "for": "file"
+    }
+  }, [_c('i', {
+    staticClass: "fa fa-upload uploader-icon"
+  }), _c('p', {
+    staticStyle: {
+      "margin-bottom": "10px",
+      "color": "#97a8be"
+    }
+  }, [_vm._t("default", [_vm._v("点击上传图片")])], 2)])])]) : _c('div', {
+    staticClass: "user-image"
+  }, [_c('div', {
+    staticClass: "thumbnail"
+  }, [_c('img', {
+    attrs: {
+      "src": _vm.source
+    }
+  })]), _vm._v(" "), _c('div', {
+    staticClass: "user-image-buttons"
+  }, [_c('span', {
+    staticClass: "btn btn-primary btn-file"
+  }, [_c('i', {
+    staticClass: "fa fa-pencil"
+  }), _c('input', {
+    attrs: {
+      "type": "file",
+      "accept": "image/png, image/jpeg, image/gif, image/jpg"
+    },
+    on: {
+      "change": _vm.onUpload
+    }
+  })])])])])
+},staticRenderFns: []}
+module.exports.render._withStripped = true
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+     require("vue-hot-reload-api").rerender("data-v-05973933", module.exports)
+  }
+}
+
+/***/ }),
+
 /***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-25cc5c4c\"}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/UserCard.vue":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -98873,16 +99132,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     attrs: {
       "href": "#"
     }
-  }, [_vm._v("[ " + _vm._s(_vm.profile.nickname) + " ]")])])]), _vm._v(" "), (_vm.noWeather) ? _c('p', {
-    staticClass: "weather"
-  }, [_vm._v("正在获取天气信息... "), _c('a', {
-    staticClass: "btn",
-    on: {
-      "click": _vm.fetchWeather
-    }
-  }, [_c('i', {
-    staticClass: "fa fa-refresh"
-  })])]) : _c('p', {
+  }, [_vm._v("[ " + _vm._s(_vm.profile.nickname) + " ]")])])]), _vm._v(" "), _c('p', {
     staticClass: "weather"
   }, [_vm._v(_vm._s(_vm.weather.date) + " " + _vm._s(_vm.weather.week) + " " + _vm._s(_vm.weather.weather) + " "), _c('a', {
     staticClass: "btn",
@@ -99359,6 +99609,12 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       expression: "activeTag"
     }
   }, [_c('el-button', {
+    directives: [{
+      name: "show",
+      rawName: "v-show",
+      value: (_vm.activeTag !== 'theme'),
+      expression: "activeTag!=='theme'"
+    }],
     attrs: {
       "type": "success",
       "size": "large",
@@ -99380,7 +99636,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     attrs: {
       "gutter": 15
     }
-  }, _vm._l((_vm.menu.main), function(menu, index) {
+  }, _vm._l((_vm.menu[_vm.activeTag]), function(menu, index) {
     return _c('el-col', {
       key: menu.id,
       staticStyle: {
@@ -99407,7 +99663,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       },
       nativeOn: {
         "click": function($event) {
-          _vm.onDeleteMenu(index)
+          _vm.onDeleteMenu(menu.id)
         }
       }
     }, [_c('i', {
@@ -99424,7 +99680,25 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       }
     }, [_c('i', {
       staticClass: "fa fa-edit"
-    })])], 1), _vm._v(" "), (typeof _vm.selectedMaterials[_vm.activeTag] === 'undefined') ? _c('div', {
+    })]), _vm._v(" "), _c('el-button', {
+      directives: [{
+        name: "show",
+        rawName: "v-show",
+        value: (menu['link'] !== null && menu['is_url'] === 0),
+        expression: "menu['link']!==null && menu['is_url']===0"
+      }],
+      attrs: {
+        "size": "small",
+        "type": "success"
+      },
+      nativeOn: {
+        "click": function($event) {
+          _vm.editLink(index)
+        }
+      }
+    }, [_c('i', {
+      staticClass: "fa fa-wechat"
+    })])], 1), _vm._v(" "), (menu['link'] === null) ? _c('div', {
       staticClass: "el-upload-dragger"
     }, [_c('i', {
       staticClass: "fa fa-plus"
@@ -99439,32 +99713,263 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       },
       on: {
         "click": function($event) {
-          _vm.showSelectMaterials(index)
+          _vm.showSelectMaterials(menu.id)
         }
       }
     }, [_c('i', {
       staticClass: "fa fa-wechat"
-    }), _vm._v(" 添加图文素材")]), _vm._v(" "), _c('a', [_c('i', {
+    }), _vm._v(" 指定图文素材")]), _vm._v(" "), _c('a', {
+      on: {
+        "click": function($event) {
+          _vm.onSetUrl(menu.id)
+        }
+      }
+    }, [_c('i', {
       staticClass: "fa fa-link"
-    }), _vm._v(" 添加跳转网页")])])]) : _vm._e(), _vm._v(" "), _vm._l((_vm.selectedMaterials[_vm.activeTag]), function(material, index) {
-      return _c('li', {
-        key: index,
-        staticClass: "item"
-      }, [_vm._v("\n\t\t\t\t\t\t\t" + _vm._s(material.title) + "\n\t\t\t\t\t\t")])
-    })], 2)], 1)
+    }), _vm._v(" 指定跳转网页")])])]) : _c('div', [(menu['is_url'] === 0) ? _vm._l((menu['link']), function(item) {
+      return _c('li', [_c('a', {
+        attrs: {
+          "href": item.url,
+          "target": "_blank"
+        }
+      }, [_vm._v(_vm._s(item.title))])])
+    }) : [_c('li', [_c('a', {
+      attrs: {
+        "href": menu.link,
+        "target": "_blank"
+      }
+    }, [_vm._v(_vm._s(menu.link) + " ")]), _c('a', {
+      staticClass: "text-muted",
+      on: {
+        "click": function($event) {
+          _vm.onSetUrl(menu.id)
+        }
+      }
+    }, [_c('i', {
+      staticClass: "fa fa-edit"
+    })])])]], 2)])], 1)
   }))], 1), _vm._v(" "), _c('el-tab-pane', {
     attrs: {
       "label": "首页引导菜单设置",
       "name": "guide"
     }
-  }, [_vm._v("微信图文素材关联")]), _vm._v(" "), _c('el-tab-pane', {
+  }, [_c('el-row', {
+    attrs: {
+      "gutter": 15
+    }
+  }, _vm._l((_vm.menu[_vm.activeTag]), function(menu, index) {
+    return _c('el-col', {
+      key: menu.id,
+      staticStyle: {
+        "margin-top": "20px"
+      },
+      attrs: {
+        "span": 12
+      }
+    }, [_c('el-card', {
+      staticClass: "box-card"
+    }, [_c('div', {
+      staticClass: "clearfix",
+      slot: "header"
+    }, [_c('span', {
+      staticStyle: {
+        "line-height": "28px"
+      }
+    }, [_c('i', {
+      class: 'fa fa-' + menu.icon
+    }), _vm._v(" " + _vm._s(menu.label))]), _vm._v(" "), _c('el-button', {
+      attrs: {
+        "size": "small",
+        "type": "danger"
+      },
+      nativeOn: {
+        "click": function($event) {
+          _vm.onDeleteMenu(menu.id)
+        }
+      }
+    }, [_c('i', {
+      staticClass: "fa fa-trash"
+    })]), _vm._v(" "), _c('el-button', {
+      attrs: {
+        "size": "small",
+        "type": "primary"
+      },
+      nativeOn: {
+        "click": function($event) {
+          _vm.showEditMenu(index)
+        }
+      }
+    }, [_c('i', {
+      staticClass: "fa fa-edit"
+    })]), _vm._v(" "), _c('el-button', {
+      directives: [{
+        name: "show",
+        rawName: "v-show",
+        value: (menu['link'] !== null && menu['is_url'] === 0),
+        expression: "menu['link']!==null && menu['is_url']===0"
+      }],
+      attrs: {
+        "size": "small",
+        "type": "success"
+      },
+      nativeOn: {
+        "click": function($event) {
+          _vm.editLink(index)
+        }
+      }
+    }, [_c('i', {
+      staticClass: "fa fa-wechat"
+    })])], 1), _vm._v(" "), (menu['link'] === null) ? _c('div', {
+      staticClass: "el-upload-dragger"
+    }, [_c('i', {
+      staticClass: "fa fa-plus"
+    }), _vm._v(" "), _c('div', {
+      staticClass: "el-upload__text",
+      staticStyle: {
+        "margin-top": "20px"
+      }
+    }, [_c('a', {
+      staticStyle: {
+        "margin-right": "20px"
+      },
+      on: {
+        "click": function($event) {
+          _vm.showSelectMaterials(menu.id)
+        }
+      }
+    }, [_c('i', {
+      staticClass: "fa fa-wechat"
+    }), _vm._v(" 指定图文素材")]), _vm._v(" "), _c('a', {
+      on: {
+        "click": function($event) {
+          _vm.onSetUrl(menu.id)
+        }
+      }
+    }, [_c('i', {
+      staticClass: "fa fa-link"
+    }), _vm._v(" 指定跳转网页")])])]) : _c('div', [(menu['is_url'] === 0) ? _vm._l((menu['link']), function(item) {
+      return _c('li', [_c('a', {
+        attrs: {
+          "href": item.url,
+          "target": "_blank"
+        }
+      }, [_vm._v(_vm._s(item.title))])])
+    }) : [_c('li', [_c('a', {
+      attrs: {
+        "href": menu.link,
+        "target": "_blank"
+      }
+    }, [_vm._v(_vm._s(menu.link) + " ")]), _c('a', {
+      staticClass: "text-muted",
+      on: {
+        "click": function($event) {
+          _vm.onSetUrl(menu.id)
+        }
+      }
+    }, [_c('i', {
+      staticClass: "fa fa-edit"
+    })])])]], 2)])], 1)
+  }))], 1), _vm._v(" "), _c('el-tab-pane', {
     attrs: {
       "label": "主题图设置",
       "name": "theme"
     }
-  }, [_vm._v("主题图设置")])], 1), _vm._v(" "), _c('el-dialog', {
+  }, [_c('upload', {
+    directives: [{
+      name: "show",
+      rawName: "v-show",
+      value: (_vm.menuRemain > 0),
+      expression: "menuRemain > 0"
+    }],
     attrs: {
-      "title": "新增",
+      "apiUrl": "wesite/upload",
+      "source": _vm.themePath,
+      "type": "button"
+    },
+    on: {
+      "update:source": function($event) {
+        _vm.themePath = $event
+      },
+      "update": _vm.onUpload
+    }
+  }, [_vm._v("还能上传" + _vm._s(_vm.menuRemain) + "张")]), _vm._v(" "), _c('el-row', {
+    attrs: {
+      "gutter": 15
+    }
+  }, _vm._l((_vm.menu.theme), function(m, index) {
+    return _c('el-col', {
+      key: index,
+      attrs: {
+        "span": 8
+      }
+    }, [_c('el-card', {
+      staticClass: "box-card"
+    }, [_c('div', {
+      staticClass: "clearfix",
+      slot: "header"
+    }, [(m['link'] !== null) ? _c('a', {
+      staticClass: "btn btn-primary",
+      attrs: {
+        "href": m.link,
+        "target": "_blank"
+      }
+    }, [_vm._v("查看链接 "), _c('i', {
+      staticClass: "fa fa-search-plus"
+    })]) : _c('span', {
+      staticClass: "text-muted"
+    }, [_vm._v("尚未指定跳转目标")]), _vm._v(" "), _c('el-button', {
+      attrs: {
+        "size": "small",
+        "type": "danger"
+      },
+      nativeOn: {
+        "click": function($event) {
+          _vm.onDeleteMenu(m.id)
+        }
+      }
+    }, [_c('i', {
+      staticClass: "fa fa-trash"
+    })])], 1), _vm._v(" "), _c('upload', {
+      attrs: {
+        "apiUrl": "wesite/upload",
+        "source": m.theme_img
+      },
+      on: {
+        "update:source": function($event) {
+          m.theme_img = $event
+        },
+        "update": function($event) {
+          _vm.onChangeTheme(m.id)
+        }
+      }
+    }), _vm._v(" "), _c('p', {
+      staticStyle: {
+        "margin-top": "20px",
+        "text-align": "center"
+      }
+    }, [_c('a', {
+      staticStyle: {
+        "margin-right": "20px"
+      },
+      on: {
+        "click": function($event) {
+          _vm.showSelectMaterials(m.id)
+        }
+      }
+    }, [_c('i', {
+      staticClass: "fa fa-wechat"
+    }), _vm._v(" 指定图文素材")]), _vm._v(" "), _c('a', {
+      on: {
+        "click": function($event) {
+          _vm.onSetUrl(m.id)
+        }
+      }
+    }, [_c('i', {
+      staticClass: "fa fa-link"
+    }), _vm._v(" 指定跳转网页")])])], 1)], 1)
+  }))], 1)], 1), _vm._v(" "), _c('el-dialog', {
+    attrs: {
+      "title": "新增菜单",
       "close-on-click-modal": false
     },
     model: {
@@ -99506,6 +100011,10 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "label": "排列顺序"
     }
   }, [_c('el-input-number', {
+    attrs: {
+      "min": 0,
+      "max": 100
+    },
     model: {
       value: (_vm.addForm.order),
       callback: function($$v) {
@@ -99615,6 +100124,10 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "label": "排列顺序"
     }
   }, [_c('el-input-number', {
+    attrs: {
+      "min": 0,
+      "max": 100
+    },
     model: {
       value: (_vm.editForm.order),
       callback: function($$v) {
@@ -99676,7 +100189,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }, [_vm._v("提交")])], 1)], 1), _vm._v(" "), _c('el-dialog', {
     attrs: {
-      "title": "选取图文素材与菜单项关联",
+      "title": "选取图文素材(排列顺序为您选取的先后顺序)",
       "close-on-click-modal": false
     },
     on: {
@@ -99691,17 +100204,17 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }, [_c('el-checkbox-group', {
     model: {
-      value: (_vm.selectedMaterials.id),
+      value: (_vm.selectedMaterialIds),
       callback: function($$v) {
-        _vm.selectedMaterials.id = $$v
+        _vm.selectedMaterialIds = $$v
       },
-      expression: "selectedMaterials.id"
+      expression: "selectedMaterialIds"
     }
-  }, _vm._l((_vm.materials), function(m, index) {
+  }, _vm._l((_vm.formaterials), function(m) {
     return _c('el-checkbox', {
-      key: index,
+      key: m.id,
       attrs: {
-        "label": _vm.materialsPaginate.start + index
+        "label": m.id
       }
     }, [_vm._v(_vm._s(m.title)), _c('span', {
       staticClass: "text-muted pull-right digest"
@@ -99729,8 +100242,9 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "margin-top": "20px"
     },
     attrs: {
+      "loading": _vm.loading,
       "type": "success",
-      "disabled": _vm.selectedMaterials.length < 1
+      "disabled": _vm.selectedMaterialIds.length < 1
     },
     nativeOn: {
       "click": function($event) {
@@ -102240,6 +102754,33 @@ if (inBrowser && window.Vue) {
 /* harmony default export */ __webpack_exports__["a"] = (VueRouter);
 
 /* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__("./node_modules/process/browser.js")))
+
+/***/ }),
+
+/***/ "./node_modules/vue-style-loader/index.js!./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"id\":\"data-v-05973933\",\"scoped\":true,\"hasInlineConfig\":true}!./node_modules/sass-loader/lib/loader.js!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/js/components/UploadImg.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__("./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"id\":\"data-v-05973933\",\"scoped\":true,\"hasInlineConfig\":true}!./node_modules/sass-loader/lib/loader.js!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/js/components/UploadImg.vue");
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__("./node_modules/vue-style-loader/lib/addStylesClient.js")("79737456", content, false);
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"id\":\"data-v-05973933\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../node_modules/sass-loader/lib/loader.js!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./UploadImg.vue", function() {
+     var newContent = require("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"id\":\"data-v-05973933\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../node_modules/sass-loader/lib/loader.js!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./UploadImg.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
 
 /***/ }),
 
@@ -127709,13 +128250,13 @@ module.exports = Component.exports
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "p", function() { return getWeather; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "q", function() { return getMe; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "k", function() { return editMe; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "l", function() { return changePassword; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "m", function() { return changeMobile; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "n", function() { return getStastics; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "o", function() { return getWechatSummary; });
+/* unused harmony export getWeather */
+/* unused harmony export getMe */
+/* unused harmony export editMe */
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "k", function() { return changePassword; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "l", function() { return changeMobile; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "m", function() { return getStastics; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "n", function() { return getWechatSummary; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "j", function() { return getNotification; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "i", function() { return markNotification; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "g", function() { return deleteNotification; });
@@ -127747,10 +128288,10 @@ var getStastics = function getStastics() {
 };
 var getWechatSummary = function getWechatSummary() {
 	function getCumulate() {
-		return axios.get('wechat/summary?type=cumulate');
+		return axios.get('wesite/summary?type=cumulate');
 	}
 	function getSummary() {
-		return axios.get('wechat/summary');
+		return axios.get('wesite/summary');
 	}
 	return axios.all([getCumulate(), getSummary()]);
 };
@@ -127783,12 +128324,12 @@ var createUser = function createUser(params) {
 
 // 微网站
 var getWeMenu = function getWeMenu() {
-	return axios.get('wechat/menu');
+	return axios.get('wesite/menu');
 };
 var createWeMenu = function createWeMenu(params) {
-	return axios.post('wechat/menu', params);
+	return axios.post('wesite/menu', params);
 };
-// export const getMaterial = params => { return axios.get('wechat/material', { params: params })}
+// export const getMaterial = params => { return axios.get('wesite/material', { params: params })}
 var getMaterial = function getMaterial(params) {
 	return axios.get('http://demo2098390.mockable.io/wechat', { params: params });
 };
@@ -128044,6 +128585,45 @@ if (false) {(function () {
     hotAPI.createRecord("data-v-72c7d5a0", Component.options)
   } else {
     hotAPI.reload("data-v-72c7d5a0", Component.options)
+  }
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+
+/***/ "./resources/assets/js/components/UploadImg.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+
+/* styles */
+__webpack_require__("./node_modules/vue-style-loader/index.js!./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"id\":\"data-v-05973933\",\"scoped\":true,\"hasInlineConfig\":true}!./node_modules/sass-loader/lib/loader.js!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/js/components/UploadImg.vue")
+
+var Component = __webpack_require__("./node_modules/vue-loader/lib/component-normalizer.js")(
+  /* script */
+  __webpack_require__("./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/components/UploadImg.vue"),
+  /* template */
+  __webpack_require__("./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-05973933\"}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/UploadImg.vue"),
+  /* scopeId */
+  "data-v-05973933",
+  /* cssModules */
+  null
+)
+Component.options.__file = "/Users/Partoo/Code/jiaodongHospital/resources/assets/js/components/UploadImg.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
+if (Component.options.functional) {console.error("[vue-loader] UploadImg.vue: functional components are not supported with templates, they should use render functions.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-05973933", Component.options)
+  } else {
+    hotAPI.reload("data-v-05973933", Component.options)
   }
 })()}
 
@@ -128860,32 +129440,54 @@ module.exports = Component.exports
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_element_ui__ = __webpack_require__("./node_modules/element-ui/lib/element-ui.common.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_element_ui___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_element_ui__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "loading", function() { return loading; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "loaded", function() { return loaded; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "userInfo", function() { return userInfo; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "profile", function() { return profile; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "weather", function() { return weather; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "LOAD_USER_INFO", function() { return LOAD_USER_INFO; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "LOAD_WEATHER", function() { return LOAD_WEATHER; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EDIT_PROFILE", function() { return EDIT_PROFILE; });
+
+
 var loading = function loading(_ref) {
-  var commit = _ref.commit;
-  return commit('loading');
+	var commit = _ref.commit;
+	return commit('loading');
 };
 var loaded = function loaded(_ref2) {
-  var commit = _ref2.commit;
-  return commit('loaded');
+	var commit = _ref2.commit;
+	return commit('loaded');
 };
-var userInfo = function userInfo(_ref3) {
-  var commit = _ref3.commit;
-  return commit('userInfo');
+
+var LOAD_USER_INFO = function LOAD_USER_INFO(_ref3) {
+	var commit = _ref3.commit;
+	return window.axios.get('home').then(function (response) {
+		commit('SET_USER_INFO', response.data.data);
+		commit('loaded');
+	}).catch(function (error) {
+		__WEBPACK_IMPORTED_MODULE_0_element_ui__["Message"].error(error);
+		commit('loaded');
+	});
 };
-var profile = function profile(_ref4) {
-  var commit = _ref4.commit;
-  return commit('profile');
+var LOAD_WEATHER = function LOAD_WEATHER(_ref4) {
+	var commit = _ref4.commit;
+	return window.axios.get('weather').then(function (response) {
+		commit('SET_WEATHER', response.data.result);
+	}).catch(function (error) {
+		__WEBPACK_IMPORTED_MODULE_0_element_ui__["Message"].error('无法连接天气服务器:' + error.response.status);
+	});
 };
-var weather = function weather(_ref5) {
-  var commit = _ref5.commit;
-  return commit('weather');
+
+var EDIT_PROFILE = function EDIT_PROFILE(_ref5, data) {
+	var commit = _ref5.commit;
+	return window.axios.post('home', data).then(function (response) {
+		commit('UPDATE_PROFILE', response.data.data);
+		__WEBPACK_IMPORTED_MODULE_0_element_ui__["Message"].success('个人资料更新成功');
+		commit('loaded');
+	}).catch(function (error) {
+		__WEBPACK_IMPORTED_MODULE_0_element_ui__["Message"].error('更新失败:' + error.response.status);
+		commit('loaded');
+	});
 };
-// export const notifications = ({ commit }) => commit('notifications')
 
 /***/ }),
 
@@ -128896,9 +129498,9 @@ var weather = function weather(_ref5) {
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "loading", function() { return loading; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "loaded", function() { return loaded; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "userInfo", function() { return userInfo; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "profile", function() { return profile; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "weather", function() { return weather; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SET_USER_INFO", function() { return SET_USER_INFO; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "UPDATE_PROFILE", function() { return UPDATE_PROFILE; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SET_WEATHER", function() { return SET_WEATHER; });
 var loading = function loading(state) {
 	return state.loading = true;
 };
@@ -128907,17 +129509,21 @@ var loaded = function loaded(state) {
 	return state.loading = false;
 };
 
-var userInfo = function userInfo(state, data) {
+// export const userInfo = ( state, data ) => {
+// 	let userInfo = data
+// 	userInfo.profile.birthday = new Date(userInfo.profile.birthday)
+// 	return state.userInfo = userInfo
+// }
+var SET_USER_INFO = function SET_USER_INFO(state, data) {
 	var userInfo = data;
 	userInfo.profile.birthday = new Date(userInfo.profile.birthday);
 	return state.userInfo = userInfo;
 };
-
-var profile = function profile(state, data) {
-	return state.profile = data;
+var UPDATE_PROFILE = function UPDATE_PROFILE(state, data) {
+	return state.userInfo = data;
 };
 
-var weather = function weather(state, data) {
+var SET_WEATHER = function SET_WEATHER(state, data) {
 	return state.weather = data;
 };
 
@@ -128940,15 +129546,11 @@ var weather = function weather(state, data) {
 
 
 
-
 __WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */]);
-
 var state = {
     loading: false,
     userInfo: {
         profile: {},
-        // unreadNotifications: {},
-        // notifications: {},
         rolemission: {
             permissions: {},
             roles: {}
@@ -128958,15 +129560,15 @@ var state = {
 };
 
 var getters = {
-    getUserInfo: function getUserInfo(state) {
+    userInfo: function userInfo(state) {
         return state.userInfo;
     },
-    // getProfile: state => state.userInfo.profile,
-    // getNotification: () => state.userInfo.notifications,
-    getWeather: function getWeather(state) {
+    permissions: function permissions(state) {
+        return state.userInfo.rolemission.permissions;
+    },
+    weather: function weather(state) {
         return state.weather;
     }
-    // getPermissions: state => state.userInfo.rolemission.permissions
 };
 
 /* harmony default export */ __webpack_exports__["a"] = (new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({

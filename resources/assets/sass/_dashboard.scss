@@ -133,6 +133,9 @@
             .sidebar {
               padding-bottom: 10px;
               height: 100%;
+              a {
+                color: #eee;
+              }
               .user-panel {
                 white-space: nowrap;
                 overflow: hidden;

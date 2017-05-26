@@ -38,8 +38,7 @@
 						</div>
 					</div>
 					<!-- WEATHER -->
-					<p v-if="noWeather" class="weather">正在获取天气信息... <a class="btn" @click="fetchWeather"><i class="fa fa-refresh"></i></a></p>
-					<p v-else class="weather">{{weather.date}} {{weather.week}} {{weather.weather}} <a class="btn" @click="fetchWeather"><i class="fa fa-refresh"></i></a></p>
+					<p class="weather">{{weather.date}} {{weather.week}} {{weather.weather}} <a class="btn" @click="fetchWeather"><i class="fa fa-refresh"></i></a></p>
 					<!--导航菜单-->
 					<el-menu :default-active="$route.path" class="sidebar-menu" unique-opened router v-show="!collapsed" theme="dark">
 						<template v-for="(item,index) in menu" v-if="!item.hidden">
@@ -88,15 +87,11 @@
 	</div>
 </template>
 <script>
-	import { getWeather, getMe } from '../api/api'
 	export default {
 		data () {
 			return {
 				collapsed: window.localStorage.getItem('wemesh_sidebar') === 'collapsed',
-				app: window.app,
-				noWeather: true,
-				menu: [],
-				permissions: {}
+				app: window.app
 			}
 		},
 		methods: {
@@ -105,15 +100,7 @@
 				this.collapsed ? window.localStorage.setItem('wemesh_sidebar', 'collapsed') : window.localStorage.setItem('wemesh_sidebar', 'normal')
 			},
 			fetchWeather () {
-				this.noWeather = true
-				getWeather().then((response) => {
-					this.$store.commit('weather', response.data.result)
-					this.noWeather = !this.noWeather
-				})
-				.catch((error) => {
-					this.hasWeather = false
-					this.$message.error('无法连接天气服务器：' + error)
-				})
+				this.$store.dispatch('LOAD_WEATHER')
 			},
 			showMenu(i,status){
 				this.$refs.menuCollapsed.getElementsByClassName('submenu-hook-'+i)[0].style.display=status?'block':'none';
@@ -121,29 +108,41 @@
 			makeMenu () {
 				// window.console.log(this.permissions)
 				let routes = this.$router.options.routes
-				var list = []
-				_.forEach(this.permissions, function(permission) {
+				let permissions = this.$store.getters.getPermissions
+				_.forEach(permissions, function(permission) {
 				  	_.forEach(routes, function (route) {
 				  		if (permission.name === route.permission ) {
-				  			list.push(route)
+				  			this.menu.push(route)
 				  		}
 				  	})
 				})
-				this.menu = list
 			}
 		},
 		computed: {
 			weather () {
-				return this.$store.getters.getWeather
+				return this.$store.getters.weather
 			},
 			loading () {
 				return this.$store.state.loading
 			},
 			userInfo () {
-				return this.$store.getters.getUserInfo
+				return this.$store.getters.userInfo
 			},
 			profile () {
 				return this.userInfo.profile
+			},
+			menu () {
+				let routes = this.$router.options.routes
+				let menu = []
+				let permissions = this.$store.getters.permissions
+				_.forEach(permissions, function(permission) {
+				  	_.forEach(routes, function (route) {
+				  		if (permission.name === route.permission ) {
+				  			menu.push(route)
+				  		}
+				  	})
+				})
+				return menu
 			}
 		},
 		mounted () {
@@ -151,16 +150,7 @@
 			if (localStorage === null) {
 				window.localStorage.setItem('wemesh_sidebar', 'normal')
 			}
-			this.$store.commit('loading')
-			getMe().then((response) => {
-				this.$store.commit('userInfo', response.data.data)
-				this.permissions = Object.assign({}, response.data.data.rolemission.permissions)
-				this.makeMenu()
-				this.$store.commit('loaded')
-			})
-			.catch((error) => {
-				swal('出错了', '无法获取数据，请刷新页面或者联系管理员', 'error')
-			})
+			this.$store.dispatch('LOAD_USER_INFO')
 			this.fetchWeather()
 		}
 	}

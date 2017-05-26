@@ -7,10 +7,10 @@ export const changeMobile = params => { return axios.post('home/changeMobile', p
 export const getStastics = () => { return axios.get('home/statistics') }
 export const getWechatSummary = () => { 
 	function getCumulate() {
-		return axios.get('wechat/summary?type=cumulate')
+		return axios.get('wesite/summary?type=cumulate')
 	}
 	function getSummary() {
-		return axios.get('wechat/summary')
+		return axios.get('wesite/summary')
 	}
 	return axios.all([getCumulate(), getSummary()])
 }
@@ -28,8 +28,8 @@ export const createUser = params => { return axios.post('user', params) }
 // export const updateUser = params => { return axios.put('user/update', params) }
 
 // 微网站
-export const getWeMenu = () => { return axios.get('wechat/menu')}
-export const createWeMenu = params => { return axios.post('wechat/menu', params)}
-// export const getMaterial = params => { return axios.get('wechat/material', { params: params })}
+export const getWeMenu = () => { return axios.get('wesite/menu')}
+export const createWeMenu = params => { return axios.post('wesite/menu', params)}
+// export const getMaterial = params => { return axios.get('wesite/material', { params: params })}
 export const getMaterial = params => { return axios.get('http://demo2098390.mockable.io/wechat', { params: params })}
 

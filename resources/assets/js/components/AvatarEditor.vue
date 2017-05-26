@@ -30,11 +30,11 @@
     },
     methods: {
       uploadChanges (e) {
-        this.$store.commit('loading')
         let files = e.target.files || e.dataTransfer.files
         if (!files.length) {
           return
         }
+        this.$store.commit('loading')
         this.newImg === '' ? this.tempImg = this.imgPath : this.tempImg = this.newImg
         this.newImg = window.URL.createObjectURL(e.target.files[0])
         let formData = new FormData()
@@ -42,8 +42,7 @@
         formData.append('file', files[0])
         axios.post(this.apiUrl, formData)
                   .then((response) => {
-                    this.$store.commit('loaded')
-                    window.location.reload()
+                    this.$store.dispatch('LOAD_USER_INFO')
                   })
       },
       removeAvatar () {

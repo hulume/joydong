@@ -39,7 +39,7 @@
 		},
 		computed: {
 			profile () {
-				return this.$store.getters.getUserInfo.profile
+				return this.$store.getters.userInfo.profile
 			}
 		},
 		components: {

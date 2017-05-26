@@ -4,14 +4,17 @@ namespace Star\Wechat\Controllers;
 
 use App\Http\Controllers\Controller;
 use EasyWeChat;
+use Star\Services\FileManager\UploadManager;
 use Star\Utils\StarJson;
 use Star\Wechat\WeMenu;
 
-class WemenuController extends Controller {
+class WesiteController extends Controller {
 
 	protected $menu;
-	public function __construct(WeMenu $menu) {
+	protected $upload;
+	public function __construct(WeMenu $menu, UploadManager $upload) {
 		$this->menu = $menu;
+		$this->upload = $upload;
 	}
 
 	public function index() {
@@ -21,7 +24,7 @@ class WemenuController extends Controller {
 		$result = [
 			'main' => $main->toArray(),
 			'guide' => $guide->toArray(),
-			'theme' => $guide->toArray(),
+			'theme' => $theme->toArray(),
 		];
 		return StarJson::create($result, 200);
 	}
@@ -31,14 +34,41 @@ class WemenuController extends Controller {
 	}
 
 	public function update($id) {
-		if ($this->menu->find($id)->update(request()->all())) {
+		if (request()->input('do') === 'link') {
+			$links = request()->input('link');
+			$this->menu->find($id)->update(['link' => $links]);
+			return StarJson::create('更新成功', 200);
+		} else if (request()->input('do') === 'url') {
+			$link = request()->input('url');
+			$this->menu->find($id)->update(['link' => $link, 'is_url' => true]);
+			return StarJson::create('更新成功', 200);
+		} else {
+			$this->menu->find($id)->update(request()->all());
 			return StarJson::create('更新成功', 200);
 		}
-		return StarJson::create(304);
 	}
 
 	public function destroy($id) {
 		return $this->menu->destroy($id);
+	}
+
+	// 处理图片上传
+	public function uploadImg() {
+		$img = request('file');
+		$validator = \Validator::make(['file' => $img], ['file' => 'image']);
+		if ($validator->fails()) {
+			return StarJson::create(304);
+		}
+		$path = 'wesite/upload/' . date('Ymd');
+		$result = $this->upload->store($img, $path);
+		if (!$result['success']) {
+			return StarJson::create(400);
+		}
+		return $result;
+	}
+	// 保存主题图设置
+	public function saveTheme($value = '') {
+		# code...
 	}
 
 	// 默认通过缓存读取，可以添加?get=force强行刷新
@@ -69,12 +99,20 @@ class WemenuController extends Controller {
 			$type = $this->findWxfmt($item['thumb_url']);
 			file_put_contents(public_path() . '/upload/wesite/' . $item['thumb_media_id'] . '.' . $type, $thumb);
 			$materials[$index]['thumb_url'] = url('upload/wesite/' . $item['thumb_media_id'] . '.' . $type);
+			$id = $this->findId($item['url']);
+			$materials[$index]['id'] = $id;
 		}
 		Cache::forever('WeMaterials', $materials);
 		return $materials;
 	}
 
+	// 从微信thumb_url中解析出图片格式
 	private function findWxfmt($url) {
 		return explode('?wx_fmt=', $url)[1];
+	}
+	// 从微信url中解析出图文ID（未必是微信的ID，只做前端标识）
+	private function findId($url) {
+		preg_match('/sn=\w+/', $url, $match);
+		return str_replace('sn=', '', $match)[0];
 	}
 }

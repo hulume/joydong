@@ -20,19 +20,21 @@ class CreateWeSiteTable extends Migration {
 			$table->string('icon', 20)->nullable();
 			$table->string('color', 10)->nullable();
 			$table->string('theme_img')->nullable();
+			$table->boolean('is_url')->default(false);
+			$table->json('link')->nullable();
 			$table->timestamps();
 		});
 
-		Schema::create('we_pages', function (Blueprint $table) {
-			$table->increments('id');
-			$table->string('title', 30);
-			$table->string('thumb_url');
-			$table->string('url');
-			$table->unsignedTinyInteger('we_menu_id');
-			$table->string('digest')->nullable();
-			$table->string('author', 20)->nullable();
-			$table->timestamps();
-		});
+		// Schema::create('we_pages', function (Blueprint $table) {
+		// 	$table->increments('id');
+		// 	$table->string('title', 30);
+		// 	$table->string('thumb_url');
+		// 	$table->string('url');
+		// 	$table->unsignedTinyInteger('we_menu_id');
+		// 	$table->string('digest')->nullable();
+		// 	$table->string('author', 20)->nullable();
+		// 	$table->timestamps();
+		// });
 	}
 	/**
 	 * Reverse the migrations.

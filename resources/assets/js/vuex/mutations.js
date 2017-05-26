@@ -1,22 +1,26 @@
 export const loading = state => {
-    return state.loading = true
+	return state.loading = true
 }
 
 export const loaded = state => {
-    return state.loading = false
+	return state.loading = false
 }
 
-export const userInfo = ( state, data ) => {
+// export const userInfo = ( state, data ) => {
+// 	let userInfo = data
+// 	userInfo.profile.birthday = new Date(userInfo.profile.birthday)
+// 	return state.userInfo = userInfo
+// }
+export const SET_USER_INFO = ( state, data ) => {
 	let userInfo = data
 	userInfo.profile.birthday = new Date(userInfo.profile.birthday)
 	return state.userInfo = userInfo
 }
-
-export const profile = ( state, data ) => {
-	return state.profile = data 
+export const UPDATE_PROFILE = ( state, data ) => {
+	return state.userInfo = data
 }
 
-export const weather = ( state, data ) => {
+export const SET_WEATHER = ( state, data ) => {
 	return state.weather = data
 }
 

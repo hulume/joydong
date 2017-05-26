@@ -1,36 +1,98 @@
 <template>
 	<div>
 		<el-tabs v-model="activeTag">
-			<el-button type="success" size="large" @click.native="showAddMenu" :disabled="menuRemain<1"><i class="fa fa-plus"></i> 添加菜单 (还可加{{menuRemain}}个)</el-button>
+			<el-button v-show="activeTag!=='theme'" type="success" size="large" @click.native="showAddMenu" :disabled="menuRemain<1"><i class="fa fa-plus"></i> 添加菜单 (还可加{{menuRemain}}个)</el-button>
+			<!-- 底部导航开始 -->
 			<el-tab-pane label="底部导航菜单设置" name="main">
 				<el-row :gutter="15">
-					<el-col :span="12" v-for="(menu, index) in menu.main" :key="menu.id" style="margin-top:20px;">
+					<el-col :span="12" v-for="(menu, index) in menu[activeTag]" :key="menu.id" style="margin-top:20px;">
 						<el-card class="box-card">
 							<div slot="header" class="clearfix">
 								<span style="line-height: 28px;"><i :class="'fa fa-' + menu.icon"></i> {{menu.label}}</span>
-								<el-button size="small" type="danger" @click.native="onDeleteMenu(index)"><i class="fa fa-trash"></i></el-button>
+								<el-button size="small" type="danger" @click.native="onDeleteMenu(menu.id)"><i class="fa fa-trash"></i></el-button>
 								<el-button size="small" type="primary" @click.native="showEditMenu(index)"><i class="fa fa-edit"></i></el-button>
-								<!-- <el-button size="small" type="success" @click.native="showSelectMaterials"><i class="fa fa-wechat"></i></el-button> -->
+								<el-button v-show="menu['link']!==null && menu['is_url']===0" size="small" type="success" @click.native="editLink(index)"><i class="fa fa-wechat"></i></el-button>
 							</div>
-							<div v-if="typeof selectedMaterials[activeTag] === 'undefined'" class="el-upload-dragger">
+							<div v-if="menu['link']===null" class="el-upload-dragger">
 								<i class="fa fa-plus"></i>
 								<div class="el-upload__text" style="margin-top:20px">
-									<a style="margin-right:20px;" @click="showSelectMaterials(index)"><i class="fa fa-wechat"></i> 添加图文素材</a>
-									<a><i class="fa fa-link"></i> 添加跳转网页</a>
+									<a style="margin-right:20px;" @click="showSelectMaterials(menu.id)"><i class="fa fa-wechat"></i> 指定图文素材</a>
+									<a @click="onSetUrl(menu.id)"><i class="fa fa-link"></i> 指定跳转网页</a>
 								</div>
 							</div>
-							<li v-for="(material, index) in selectedMaterials[activeTag]" :key="index" class="item">
-								{{material.title}}
-							</li>
+							<div v-else>
+								<template v-if="menu['is_url']===0">
+									<li  v-for="item in menu['link']">
+										<a :href="item.url" target="_blank">{{item.title}}</a>
+									</li>
+								</template>
+								<template v-else>
+									<li>
+										<a  :href="menu.link" target="_blank">{{menu.link}} </a><a class="text-muted" @click="onSetUrl(menu.id)"><i class="fa fa-edit"></i></a>
+									</li>
+								</template>
+							</div>
 						</el-card>
 					</el-col>
 				</el-row>
 			</el-tab-pane>
-			<el-tab-pane label="首页引导菜单设置" name="guide">微信图文素材关联</el-tab-pane>
-			<el-tab-pane label="主题图设置" name="theme">主题图设置</el-tab-pane>
+			<!-- 引导菜单开始 -->
+			<el-tab-pane label="首页引导菜单设置" name="guide">
+				<el-row :gutter="15">
+					<el-col :span="12" v-for="(menu, index) in menu[activeTag]" :key="menu.id" style="margin-top:20px;">
+						<el-card class="box-card">
+							<div slot="header" class="clearfix">
+								<span style="line-height: 28px;"><i :class="'fa fa-' + menu.icon"></i> {{menu.label}}</span>
+								<el-button size="small" type="danger" @click.native="onDeleteMenu(menu.id)"><i class="fa fa-trash"></i></el-button>
+								<el-button size="small" type="primary" @click.native="showEditMenu(index)"><i class="fa fa-edit"></i></el-button>
+								<el-button v-show="menu['link']!==null && menu['is_url']===0" size="small" type="success" @click.native="editLink(index)"><i class="fa fa-wechat"></i></el-button>
+							</div>
+							<div v-if="menu['link']===null" class="el-upload-dragger">
+								<i class="fa fa-plus"></i>
+								<div class="el-upload__text" style="margin-top:20px">
+									<a style="margin-right:20px;" @click="showSelectMaterials(menu.id)"><i class="fa fa-wechat"></i> 指定图文素材</a>
+									<a @click="onSetUrl(menu.id)"><i class="fa fa-link"></i> 指定跳转网页</a>
+								</div>
+							</div>
+							<div v-else>
+								<template v-if="menu['is_url']===0">
+									<li  v-for="item in menu['link']">
+										<a :href="item.url" target="_blank">{{item.title}}</a>
+									</li>
+								</template>
+								<template v-else>
+									<li>
+										<a  :href="menu.link" target="_blank">{{menu.link}} </a><a class="text-muted" @click="onSetUrl(menu.id)"><i class="fa fa-edit"></i></a>
+									</li>
+								</template>
+							</div>
+						</el-card>
+					</el-col>
+				</el-row>
+			</el-tab-pane>
+			<!-- 主题图开始 -->
+			<el-tab-pane label="主题图设置" name="theme">
+			<upload v-show="menuRemain > 0" apiUrl="wesite/upload" :source.sync="themePath" type="button" @update="onUpload">还能上传{{menuRemain}}张</upload>
+				<el-row :gutter="15">
+					<el-col :span="8" v-for="(m, index) in menu.theme" :key="index">
+						<el-card class="box-card">
+						<div slot="header" class="clearfix">
+							<a :href="m.link" target="_blank" v-if="m['link']!==null" class="btn btn-primary">查看链接 <i class="fa fa-search-plus"></i> </a>
+							<span v-else class="text-muted">尚未指定跳转目标</span>
+							<el-button size="small" type="danger" @click.native="onDeleteMenu(m.id)"><i class="fa fa-trash"></i></el-button>
+						</div>
+						<upload apiUrl="wesite/upload" :source.sync="m.theme_img" @update="onChangeTheme(m.id)"></upload>
+							<p style="margin-top:20px; text-align: center">
+								<a style="margin-right:20px;" @click="showSelectMaterials(m.id)"><i class="fa fa-wechat"></i> 指定图文素材</a>
+								<a @click="onSetUrl(m.id)"><i class="fa fa-link"></i> 指定跳转网页</a>
+							</p>
+						</el-card>
+					</el-col>
+				</el-row>
+			</el-tab-pane>
 		</el-tabs>
 		<!--新增界面-->
-		<el-dialog title="新增" v-model="addMenuVisible" :close-on-click-modal="false">
+		<el-dialog title="新增菜单" v-model="addMenuVisible" :close-on-click-modal="false">
 			<el-form :model="addForm" label-width="120px" :rules="formRules" ref="addForm">
 				<el-form-item label="菜单类型">
 					{{currentMenuType}}
@@ -39,7 +101,7 @@
 					<el-input v-model="addForm.label" auto-complete="off"></el-input>
 				</el-form-item>
 				<el-form-item label="排列顺序">
-					<el-input-number v-model="addForm.order"></el-input-number>
+					<el-input-number v-model="addForm.order" :min="0" :max="100"></el-input-number>
 				</el-form-item>
 				<el-form-item label="背景色" v-show="activeTag==='guide'">
 					<el-color-picker v-model="addForm.color"></el-color-picker>
@@ -56,7 +118,7 @@
 			</div>
 		</el-dialog>
 		<!--编辑界面-->
-		<el-dialog title="编辑" v-model="editMenuVisible" :close-on-click-modal="false">
+		<el-dialog title="编辑" v-model="editMenuVisible" :close-on-click-modal="false" >
 			<el-form :model="editForm" label-width="80px" :rules="formRules" ref="editForm">
 				<el-form-item label="菜单类型">
 					{{currentMenuType}}
@@ -65,7 +127,7 @@
 					<el-input v-model="editForm.label" auto-complete="off"></el-input>
 				</el-form-item>
 				<el-form-item label="排列顺序">
-					<el-input-number v-model="editForm.order"></el-input-number>
+					<el-input-number v-model="editForm.order" :min="0" :max="100"></el-input-number>
 				</el-form-item>
 				<el-form-item label="背景色" v-show="activeTag==='guide'">
 					<el-color-picker v-model="editForm.color"></el-color-picker>
@@ -81,23 +143,20 @@
 			</div>
 		</el-dialog>
 		<!-- 图文消息库界面 -->
-		<el-dialog title="选取图文素材与菜单项关联" v-model="materialVisible" :close-on-click-modal="false" @close="initDialog">
-		<!-- <li v-for="(m, index) in materials" :key="index" @click="onSelectMaterials(index)">
-			{{m.title}} <span class="text-muted pull-right">{{m.digest}}</span>
-		</li> -->
-		<el-checkbox-group  v-model="selectedMaterials.id">
-			<el-checkbox v-for="(m, index) in materials" :key="index" :label="materialsPaginate.start+index">{{m.title}}<span class="text-muted pull-right digest">{{m.digest}}</span></el-checkbox>
-		</el-checkbox-group>
-		<el-pagination layout="prev, pager, next" :total="materialsData.length" :page-size="15" :current-page.sync="materialsPaginate.page" @current-change="onChangeMaterialPage" style="float:right; margin-top: 20px; display: inline-block">
-		</el-pagination>
-		<el-button style="margin-top: 20px;" type="success" :disabled="selectedMaterials.length<1" @click.native="pushMaterials">关联所选项</el-button>
+		<el-dialog title="选取图文素材(排列顺序为您选取的先后顺序)" v-model="materialVisible" :close-on-click-modal="false" @close="initDialog">
+			<el-checkbox-group  v-model="selectedMaterialIds">
+				<el-checkbox v-for="m in formaterials" :key="m.id" :label="m.id">{{m.title}}<span class="text-muted pull-right digest">{{m.digest}}</span></el-checkbox>
+			</el-checkbox-group>
+			<el-pagination layout="prev, pager, next" :total="materialsData.length" :page-size="15" :current-page.sync="materialsPaginate.page" @current-change="onChangeMaterialPage" style="float:right; margin-top: 20px; display: inline-block">
+			</el-pagination>
+			<el-button style="margin-top: 20px;" :loading="loading" type="success" :disabled="selectedMaterialIds.length<1" @click.native="pushMaterials">关联所选项</el-button>
 		</el-dialog>
 	</div>
 </template>
 <script>
 	import { getWeMenu, createWeMenu, getMaterial } from '../api/api'
 	import { ICONS } from '../config/config'
-	// import  Welink from '../components/WeLink'
+	import Upload from '../components/UploadImg'
 	export default {
 		data () {
 			return {
@@ -108,10 +167,7 @@
 					theme: []
 				}, 
 				// 已选的图文
-				selectedMaterials: {
-					id: [],
-					data: []
-				},
+				selectedMaterialIds: [],
 				// 约束菜单数量
 				menuLimit: {
 					main: 4,
@@ -129,7 +185,7 @@
 				// 当前所在TAB
 				activeTag: 'main',
 				// 初始菜单排序
-				activeMenuIndex: -1,
+				activeMenuId: -1,
 				materialVisible: false,
 				addMenuVisible: false,
 				editMenuVisible: false,
@@ -144,6 +200,7 @@
 					icon: '',
 					url: ''
 				},
+				themePath: '',
 				//新增菜单界面数据
 				addForm: {},
 				formRules: {
@@ -172,7 +229,7 @@
 				return this.menuLimit[this.activeTag] - this.menu[this.activeTag].length
 			},
 			// 格式化图文素材为分页形式数据
-			materials () {
+			formaterials () {
 				let start = (this.materialsPaginate.page - 1) * this.materialsPaginate.size
 				this.materialsPaginate.start = start
 				return _.slice(this.materialsData, start, this.materialsPaginate.size * this.materialsPaginate.page)
@@ -182,20 +239,23 @@
 			// 初始化值
 			init () {
 				this.addForm = { label: '', type: 1, order: 1, color: '#20a0ff', icon: 'child', route: '' }
+				this.editForm = { label: '', type: 1, order: 1, color: '#20a0ff', icon: 'child', route: '' }
 				this.materialVisible = false
 				this.addMenuVisible = false
 				this.editMenuVisible = false
+				this.loading = false
 			},
 			// modal中的图文在关闭modal后清空
 			initDialog () {
-				this.selectedMaterials.data = []
-				this.selectedMaterials.id = []
+				this.selectedMaterialIds = []
 			},
 			// 读取菜单数据并调用初始方法
 			loadMenu () {
+				this.$store.commit('loading')
 				getWeMenu ()
 				.then((response) => {
 					this.menu = response.data.data
+					this.$store.commit('loaded')
 					this.init()
 				})
 			},
@@ -216,22 +276,22 @@
 				this.editMenuVisible = true
 			},
 			// 选择图文素材显示状态
-			showSelectMaterials (index) {
+			showSelectMaterials (id) {
 				this.materialVisible = true
-				this.activeMenuIndex = index
+				this.activeMenuId = id
 			},
 			// 监测图文素材当前页变化
 			onChangeMaterialPage (page) {
 				this.materialsPaginate.page = page
 			},
 			// 删除modal相关操作
-			onDeleteMenu (index) {
+			onDeleteMenu (id) {
 				this.$confirm('确认要删除这个菜单吗？', '删除菜单', {
 					confirmButtonText: '确定删除',
 					cancelButtonText: '取消',
 					type: 'error'
 				}).then(() => {
-					this.onDeletedMenu(this.menu[this.activeTag][index].id)
+					this.onDeletedMenu(id)
 				}).catch(() => {
 					this.$message.info('已取消删除')
 				})
@@ -239,7 +299,7 @@
 			// 删除数据库中的菜单数据
 			onDeletedMenu (id) {
 				this.$store.commit('loading')
-				axios.delete('wechat/menu/' + id)
+				axios.delete('wesite/menu/' + id)
 				.then((response) => {
 					this.$store.commit('loaded')
 					this.$message.success('删除成功')
@@ -251,21 +311,36 @@
 			},
 			// 选择素材后写入数据库操作
 			pushMaterials () {
-				let result = []
-				_.forEach(this.selectedMaterials.id, (value) => {
-					result.push(this.materials[value])
-				})
-				// push to database
-				// axios.post()
+				// 如果是主题图，则只把第一个选择的素材url放入菜单中
+				if (this.activeTag === 'theme') {
+					let link = (_.find(this.materialsData, ['id', this.selectedMaterialIds[0]]).url)
+					this.loading = true
+					axios.put('wesite/menu/' + this.activeMenuId + '?do=link', {link: link})
+						.then((response) => {
+							this.$message.success(response.data.data)
+							this.loadMenu()
+						})
+				} else {
+					let result = []
+					_.forEach(this.selectedMaterialIds, (value) => {
+						result.push(_.find(this.materialsData, ['id', value]))
+					})
+					let wx_menu_id = this.activeMenuId
+					this.loading = true
+					// 只更新link
+					axios.put('wesite/menu/' + wx_menu_id + '?do=link', {link: result})
+					.then((response) => {
+						this.$message.success(response.data.data)
+						this.loadMenu()
+					})
+				}
 			},
 			// 添加菜单写入数据库
 			addSubmit () {
 				this.loading = true
 				createWeMenu(this.addForm)
 				.then((response) => {
-					this.loading = false
 					this.$message.success('菜单添加成功')
-					this.addMenuVisible = false
 					this.loadMenu()
 				})
 				.catch((error) => {
@@ -278,12 +353,9 @@
 			// 编辑菜单数据库操作
 			editSubmit () {
 				this.loading = true
-				axios.put('wechat/menu/' + this.editForm.id, this.editForm)
+				axios.put('wesite/menu/' + this.editForm.id, this.editForm)
 				.then((response) => {
-					this.loading = false
 					this.$message.success('修改成功')
-					this.editMenuVisible = false
-					this.editForm.isUrl = false
 					this.loadMenu()
 				})
 				.catch((error) => {
@@ -292,15 +364,68 @@
 					this.editForm.isUrl = false
 					this.$message.error('修改失败，请与管理员联系')
 				})
+			},
+			// 编辑所选内容
+			editLink (index) {
+				let menu = this.menu[this.activeTag][index]
+				this.activeMenuId = menu.id
+				this.selectedMaterialIds = _.map(menu.link, 'id')
+				this.materialVisible = true
+			},
+			// 显示提交URL对话框
+			onSetUrl (id) {
+				let currentUrl = _.find(this.menu[this.activeTag], ['id', id]).link
+				this.$prompt('请输入有效的网址(须带如http://)', '指定跳转网页', {
+					confirmButtonText: '确定',
+					cancelButtonText: '取消',
+					inputPattern: /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/,
+					inputErrorMessage: '网页地址格式不正确',
+					inputValue: currentUrl
+				}).then(( {value} ) => {
+					axios.put('wesite/menu/' + id + '?do=url', {url: value})
+						.then((response) => {
+							this.$message.success(response.data.data)
+							this.loadMenu()
+						})
+				}).catch (() => {
+					window.console.log('add url canceled')
+				})
+			},
+			onUpload (id) {
+				let data = {
+					label: '主题图',
+					theme_img: this.menu,
+					type: this.addForm.type
+				}
+				createWeMenu(data)
+				.then((response) => {
+					this.$message.success('菜单添加成功')
+					this.loadMenu()
+				})
+				.catch((error) => {
+					this.loading = false
+					this.addMenuVisible = false
+					this.$message.error('添加失败，请与管理员联系')
+				})
+			},
+			onChangeTheme (id) {
+				let data = {
+					theme_img: _.find(this.menu['theme'], ['id', id])['theme_img']
+				}
+				axios.put('wesite/menu/' + id, data)
+					.then((response) => {
+						this.$message.success(response.data.data)
+						this.loadMenu()
+					})
 			}
 		},
 		mounted () {
 			this.loadMenu()
 			this.loadMaterial()
+		},
+		components: {
+			Upload
 		}
-		// components: {
-		// 	Welink
-		// }
 	}
 </script>
 <style scoped>
@@ -319,11 +444,14 @@
 		/*margin: 0 2px 0 0;*/
 		margin-left: 10px;
 	}
-	.el-checkbox {
+	.el-checkbox, li {
 		border-bottom: dotted 1px #eee;
 		padding: 10px;
 		display: block;
 		margin: 0!important;
+	}
+	li {
+		list-style-type: none;
 	}
 	.el-checkbox .digest {
 		width: 270px;
@@ -341,5 +469,8 @@
 		color: #97a8be;
 		margin: 40px 0 16px;
 		line-height: 50px;
+	}
+	.box-card {
+		margin-top: 15px;
 	}
 </style>
