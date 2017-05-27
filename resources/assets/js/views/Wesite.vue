@@ -4,11 +4,17 @@
 			<el-button v-show="activeTag!=='theme'" type="success" size="large" @click.native="showAddMenu" :disabled="menuRemain<1"><i class="fa fa-plus"></i> 添加菜单 (还可加{{menuRemain}}个)</el-button>
 			<!-- 底部导航开始 -->
 			<el-tab-pane label="底部导航菜单设置" name="main">
+				<el-alert style="margin-top: 25px;"
+				    title="底部导航菜单设置说明"
+				    type="info"
+				    description="系统默认将第一条记录（可以通过编辑中的排列顺序进行调整）作为首页，首页无法使用跳转链接，只能指定图文素材">
+				  </el-alert>
 				<el-row :gutter="15">
-					<el-col :span="12" v-for="(menu, index) in menu[activeTag]" :key="menu.id" style="margin-top:20px;">
+					<el-col :span="8" v-for="(menu, index) in menu[activeTag]" :key="menu.id" style="margin-top:20px;">
 						<el-card class="box-card">
 							<div slot="header" class="clearfix">
 								<span style="line-height: 28px;"><i :class="'fa fa-' + menu.icon"></i> {{menu.label}}</span>
+								<span class="text-muted">(排序:{{index+1}})</span>
 								<el-button size="small" type="danger" @click.native="onDeleteMenu(menu.id)"><i class="fa fa-trash"></i></el-button>
 								<el-button size="small" type="primary" @click.native="showEditMenu(index)"><i class="fa fa-edit"></i></el-button>
 								<el-button v-show="menu['link']!==null && menu['is_url']===0" size="small" type="success" @click.native="editLink(index)"><i class="fa fa-wechat"></i></el-button>
@@ -17,7 +23,7 @@
 								<i class="fa fa-plus"></i>
 								<div class="el-upload__text" style="margin-top:20px">
 									<a style="margin-right:20px;" @click="showSelectMaterials(menu.id)"><i class="fa fa-wechat"></i> 指定图文素材</a>
-									<a @click="onSetUrl(menu.id)"><i class="fa fa-link"></i> 指定跳转网页</a>
+									<a v-show="index!==0" @click="onSetUrl(menu.id)"><i class="fa fa-link"></i> 指定跳转网页</a>
 								</div>
 							</div>
 							<div v-else>
@@ -39,7 +45,7 @@
 			<!-- 引导菜单开始 -->
 			<el-tab-pane label="首页引导菜单设置" name="guide">
 				<el-row :gutter="15">
-					<el-col :span="12" v-for="(menu, index) in menu[activeTag]" :key="menu.id" style="margin-top:20px;">
+					<el-col :span="8" v-for="(menu, index) in menu[activeTag]" :key="menu.id" style="margin-top:20px;">
 						<el-card class="box-card">
 							<div slot="header" class="clearfix">
 								<span style="line-height: 28px;"><i :class="'fa fa-' + menu.icon"></i> {{menu.label}}</span>
@@ -451,7 +457,7 @@
 		margin: 0!important;
 	}
 	li {
-		list-style-type: none;
+		list-style-type:none;
 	}
 	.el-checkbox .digest {
 		width: 270px;

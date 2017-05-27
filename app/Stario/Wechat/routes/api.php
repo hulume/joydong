@@ -9,4 +9,4 @@ Route::group([
 });
 
 // 对外部访客提供
-Route::get('wesite', 'WesiteController@index');
+Route::get('wesite', 'WesiteController@index')->middleware(['api', 'cors']);

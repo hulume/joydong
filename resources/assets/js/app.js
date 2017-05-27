@@ -6,9 +6,6 @@ import routes from './config/routes.js'
 import App from './App.vue'
 import ElementUI from 'element-ui'
 
-// import VueEvents from 'vue-events'
-// Vue.use(VueEvents)
-
 Vue.use(VueRouter)
 Vue.use(ElementUI)
 const router = new VueRouter({

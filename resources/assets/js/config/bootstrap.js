@@ -1,18 +1,9 @@
 import {API_ROOT} from './config'
 import '../../theme-default/index.css'
 
-// window.$ = window.jQuery = require('jquery')
 window._ = require('lodash')
 window.axios = require('axios')
-// require('../bower_components/bootstrap-sass/assets/javascripts/bootstrap.min.js')
-// require('./plugins/datepicker')
-// require('./dropzone')
 window.Vue = require('vue')
-// window.toastr = require('toastr/build/toastr.min.js')
-// window.swal = require('sweetalert')
-// window.toastr.options = {
-//     positionClass: "toast-top-right"
-// }
 
 window.axios.interceptors.request.use(function(config){
     config.headers['X-CSRF-TOKEN'] = Wemesh.csrfToken
@@ -26,11 +17,11 @@ window.axios.defaults.headers.post = {
 window.axios.interceptors.response.use(
   response => response,
   (error) => {
-    // if (error.response.status === 401) {
-    //   window.location = '/login'
-    // }
+    if (error.response.status === 401) {
+      window.location = '/login'
+    }
     // if (error.response.status === 404) {
-    // 	window.location = '/'
+    // 	window.location = '/home'
     // }
     return Promise.reject(error)
   })
