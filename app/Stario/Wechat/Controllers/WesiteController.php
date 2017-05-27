@@ -18,13 +18,43 @@ class WesiteController extends Controller {
 	}
 
 	public function index() {
-		$main = $this->menu->main()->orderBy('order')->get();
-		$guide = $this->menu->guide()->orderBy('order')->get();
-		$theme = $this->menu->theme()->orderBy('order')->get();
+		$main = $this->menu->main()->orderBy('order')->get()->map(function ($item) {
+			return [
+				'id' => $item->id,
+				'label' => $item->label,
+				'type' => $item->type,
+				'order' => $item->order,
+				'icon' => $item->icon,
+				'is_url' => $item->is_url,
+				'link' => $item->link,
+			];
+		});
+		$guide = $this->menu->guide()->orderBy('order')->get()->map(function ($item) {
+			return [
+				'id' => $item->id,
+				'label' => $item->label,
+				'type' => $item->type,
+				'order' => $item->order,
+				'icon' => $item->icon,
+				'color' => $item->color,
+				'is_url' => $item->is_url,
+				'link' => $item->link,
+			];
+		});
+		$theme = $this->menu->theme()->orderBy('order')->get()->map(function ($item) {
+			return [
+				'id' => $item->id,
+				'type' => $item->type,
+				'order' => $item->order,
+				'is_url' => $item->is_url,
+				'theme_img' => $item->theme_img,
+				'link' => $item->link,
+			];
+		});
 		$result = [
-			'main' => $main->toArray(),
-			'guide' => $guide->toArray(),
-			'theme' => $theme->toArray(),
+			'main' => $main,
+			'guide' => $guide,
+			'theme' => $theme,
 		];
 		return StarJson::create($result, 200);
 	}

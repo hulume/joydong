@@ -5168,7 +5168,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 			var data = {
 				label: '主题图',
-				theme_img: this.menu,
+				theme_img: this.themePath,
 				type: this.addForm.type
 			};
 			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__api_api__["c" /* createWeMenu */])(data).then(function (response) {

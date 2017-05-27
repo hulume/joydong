@@ -394,7 +394,7 @@
 			onUpload (id) {
 				let data = {
 					label: '主题图',
-					theme_img: this.menu,
+					theme_img: this.themePath,
 					type: this.addForm.type
 				}
 				createWeMenu(data)
