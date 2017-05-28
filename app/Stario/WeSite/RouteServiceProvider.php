@@ -1,13 +1,13 @@
 <?php
 
-namespace Star\Wechat;
+namespace Star\Wesite;
 
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Route;
 
 class RouteServiceProvider extends ServiceProvider {
 
-	protected $namespace = 'Star\Wechat\Controllers';
+	protected $namespace = 'Star\Wesite\Controllers';
 
 	public function boot() {
 
@@ -16,6 +16,13 @@ class RouteServiceProvider extends ServiceProvider {
 
 	public function map() {
 		$this->mapApiRoutes();
+		$this->mapWebRoutes();
+	}
+
+	protected function mapWebRoutes() {
+		Route::middleware('web')
+			->namespace($this->namespace)
+			->group(dirname(__FILE__) . '/routes/web.php');
 	}
 
 	protected function mapApiRoutes() {

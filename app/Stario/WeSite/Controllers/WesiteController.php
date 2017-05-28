@@ -1,12 +1,12 @@
 <?php
 
-namespace Star\Wechat\Controllers;
+namespace Star\Wesite\Controllers;
 
 use App\Http\Controllers\Controller;
 use EasyWeChat;
 use Star\Services\FileManager\UploadManager;
 use Star\Utils\StarJson;
-use Star\Wechat\WeMenu;
+use Star\Wesite\WeMenu;
 
 class WesiteController extends Controller {
 

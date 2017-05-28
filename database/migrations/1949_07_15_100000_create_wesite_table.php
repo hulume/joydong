@@ -11,7 +11,7 @@ class CreateWeSiteTable extends Migration {
 	 * @return void
 	 */
 	public function up() {
-		Schema::create('we_menus', function (Blueprint $table) {
+		Schema::create('wesite', function (Blueprint $table) {
 			$table->increments('id');
 			$table->string('label', 30);
 			$table->unsignedTinyInteger('type')->defalut(1); // 1.mainbar 2.guide 3.theme

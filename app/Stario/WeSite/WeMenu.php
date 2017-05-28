@@ -1,11 +1,11 @@
 <?php
 
-namespace Star\Wechat;
+namespace Star\Wesite;
 
 use Illuminate\Database\Eloquent\Model;
 
 class WeMenu extends Model {
-	protected $table = 'we_menus';
+	protected $table = 'wesite';
 	protected $guarded = ['id'];
 	protected $casts = ['link' => 'array'];
 

@@ -180,7 +180,8 @@ return [
 		Star\ICenter\RouteServiceProvider::class,
 		Star\ICenter\Permission\PermissionServiceProvider::class,
 		Star\SimpleMessage\SmsServiceProvider::class,
-		Star\Wechat\RouteServiceProvider::class,
+		Star\Wesite\WesiteServiceProvider::class,
+		Star\Wesite\RouteServiceProvider::class,
 
 		Overtrue\LaravelWechat\ServiceProvider::class,
 		Maatwebsite\Excel\ExcelServiceProvider::class,
