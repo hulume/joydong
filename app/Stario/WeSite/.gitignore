@@ -1,5 +1,5 @@
 /node_modules
-fonts/*
+/fonts
 /resources/assets/bower_components
 *.vscode
 .vscode/*
