@@ -1,14 +1,4 @@
 <?php
-Route::get('wesite', function () {
-	return view('wesite::app');
-});
-
-/*
-Wechat
- */
-// Route::group(['prefix' => 'wechat', 'middleware' => 'auth'], function () {
-// 	Route::any('/', '\Star\Wechat\Controllers\WechatController@serve');
-// 	Route::get('user', '\Star\Wechat\Controllers\WechatController@user')->middleware('wechat.oauth');
-// 	Route::get('material', '\Star\Wechat\Controllers\WechatController@material');
-// 	Route::get('summary', '\Star\Wechat\Controllers\WechatController@summary');
-// });
+// 微网站对外入口,微网站只调取openid
+Route::get('wesite', 'WesiteController@pub');
+// ->middleware('wechat.oauth:snsapi_base');

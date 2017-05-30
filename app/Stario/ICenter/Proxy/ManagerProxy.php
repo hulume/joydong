@@ -21,7 +21,7 @@ class ManagerProxy extends BaseProxy {
 	public function attemptLogin($request) {
 		$user = $this->user->where('mobile', $request['mobile'])->first();
 		if (!empty($user)) {
-			return $this->proxy($request);
+			return $this->proxy('password', $request);
 		}
 		return StarJson::create(401);
 	}

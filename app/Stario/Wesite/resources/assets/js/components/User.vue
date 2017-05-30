@@ -21,6 +21,12 @@
   export default {
     components: {
       Cell
+    },
+    mounted () {
+      let flag = window.localStorage.getItem('auth')
+      if (flag === null || flag !== 'passed') {
+        this.$router.replace('login')
+      }
     }
   }
 </script>

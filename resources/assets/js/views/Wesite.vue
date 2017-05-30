@@ -29,12 +29,12 @@
 							<div v-else>
 								<template v-if="menu['is_url']===0">
 									<li  v-for="item in menu['link']">
-										<a :href="item.url" target="_blank">{{item.title}}</a>
+										<a :href="item.url">{{item.title}}</a>
 									</li>
 								</template>
 								<template v-else>
 									<li>
-										<a  :href="menu.link" target="_blank">{{menu.link}} </a><a class="text-muted" @click="onSetUrl(menu.id)"><i class="fa fa-edit"></i></a>
+										<a  :href="menu.link">{{menu.link}} </a><a class="text-muted" @click="onSetUrl(menu.id)"><i class="fa fa-edit"></i></a>
 									</li>
 								</template>
 							</div>
@@ -63,12 +63,12 @@
 							<div v-else>
 								<template v-if="menu['is_url']===0">
 									<li  v-for="item in menu['link']">
-										<a :href="item.url" target="_blank">{{item.title}}</a>
+										<a :href="item.url">{{item.title}}</a>
 									</li>
 								</template>
 								<template v-else>
 									<li>
-										<a  :href="menu.link" target="_blank">{{menu.link}} </a><a class="text-muted" @click="onSetUrl(menu.id)"><i class="fa fa-edit"></i></a>
+										<a  :href="menu.link">{{menu.link}} </a><a class="text-muted" @click="onSetUrl(menu.id)"><i class="fa fa-edit"></i></a>
 									</li>
 								</template>
 							</div>
@@ -83,7 +83,7 @@
 					<el-col :span="8" v-for="(m, index) in menu.theme" :key="index">
 						<el-card class="box-card">
 						<div slot="header" class="clearfix">
-							<a :href="m.link" target="_blank" v-if="m['link']!==null" class="btn btn-primary">查看链接 <i class="fa fa-search-plus"></i> </a>
+							<a :href="m.link" v-if="m['link']!==null" class="btn btn-primary">查看链接 <i class="fa fa-search-plus"></i> </a>
 							<span v-else class="text-muted">尚未指定跳转目标</span>
 							<el-button size="small" type="danger" @click.native="onDeleteMenu(m.id)"><i class="fa fa-trash"></i></el-button>
 						</div>
@@ -155,7 +155,8 @@
 			</el-checkbox-group>
 			<el-pagination layout="prev, pager, next" :total="materialsData.length" :page-size="15" :current-page.sync="materialsPaginate.page" @current-change="onChangeMaterialPage" style="float:right; margin-top: 20px; display: inline-block">
 			</el-pagination>
-			<el-button style="margin-top: 20px;" :loading="loading" type="success" :disabled="selectedMaterialIds.length<1" @click.native="pushMaterials">关联所选项</el-button>
+			<el-button style="margin-top: 20px;" :loading="loading" type="primary" :disabled="selectedMaterialIds.length<1" @click.native="pushMaterials"><i class="fa fa-check-square"></i> 关联所选项</el-button>
+			<el-button style="margin-top: 20px;" :loading="loading" type="success" @click.native="refreshMaterials"><i class="fa fa-refresh"></i> 刷新素材</el-button>
 		</el-dialog>
 	</div>
 </template>
@@ -270,6 +271,14 @@
 				getMaterial ()
 				.then((response) => {
 					this.materialsData = response.data
+				})
+			},
+			refreshMaterials () {
+				this.$store.commit('loading')
+				axios.get('wesite/material?get=force')
+				.then((response) => {
+					this.materialsData = response.data
+					this.$store.commit('loaded')
 				})
 			},
 			// 添加菜单modal显示状态

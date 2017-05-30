@@ -26,10 +26,10 @@ class AuthServiceProvider extends ServiceProvider {
 			$router->forAccessTokens();
 			$router->forTransientTokens();
 		});
-		Passport::tokensCan([
-			'patient' => 'Patient Visitor',
-			'manager' => 'Manager Permission',
-		]);
+		// Passport::tokensCan([
+		// 	'patient' => 'Patient Visitor',
+		// 	'manager' => 'Manager Permission',
+		// ]);
 		// Passport::tokensExpireIn(Carbon::now()->addMinutes(15));
 		// Passport::refreshTokensExpireIn(Carbon::now()->addDays(30));
 	}

@@ -98828,7 +98828,7 @@ var LOAD_WEATHER = function LOAD_WEATHER(_ref4) {
 var EDIT_PROFILE = function EDIT_PROFILE(_ref5, data) {
 	var commit = _ref5.commit;
 	return window.axios.post('home', data).then(function (response) {
-		commit('UPDATE_PROFILE', response.data.data);
+		commit('SET_USER_INFO', response.data.data);
 		__WEBPACK_IMPORTED_MODULE_0_element_ui__["Message"].success('个人资料更新成功');
 		commit('loaded');
 	}).catch(function (error) {
@@ -98847,7 +98847,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "loading", function() { return loading; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "loaded", function() { return loaded; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SET_USER_INFO", function() { return SET_USER_INFO; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "UPDATE_PROFILE", function() { return UPDATE_PROFILE; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SET_WEATHER", function() { return SET_WEATHER; });
 var loading = function loading(state) {
 	return state.loading = true;
@@ -98866,9 +98865,6 @@ var SET_USER_INFO = function SET_USER_INFO(state, data) {
 	var userInfo = data;
 	userInfo.profile.birthday = new Date(userInfo.profile.birthday);
 	return state.userInfo = userInfo;
-};
-var UPDATE_PROFILE = function UPDATE_PROFILE(state, data) {
-	return state.userInfo = data;
 };
 
 var SET_WEATHER = function SET_WEATHER(state, data) {

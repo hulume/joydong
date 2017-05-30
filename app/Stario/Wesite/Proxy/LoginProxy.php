@@ -1,10 +1,11 @@
 <?php
-namespace Star\ICenter\Proxy;
+namespace Star\Wesite\Proxy;
 
 use App\Patient;
+use Star\ICenter\Proxy\BaseProxy;
 use Star\utils\StarJson;
 
-class PatientProxy extends BaseProxy {
+class LoginProxy extends BaseProxy {
 	private $user;
 
 	public function __construct(Patient $user) {
@@ -14,15 +15,21 @@ class PatientProxy extends BaseProxy {
 		return [
 			'client_id' => env('PASSWORD_CLIENT_ID'),
 			'client_secret' => env('PASSWORD_CLIENT_SECRET'),
-			'provider' => 'api',
-			'scope' => 'patient',
+			'provider' => 'patients',
+			'scope' => '',
 		];
 	}
 	public function attemptLogin($request) {
 		$user = $this->user->where('mobile', $request['mobile'])->first();
 		if (!empty($user)) {
-			return $this->proxy($request);
+			return $this->proxy('password', $request);
 		}
 		return StarJson::create(401);
+	}
+	public function attemptRefresh() {
+		$refreshToken = request()->cookie('refresh_token');
+		return $this->proxy('refresh_token', [
+			'refresh_token' => $refreshToken,
+		]);
 	}
 }

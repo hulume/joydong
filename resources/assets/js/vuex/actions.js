@@ -17,7 +17,7 @@ export const LOAD_WEATHER = ({ commit }) => window.axios.get('weather').then((re
 })
 
 export const EDIT_PROFILE = ({ commit }, data) => window.axios.post('home', data).then((response) => {
-	commit('UPDATE_PROFILE', response.data.data)
+	commit('SET_USER_INFO', response.data.data)
 	Message.success('个人资料更新成功')
 	commit('loaded')
 }).catch((error) => {

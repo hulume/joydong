@@ -18,7 +18,7 @@ class WesiteServiceProvider extends ServiceProvider {
 
 		$this->publishes([
 			__DIR__ . '/public' => public_path('vendor/wesite'),
-		], 'public');
+		], 'wesite');
 
 		// $this->loadRoutesFrom(__DIR__ . '/routes.php');
 		$this->loadViewsFrom(__DIR__ . '/resources/views', 'wesite');

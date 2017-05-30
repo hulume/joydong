@@ -16,9 +16,6 @@ export const SET_USER_INFO = ( state, data ) => {
 	userInfo.profile.birthday = new Date(userInfo.profile.birthday)
 	return state.userInfo = userInfo
 }
-export const UPDATE_PROFILE = ( state, data ) => {
-	return state.userInfo = data
-}
 
 export const SET_WEATHER = ( state, data ) => {
 	return state.weather = data

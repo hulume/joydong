@@ -282,7 +282,6 @@ class BaseManager {
 	 */
 	// public function store(UploadedFile $file, $dir = '', Closure $callback = null) {
 	public function store(UploadedFile $file, $dir = '', $filenameType = 'original') {
-
 		if ($filenameType == 'hash') {
 			$fileName = str_ireplace('.jpeg', '.jpg', $file->hashName());
 		} else {

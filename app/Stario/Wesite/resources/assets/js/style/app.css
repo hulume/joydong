@@ -79,6 +79,10 @@ header {
 }
 /* Buttons
 // –––––––––––––––––––––––––––––––––––––––––––––––––– */
+.btn-block {
+    display: block;
+    width: 100%;
+}
 .button,
 button,
 input[type="submit"],
@@ -136,6 +140,21 @@ input[type="button"] {
         background-color: #1EAEDB;
         border-color: #1EAEDB; }
 
+        .button:disabled,
+        .button:disabled:hover,
+        button[disabled],
+        .button[disabled],
+        .button-primary[disabled],
+        .button-success[disabled],
+        .button-danger[disabled],
+        input[type="submit"][disabled],
+        input[type="reset"][disabled],
+        input[type="button"][disabled] {
+          background-color: #e3e3e3 !important;
+          border: 1px solid #ccc !important;
+          color: #888;
+          cursor: not-allowed;
+        }
 
         .theme {
           min-height: 100px;

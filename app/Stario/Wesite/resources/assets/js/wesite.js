@@ -6,6 +6,7 @@ import 'mint-ui/lib/style.css'
 import './style/app.css'
 import 'font-awesome/css/font-awesome.css'
 import App from './App'
+import { getCookie } from './utils'
 
 window.axios.interceptors.response.use(
   response => response,
@@ -13,11 +14,18 @@ window.axios.interceptors.response.use(
     if (error.response.status === 401) {
       window.location = '/login'
     }
-    if (error.response.status === 404) {
-      window.location = '/'
-    }
     return Promise.reject(error)
   })
+
+router.beforeEach((to, from, next) => {
+  if (to.matched.some(m => m.meta.auth) && !store.state.authenticated) {
+    next({
+      name: 'Login'
+    })
+  } else {
+    next()
+  }
+})
 
 Vue.config.productionTip = false
 /* eslint-disable no-new */

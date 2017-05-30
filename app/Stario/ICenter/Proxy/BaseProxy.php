@@ -9,13 +9,13 @@ abstract class BaseProxy {
 	abstract protected function params();
 
 	abstract public function attemptLogin($data);
-	// abstract public function attemptRefresh();
+	abstract public function attemptRefresh();
 
 	public function logout() {
 		$accessToken = auth()->user()->token();
 	}
 
-	public function proxy(array $data = []) {
+	public function proxy($grantType, array $data = []) {
 		$data = array_merge(
 			[
 				'username' => $data['mobile'],
@@ -24,7 +24,7 @@ abstract class BaseProxy {
 			[
 				'client_id' => $this->params()['client_id'],
 				'client_secret' => $this->params()['client_secret'],
-				'grant_type' => 'password',
+				'grant_type' => $grantType,
 				'scope' => $this->params()['scope'],
 				'provider' => $this->params()['provider'],
 			]);
@@ -38,12 +38,11 @@ abstract class BaseProxy {
 		}
 
 		$data = json_decode($response->getBody()->getContents());
-		return StarJson::create([
+		return response([
 			'token_type' => $data->token_type,
 			'access_token' => $data->access_token,
 			'refresh_token' => $data->refresh_token,
 			'expires_in' => $data->expires_in,
-			// 'provider' => 'patients',
-		], 200);
+		]);
 	}
 }

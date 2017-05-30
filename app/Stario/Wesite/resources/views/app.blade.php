@@ -9,6 +9,6 @@
   </head>
   <body>
     <div id="app"></div>
-    <script src={{url('vendor/wesite/js/wesite.js')}}></script>
+    <script src={{asset('vendor/wesite/js/wesite.js')}}></script>
   </body>
 </html>

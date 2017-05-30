@@ -6,7 +6,15 @@ Route::group([
 	Route::resource('wesite/menu', 'WesiteController', ['except' => ['create', 'show']]);
 	Route::get('wesite/material', 'WesiteController@material');
 	Route::post('wesite/upload', 'WesiteController@uploadImg');
+	Route::get('wesite/summary', 'WesiteController@summary');
 });
 
 // 对外部访客提供
-Route::get('wesite', 'WesiteController@index')->middleware(['api', 'cors']);
+Route::group([
+	'middleware' => ['api'],
+], function () {
+	Route::get('wesite', 'WesiteController@index');
+	Route::post('wesite/login', 'AuthController@login');
+	Route::post('wesite/register', 'AuthController@register');
+	Route::post('wesite/sms', 'SmsController@authcode');
+});

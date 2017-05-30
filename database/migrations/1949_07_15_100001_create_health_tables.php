@@ -12,15 +12,15 @@ class CreateHealthTables extends Migration {
 	public function up() {
 		Schema::create('patients', function (Blueprint $table) {
 			$table->increments('id');
+			$table->string('openid', 66)->unique()->nullable();
 			$table->string('identify', 20)->unique()->nullable(); //身份证
 			$table->string('mobile', 12)->unique()->nullable(); // 手机
 			$table->string('password', 66);
 			$table->date('birthday', 12)->nullable();
 			$table->unsignedTinyInteger('age')->nullable();
-			$table->string('name', 10);
+			$table->string('name', 10)->nullable();
 			$table->string('paytype', 20)->nullable();
 			$table->tinyInteger('sex')->unsigned()->default(0);
-			$table->string('weixin', 66)->unique()->nullable();
 			$table->string('address')->nullable();
 			$table->boolean('livetype')->default(false);
 			$table->string('nation', 15)->nullable();

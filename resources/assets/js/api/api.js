@@ -31,5 +31,5 @@ export const createUser = params => { return axios.post('user', params) }
 export const getWeMenu = () => { return axios.get('wesite/menu')}
 export const createWeMenu = params => { return axios.post('wesite/menu', params)}
 // export const getMaterial = params => { return axios.get('wesite/material', { params: params })}
-export const getMaterial = params => { return axios.get('http://demo2098390.mockable.io/wechat', { params: params })}
+export const getMaterial = params => { return axios.get('wesite/material', { params: params })}
 

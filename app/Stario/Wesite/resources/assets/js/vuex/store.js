@@ -5,6 +5,7 @@ import * as mutations from './mutations.js'
 Vue.use(Vuex)
 const state = {
   loading: false,
+  authenticated: false,
   site: {
   	main: [],
   	guide: [],
