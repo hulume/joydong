@@ -13,6 +13,7 @@
           <input type="text" v-model="authcode"  placeholder="请输入验证码">
           <button class="button button-primary" @click.prevent="onSend" :disabled="countdown" style="float:right; margin-top: 5px;">发送验证码</button>
       </div>
+      <p class="bg-warning">{{tips}}</p>
         <button class="button button-primary btn-block" style="display:block; margin-top: 15px;" :disabled="!formValid" @click.prevent="onSubmit">确认绑定</button>
     </div>
   </div>
@@ -25,7 +26,8 @@ export default {
     return {
       mobile: '',
       authcode: '',
-      send_disabled: false
+      send_disabled: false,
+      tips: '手机只在初次使用时需绑定'
     }
   },
   computed: {
@@ -49,17 +51,11 @@ export default {
       axios.post('api/wesite/sms', {mobile: this.mobile})
       .then((response) => {
         this.$store.commit('loaded')
-        Toast({
-          message: response.data.data,
-          duration: 5000
-        })
+        this.tips = response.data.data
       })
       .catch((error) => {
         this.$store.commit('loaded')
-        Toast({
-          message: error.response.data.error,
-          duration: 5000
-        })
+        this.tips = error.response.data.error
       })
     },
     onSubmit () {
@@ -72,10 +68,7 @@ export default {
       })
       .catch((error) => {
         this.$store.commit('loaded')
-        Toast({
-          message: error.response.data.error,
-          duration: 5000
-        })
+        this.tips = error.response.data.error
       })
     }
   },

@@ -70,6 +70,13 @@ header {
   -webkit-box-orient: vertical;
   box-orient: vertical;
 }
+
+.bg-warning {
+  background-color: #fcf8e3;
+}
+p {
+  margin: 0 0 10px;
+}
 .ucenter {
 	width: 50%;
 	margin: 0 auto;
@@ -80,8 +87,8 @@ header {
 /* Buttons
 // –––––––––––––––––––––––––––––––––––––––––––––––––– */
 .btn-block {
-    display: block;
-    width: 100%;
+  display: block;
+  width: 100%;
 }
 .button,
 button,
