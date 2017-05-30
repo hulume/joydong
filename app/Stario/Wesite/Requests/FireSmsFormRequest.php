@@ -5,7 +5,7 @@ namespace Star\Wesite\Requests;
 use Cache;
 use Illuminate\Foundation\Http\FormRequest;
 use Star\SimpleMessage\SmsClient;
-use Star\utils\StarJson;
+use Star\Utils\StarJson;
 use Star\Wesite\Repository\Eloquent\PatientRepo;
 
 class FireSmsFormRequest extends FormRequest {

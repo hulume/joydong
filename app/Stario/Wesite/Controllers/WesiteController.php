@@ -28,7 +28,6 @@ class WesiteController extends Controller {
 	 */
 	public function pub(CookieJar $cookie) {
 		$user = session('wechat.oauth_user'); // 拿到授权用户资料
-		$user['id'] = 'Test must to be deleted'; // 需要删除
 		if (empty($user)) {
 			return StarJson::create(401);
 		}

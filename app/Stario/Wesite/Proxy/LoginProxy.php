@@ -7,7 +7,6 @@ use Star\utils\StarJson;
 
 class LoginProxy extends BaseProxy {
 	private $user;
-
 	public function __construct(Patient $user) {
 		$this->user = $user;
 	}

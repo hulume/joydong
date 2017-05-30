@@ -36,7 +36,6 @@ class AuthController extends Controller {
 			$item = array_flatten($item->toArray());
 			return $this->getToken($item[0], $item[1]);
 		}
-		return 'unbound';
 	}
 
 	// 未曾绑定过
@@ -53,6 +52,7 @@ class AuthController extends Controller {
 		} catch (Exception $e) {
 			return StarJson::create($e, 403);
 		}
+		$openid = decrypt($request->cookie('wesite_openid'));
 		$result = $this->user->create([
 			'mobile' => $mobile,
 			'openid' => $openid,

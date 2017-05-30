@@ -1,10 +1,5 @@
 /node_modules
 /fonts/*
-/resources/assets/bower_components
 *.vscode
 .vscode/*
 sftp-config.json
-*/mix-manifest.json
-/vendor
-/.idea
-*.lock
