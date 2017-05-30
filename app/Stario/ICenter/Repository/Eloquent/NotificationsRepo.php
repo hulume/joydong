@@ -2,7 +2,7 @@
 namespace Star\ICenter\Repository\Eloquent;
 
 use App\User;
-use Star\utils\StarJson;
+use Star\Utils\StarJson;
 
 /**
  * 用来生成用户历史事件

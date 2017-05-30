@@ -2,7 +2,7 @@
 namespace Star\ICenter\Proxy;
 
 use App\User;
-use Star\utils\StarJson;
+use Star\Utils\StarJson;
 
 class ManagerProxy extends BaseProxy {
 	private $user;

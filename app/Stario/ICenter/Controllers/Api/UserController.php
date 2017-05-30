@@ -8,7 +8,7 @@ use Star\ICenter\Repository\Eloquent\UserRepo;
 use Star\ICenter\Requests\UserManageFormRequest;
 use Star\ICenter\Transformers\UserInfoTransformer;
 use Star\ICenter\Transformers\UserTransformer;
-use Star\utils\StarJson;
+use Star\Utils\StarJson;
 
 class UserController extends ApiController {
 	protected $userRepo;

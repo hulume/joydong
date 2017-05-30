@@ -2,7 +2,7 @@
 namespace Star\ICenter\Proxy;
 
 use GuzzleHttp\Client;
-use Star\utils\StarJson;
+use Star\Utils\StarJson;
 
 abstract class BaseProxy {
 

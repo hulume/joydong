@@ -5,7 +5,7 @@ namespace Star\ICenter\Repository\Eloquent;
 use App\User;
 use Star\ICenter\Models\Profile;
 use Star\Services\FileManager\UploadManager;
-use Star\utils\StarJson;
+use Star\Utils\StarJson;
 
 class UserRepo extends BaseRepository {
 	protected $model;

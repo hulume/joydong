@@ -4,7 +4,7 @@ namespace Star\Utils;
 
 use GuzzleHttp\Client;
 use Illuminate\Support\Collection;
-use Star\utils\Serializer;
+use Star\Utils\Serializer;
 
 class Http {
 	protected $uri;

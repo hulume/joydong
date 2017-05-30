@@ -3,7 +3,7 @@ namespace Star\Wesite\Proxy;
 
 use App\Patient;
 use Star\ICenter\Proxy\BaseProxy;
-use Star\utils\StarJson;
+use Star\Utils\StarJson;
 
 class LoginProxy extends BaseProxy {
 	private $user;

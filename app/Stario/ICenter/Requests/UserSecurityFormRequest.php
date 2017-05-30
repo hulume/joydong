@@ -6,7 +6,7 @@ use App\User;
 use Illuminate\Foundation\Http\FormRequest;
 use Star\ICenter\Events\ChangeCredentials;
 use Star\ICenter\Repository\Eloquent\UserRepo;
-use Star\utils\StarJson;
+use Star\Utils\StarJson;
 
 class UserSecurityFormRequest extends FormRequest {
 	protected $user;

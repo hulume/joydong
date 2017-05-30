@@ -6,7 +6,7 @@ use Cache;
 use Illuminate\Foundation\Http\FormRequest;
 use Star\ICenter\Repository\Eloquent\UserRepo;
 use Star\SimpleMessage\SmsClient;
-use Star\utils\StarJson;
+use Star\Utils\StarJson;
 
 class FireSmsFormRequest extends FormRequest {
 	protected $user;

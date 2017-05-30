@@ -5,7 +5,7 @@ namespace Star\ICenter\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Star\ICenter\Events\ChangeCredentials;
 use Star\ICenter\Repository\Eloquent\UserRepo;
-use Star\utils\StarJson;
+use Star\Utils\StarJson;
 
 class SignupFormRequest extends FormRequest {
 	protected $user;

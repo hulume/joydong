@@ -7,7 +7,7 @@ use Auth;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Star\ICenter\Repository\Eloquent\NotificationsRepo;
-use Star\utils\StarJson;
+use Star\Utils\StarJson;
 
 class NotificationController extends Controller {
 	protected $notification;
