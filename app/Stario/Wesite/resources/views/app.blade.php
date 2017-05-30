@@ -5,7 +5,7 @@
     <meta name="viewport" content="initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no, width=device-width, minimal-ui">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    {{-- <title>{{ config('wesite.name', 'Wesite') }}</title> --}}
+    <title>健康胶东</title>
   </head>
   <body>
     <div id="app"></div>

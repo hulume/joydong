@@ -12,7 +12,7 @@ window.axios.interceptors.response.use(
   response => response,
   (error) => {
     if (error.response.status === 401) {
-      window.location = '/login'
+      window.location = '/bind'
     }
     return Promise.reject(error)
   })

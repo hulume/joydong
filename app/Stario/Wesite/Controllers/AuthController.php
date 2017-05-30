@@ -21,9 +21,9 @@ class AuthController extends Controller {
 	}
 // 使用了ICenter中的Request
 	// 不存在密码，都是自动登录
-	public function login(AuthRequest $request) {
-		return $this->loginProxy->attemptLogin(['mobile' => $request->get('mobile'), 'password' => $request->get('password')]);
-	}
+	// public function login(AuthRequest $request) {
+	// 	return $this->loginProxy->attemptLogin(['mobile' => $request->get('mobile'), 'password' => $request->get('password')]);
+	// }
 
 	// 查看是否已经绑定
 	public function checkIfBound(Request $request) {

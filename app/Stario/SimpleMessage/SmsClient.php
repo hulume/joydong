@@ -14,7 +14,7 @@ namespace Star\SimpleMessage;
 use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Cache;
 use Psr\Http\Message\ResponseInterface;
-use Star\utils\StarJson;
+use Star\Utils\StarJson;
 
 /**
  * Class SmsClient
