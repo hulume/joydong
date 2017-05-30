@@ -4,7 +4,7 @@ import Home from '../components/Home'
 import Page from '../components/Page'
 import Guide from '../components/Guide'
 import User from '../components/User'
-import Login from '../components/Login'
+import Bind from '../components/Bind'
 Vue.use(Router)
 
 export default new Router({
@@ -29,9 +29,10 @@ export default new Router({
   component: Guide
 },
 {
-  path: '/login',
-  name: 'Login',
-  component: Login
+  path: '/bind',
+  name: 'Bind',
+  component: Bind,
+  meta: { guest: true }
 }
 ]
 })

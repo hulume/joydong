@@ -16,11 +16,31 @@ window.axios.interceptors.response.use(
     }
     return Promise.reject(error)
   })
+// 检查是否已经登录
+store.dispatch('check')
+// 如果localStorage没有token，向后台申请
+// 后台如果发现之前openid已经绑定，返回token
+// 如果未绑定，跳转至绑定页
+if (!store.state.authenticated) {
+  window.axios.get('api/wesite/check')
+  .then((response) => {
+    store.dispatch('bind', response.data.data)
+    store.dispatch('check')
+  })
+  .catch((error) => {
+    router.push({name: 'Bind'})
+  })
+}
+
 
 router.beforeEach((to, from, next) => {
   if (to.matched.some(m => m.meta.auth) && !store.state.authenticated) {
     next({
-      name: 'Login'
+      name: 'Bind'
+    })
+  } else if (to.matched.some(m => m.meta.guest) && store.state.authenticated) {
+    next({
+      name: 'User'
     })
   } else {
     next()

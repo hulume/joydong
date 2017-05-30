@@ -12,7 +12,7 @@ import Foot from './components/Footer'
 export default {
   mounted () {
     this.$store.commit('loading')
-    this.$store.dispatch('LOAD_DATA')
+    this.$store.dispatch('fetchData')
   },
   components: {
     Foot

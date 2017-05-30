@@ -3,6 +3,7 @@ namespace Star\Wesite\Controllers;
 
 use App\Http\Controllers\Controller;
 use Cache;
+use Illuminate\Http\Request;
 use Star\Utils\StarJson;
 use Star\Wesite\Proxy\LoginProxy;
 use Star\Wesite\Repository\Eloquent\PatientRepo;
@@ -23,11 +24,23 @@ class AuthController extends Controller {
 	public function login(AuthRequest $request) {
 		return $this->loginProxy->attemptLogin(['mobile' => $request->get('mobile'), 'password' => $request->get('password')]);
 	}
-	public function register(AuthRequest $request) {
+
+	// 查看是否已经绑定
+	public function checkIfBound(Request $request) {
 		$openid = decrypt($request->cookie('wesite_openid'));
 		if (empty($openid)) {
 			return StarJson::create('您需要在微信客户端打开', 403);
 		}
+		// 如果已经绑定
+		if ($item = $this->user->findBy('openid', $openid, ['mobile', 'openid'])) {
+			$item = array_flatten($item->toArray());
+			return $this->getToken($item[0], $item[1]);
+		}
+		return 'unbound';
+	}
+
+	// 未曾绑定过
+	public function bind(AuthRequest $request) {
 		$mobile = $request->get('mobile');
 		$authcode = $request->get('authcode');
 		if (Cache::get($mobile) != $authcode) {
@@ -47,13 +60,17 @@ class AuthController extends Controller {
 		]);
 		if ($result) {
 			// 获取Response的原始数据
-			$credentials = $this->loginProxy->attemptLogin(['mobile' => $mobile, 'password' => $openid])->original;
-			return StarJson::create($credentials['access_token'], 200)->withCookie(cookie('refreshToken', $credentials['refresh_token']));
+			$this->getToken($mobile, $openid);
 		} else {
 			return StarJson::create('绑定失败', 403);
 		}
 	}
 	public function refresh(Request $request) {
 		return $this->loginProxy->attemptRefresh();
+	}
+	// 生成token并返回
+	private function getToken($mobile, $openid) {
+		$credentials = $this->loginProxy->attemptLogin(['mobile' => $mobile, 'password' => $openid])->original;
+		return StarJson::create($credentials['access_token'], 200)->withCookie(cookie('refreshToken', $credentials['refresh_token']));
 	}
 }

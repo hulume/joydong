@@ -90,7 +90,7 @@ abstract class BaseRepository {
 	 * 同时也可以用来判断是否存在该数据
 	 */
 	public function findBy($field, $value = null, $columns = ['*']) {
-		return $this->model->where($field, '=', $value)->get($columns);
+		return $this->model->where($field, $value)->get($columns);
 	}
 	/**
 	 * 多个条件来获取记录

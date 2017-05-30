@@ -13,7 +13,7 @@
           <input type="text" v-model="authcode"  placeholder="请输入验证码">
           <button class="button button-primary" @click.prevent="onSend" :disabled="countdown" style="float:right; margin-top: 5px;">发送验证码</button>
       </div>
-        <button class="button button-primary btn-block" style="display:block; margin-top: 15px;" :disabled="formInvalid" @click.prevent="onSubmit">确认绑定</button>
+        <button class="button button-primary btn-block" style="display:block; margin-top: 15px;" :disabled="!formValid" @click.prevent="onSubmit">确认绑定</button>
     </div>
   </div>
 </template>
@@ -38,8 +38,8 @@ export default {
         return false
       }
     },
-    formInvalid () {
-      return this.send_disabled || this.authcode === ''
+    formValid () {
+      return isMobile(this.mobile) && this.authcode !== ''
     }
   },
   methods: {
@@ -64,10 +64,11 @@ export default {
     },
     onSubmit () {
       this.$store.commit('loading')
-      axios.post('api/wesite/register', { mobile: this.mobile, authcode: this.authcode })
+      axios.post('api/wesite/bind', { mobile: this.mobile, authcode: this.authcode })
       .then((response) => {
         this.$store.commit('loaded')
-        this.$store.dispatch('login')
+        this.$store.dispatch('bind', response.data.data)
+        this.$router.push({path: 'User'})
       })
       .catch((error) => {
         this.$store.commit('loaded')

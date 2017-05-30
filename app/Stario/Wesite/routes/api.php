@@ -15,6 +15,7 @@ Route::group([
 ], function () {
 	Route::get('wesite', 'WesiteController@index');
 	Route::post('wesite/login', 'AuthController@login');
-	Route::post('wesite/register', 'AuthController@register');
+	Route::get('wesite/check', 'AuthController@checkIfBound');
+	Route::post('wesite/bind', 'AuthController@bind');
 	Route::post('wesite/sms', 'SmsController@authcode');
 });
