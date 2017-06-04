@@ -17,9 +17,9 @@ window.axios.defaults.headers.post = {
 window.axios.interceptors.response.use(
   response => response,
   (error) => {
-    if (error.response.status === 401) {
-      window.location = '/login'
-    }
+    // if (error.response.status === 401) {
+    //   window.location = '/login'
+    // }
     // if (error.response.status === 404) {
     // 	window.location = '/home'
     // }

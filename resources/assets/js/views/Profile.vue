@@ -131,7 +131,7 @@
 				} else {
 					callback();
 				}
-			};
+			}
 			return {
 				active: 'edit',
 				password: {

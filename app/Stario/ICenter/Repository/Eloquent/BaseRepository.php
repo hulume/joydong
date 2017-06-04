@@ -89,7 +89,7 @@ abstract class BaseRepository {
 	 * 如$user->findBy('mobile', '18669683161') 会获得相应的数据
 	 * 同时也可以用来判断是否存在该数据
 	 */
-	public function findBy($field, $value = null, $columns = ['*']) {
+	public function findBy($field, $value, $columns = ['*']) {
 		return $this->model->where($field, $value)->get($columns);
 	}
 	/**

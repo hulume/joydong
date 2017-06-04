@@ -41,6 +41,7 @@ return [
 			'provider' => 'users',
 		],
 
+		// 这是provider (api/api_manager)
 		// 必须为api，passport当前不能为此改名
 		'api' => [
 			'driver' => 'passport',

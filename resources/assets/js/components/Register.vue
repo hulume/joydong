@@ -1,52 +1,54 @@
 <template>
-  <div>
-  <div class="form-group">
-      <label class="col-sm-3 control-label"><i class="fa fa-mobile"></i> 手机号码</label>
-      <div class="col-sm-9">
-          <input type="text" class="form-control" v-model="user.mobile" placeholder="输入手机号" required>
-      </div>
-  </div>
+  <el-form :model="user" :rules="rules" ref="user" label-width="100px">
+    <el-form-item label="手机号码" prop="mobile">
+      <el-input v-model="user.mobile" placeholder="输入手机号"></el-input>
+    </el-form-item>
+    <el-row :gutter="10">
+      <el-col :span="19">
+        <el-form-item label="验证短信" prop="authCode">
+          <el-input v-model="user.authCode" placeholder="输入您收到的验证码"></el-input>
+        </el-form-item>
+      </el-col>
+      <el-col :span="5">
+        <auth-code :data="{mobile:this.user.mobile}">获取验证码</auth-code>
+      </el-col>
+    </el-row>
+    <el-form-item label="真实姓名" prop="name">
+      <el-input v-model="user.name" placeholder="输入您的真实姓名"></el-input>
+    </el-form-item>
+    <el-form-item label="输入密码" prop="password">
+      <el-input v-model="user.password" placeholder="输入不少于6位的密码"></el-input>
+    </el-form-item>
+    <el-form-item label="密码确认" prop="repassword">
+      <el-input v-model="user.repassword" placeholder="再次输入您的密码"></el-input>
+    </el-form-item>
+    <button @click.prevent="onSubmit"  class="btn btn-primary btn-block" style="margin-bottom: 20px; font-size: 16px"><i class="fa fa-sign-in"></i> 完成注册</button>
+  </el-form>
 
-  <div class="form-group">
-        <label class="col-sm-3 control-label"><i class="fa fa-commenting-o"></i> 验证短信</label>
-        <div class="col-sm-5">
-            <input type="text" name="authCode" class="form-control" v-model="user.authCode" placeholder="输入您收到的验证码">
-        </div>
-        <div class="col-sm-4">
-            <auth-code :data="{mobile:this.user.mobile}" :disabled="!(validator.mobile)">获取验证码</auth-code>
-        </div>
-      </div>
-
-
-      <div class="form-group">
-          <label class="col-sm-3 control-label"><i class="fa fa-user-circle"></i> 真实姓名</label>
-          <div class="col-sm-9">
-              <input type="text" class="form-control" v-model="user.name" placeholder="输入您的真实姓名" required>
-          </div>
-      </div>
-
-      <div class="form-group">
-      <label class="col-sm-3 control-label"><i class="fa fa-key"></i> 输入密码</label>
-      <div class="col-sm-9">
-          <input type="password" class="form-control" name="password" v-model="user.password" placeholder="输入不少于6位的密码" required>
-      </div>
-  </div>
-
-  <div class="form-group">
-      <label class="col-sm-3 control-label"><i class="fa fa-key"></i> 密码确认</label>
-      <div class="col-sm-9">
-          <input type="password" class="form-control" v-model="user.repassword" placeholder="再次输入您的密码" required>
-      </div>
-  </div>
-  <button @click.prevent="onSubmit" :disabled="!(validator.passed)" class="btn btn-lg btn-primary margin-bottom-10 btn-block"><i class="fa fa-sign-in"></i> 完成注册</button>
-  </div>
-   
 </template>
 <script>
   import AuthCode from './AuthCode.vue'
-  import {isMobile, required} from '../utils/validator'
   export default {
     data () {
+      var validatePass = (rule, value, callback) => {
+        if (value === '') {
+          callback(new Error('请输入密码'))
+        } else {
+          if (this.user.repassword !== '') {
+            this.$refs.user.validateField('repassword')
+          }
+          callback()
+        }
+      }
+      var validatePass2 = (rule, value, callback) => {
+        if (value === '') {
+          callback(new Error('请再次输入密码'));
+        } else if (value !== this.user.password) {
+          callback(new Error('两次输入密码不一致!'));
+        } else {
+          callback();
+        }
+      }
       return {
         user: {
           mobile: '',
@@ -54,14 +56,13 @@
           password: '',
           repassword: '',
           name: ''
-        }
-      }
-    },
-    computed: {
-      validator () {
-        return {
-          mobile: isMobile(this.user.mobile),
-          passed: isMobile(this.user.mobile) && required(this.user.password) && required(this.user.name) && required(this.user.authCode) && this.user.password === this.user.repassword
+        },
+        rules: {
+          mobile: { required: true, message: '请输入手机号码', trigger: 'blur' },
+          authCode: { required: true, message: '请输入短信验证码', trigger: 'blur' },
+          name: { required: true, message: '请输入您的真实姓名', trigger: 'blur' },
+          password: { required: true, validator: validatePass, trigger: 'blur'},
+          repassword: { required: true, validator: validatePass2, trigger: 'blur'}
         }
       }
     },
@@ -74,29 +75,22 @@
           name: this.user.name
         }
         axios.post('signup', this.user)
-          .then((response) => {
-            swal({
-              title: '注册成功',
-              text: '您已经成功注册，现在可以登录了',
-              type: 'success',
-              confirmButtonText: '继续操作',
-              allowOutsideClick: false
-            }, () => {
+        .then((response) => {
+          this.$alert('您已经成功注册，现在可以登录了', '注册成功', {
+            confirmButtonText: '继续操作',
+            callback: action => {
               window.location.href = '/login'
-            })
+            }
           })
-          .catch((error) => {
-            let data = error.response.data
-            swal({
-              title: '注册失败',
-              text: data[Object.keys(data) [0]],
-              type: 'error',
-              confirmButtonText: '继续',
-              allowOutsideClick: false
-            }, () => {
+        })
+        .catch((error) => {
+          this.$alert(error.response.data, '注册失败', {
+            confirmButtonText: '继续操作',
+            callback: action => {
               window.location.href = '/login'
-            })
+            }
           })
+        })
       }
     },
     components: {

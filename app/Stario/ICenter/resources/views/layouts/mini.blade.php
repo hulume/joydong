@@ -11,7 +11,7 @@
     <link rel="shortcut icon" href="/favicon.ico" />
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>{{ config('app.name', 'Wemesh') }}登录</title>
-    <link href={{mix('css/mini.css')}} rel="stylesheet">
+    <link href={{mix('css/app.css')}} rel="stylesheet">
     <script>
         window.Wemesh = <?php echo json_encode(['csrfToken' => csrf_token()]); ?>
     </script>
@@ -22,10 +22,12 @@
     		<div class="overlay_mask"></div>
     		<div class="overlay_content">
     			<div class="container">
-    					<div class="col-md-6 col-sm-12 col-md-offset-3 col-lg-offset-3 padding-top-20  login">
-    						<logo class="center"></logo>
-    						@yield('content')
-    					</div>
+                                                <el-row :gutter="20">
+                                                  <el-col :span="12" :offset="6" class="login">
+                                                      <logo class="center" style="margin-top: 20px;"></logo>
+                                                        @yield('content')
+                                                  </el-col>
+                                                </el-row>
     			</div>
     		</div>
     	</div>

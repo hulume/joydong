@@ -21,9 +21,8 @@ class WesiteController extends Controller {
 		$this->upload = $upload;
 	}
 	/**
-	 * 对外入口，因微信js-sdk安卓低版本问题，单页面获取有问题，故：
-	 * 访问页面就获取用户微信数据，当单页面跳至user页面时前端根据cookie、localStorage判断是否已绑定
-	 * 控制器只返回cookie(保存refresnToken), 以及localStorage数据
+	 * 对外入口，Route中的middleware限制只能在微信访问
+	 * 访问自动获取openid并放到cookie中(session模式)
 	 * @return view
 	 */
 	public function pub(CookieJar $cookie) {
@@ -33,12 +32,7 @@ class WesiteController extends Controller {
 		}
 		$cookie->queue(
 			'wesite_openid',
-			$user['id'],
-			864000,
-			null,
-			null,
-			false,
-			true// HttpOnly
+			$user['id']
 		);
 		return view('wesite::app');
 	}
@@ -134,10 +128,6 @@ class WesiteController extends Controller {
 		}
 		return $result;
 	}
-	// 保存主题图设置
-	public function saveTheme($value = '') {
-		# code...
-	}
 
 	// 默认通过缓存读取，可以添加?get=force强行刷新
 	public function material() {
@@ -147,6 +137,7 @@ class WesiteController extends Controller {
 		return Cache::get('WeMaterials');
 	}
 
+	// 获取微信公众号图文素材
 	private function getMaterial() {
 		$material = EasyWeChat::material();
 		$raw = $material->lists('news');

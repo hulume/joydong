@@ -31,11 +31,10 @@ class CreateHealthTables extends Migration {
 		Schema::create('archives', function (Blueprint $table) {
 			$table->increments('id');
 			$table->integer('patient_id')->unsigned()->nullable();
-			$table->string('check_unit', 32);
-			$table->string('doctor', 10);
-			$table->json('data');
+			$table->string('name', 10)->unique();
+			$table->string('check_unit', 32)->nullable();
+			$table->string('doctor', 10)->nullable();
 			$table->json('result')->nullable();
-			$table->json('innormal')->nullable();
 			$table->timestamps();
 			$table->foreign('patient_id')
 				->references('id')

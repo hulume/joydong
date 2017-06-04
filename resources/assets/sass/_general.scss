@@ -248,3 +248,107 @@ img {
 .toolbar {
   margin-top: 25px;
 }
+.text-danger {
+    color: #a94442;
+}
+.center {
+    text-align: center;
+}
+.vcenter {
+    min-height: 100%;
+    min-height: 100vh;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-align-items: center;
+    -ms-flex-align: center;
+    align-items: center;
+}
+.overlay {
+  position: fixed;
+  justify-content: center;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url(http://static.stario.net/images/stariobg1.jpg);
+  background-size: cover;
+  background-attachment: fixed;
+  background-position: top center;
+  background-color: #4c5766;
+  z-index: 9;
+  overflow: hidden;
+}
+.overlay {
+  display: flex;
+}
+.overlay_mask {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 10;
+  background: rgba(0, 5, 8, 0.7); 
+}
+.overlay_content {
+  position: relative;
+  box-sizing: border-box;
+  padding-left: 10px;
+  padding-right: 10px;
+  z-index: 22;
+  flex: 1;
+}
+.login{
+    background-color: #fff;
+  }
+    .login-tab {
+      .el-col {
+        background-color: #ddd;
+        text-align: center;
+        color: #000;
+        cursor: pointer;
+        height:50px;
+        line-height: 50px;
+        font-size: 14px;
+        a {
+          color: #000;
+        }
+      }
+      .active{
+        background-color: #3c8dbc;
+        color: white;
+        a {
+          color: #fff;
+        }
+      }
+    
+    margin-bottom:20px;
+  }
+  footer{    
+        line-height: 30px;
+    img{
+        width:30px;
+        height:30px;
+    }
+  }
+  button:focus {outline:0;}
+  .btn-block {
+    display: block;
+    width: 100%;
+}
+  .star-check input[type="checkbox"]{
+        height: 23px;
+        width: 23px;
+        vertical-align: middle;
+        margin: 0;
+        padding: 0;
+  }
+  .star-check label {
+    cursor: pointer;
+    display: inline-block;
+    position: relative;
+    line-height: 20px;
+    white-space: nowrap;
+    vertical-align: middle;
+  }

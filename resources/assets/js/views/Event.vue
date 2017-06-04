@@ -115,7 +115,6 @@
 				})
 			},
 			handleClear () {
-				this.$store.commit('loading')
 				this.$confirm('确定清空所有的消息吗？', '提示', {
 					type: 'error'
 				}).then(() => {

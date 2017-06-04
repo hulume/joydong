@@ -1,7 +1,7 @@
 <template>
   <div class="logo">
     <img src="http://static.stario.net/images/logo.png">
-        <h5>微脉事 WeMesh&trade;</h5>
+        <h5 style="font-size: 14px; margin-top: 10px;">微脉事 WeMesh&trade;</h5>
   </div>
 </template>
 

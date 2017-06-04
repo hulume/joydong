@@ -18,6 +18,10 @@
 								<el-button size="small" type="danger" @click.native="onDeleteMenu(menu.id)"><i class="fa fa-trash"></i></el-button>
 								<el-button size="small" type="primary" @click.native="showEditMenu(index)"><i class="fa fa-edit"></i></el-button>
 								<el-button v-show="menu['link']!==null && menu['is_url']===0" size="small" type="success" @click.native="editLink(index)"><i class="fa fa-wechat"></i></el-button>
+								<p>
+								<el-input v-if="index===0" style="margin-top: 15px" placeholder="请输入内容" :value="baseUrl+'home'" :disabled="true"></el-input>
+								<el-input v-else style="margin-top: 15px" placeholder="请输入内容" :value="baseUrl+'page/'+menu.id" :disabled="true"></el-input>
+								</p>
 							</div>
 							<div v-if="menu['link']===null" class="el-upload-dragger">
 								<i class="fa fa-plus"></i>
@@ -167,6 +171,7 @@
 	export default {
 		data () {
 			return {
+				baseUrl: 'http://jd.wemesh.cn/wesite#/',
 				// 全部的菜单
 				menu: {
 					main: [],

@@ -1,17 +1,9 @@
 import {API_ROOT} from './config/config'
-
-window.$ = window.jQuery = require('jquery');
-window._ = require('lodash');
+import ElementUI from 'element-ui'
+import '../theme-default/index.css'
 window.axios = require('axios');
-require('../bower_components/bootstrap-sass/assets/javascripts/bootstrap.min.js');
-// require('./dropzone');
 window.Vue = require('vue');
-window.toastr = require('toastr/build/toastr.min.js')
-window.swal = require('sweetalert')
-window.toastr.options = {
-    positionClass: "toast-top-right"
-}
-
+Vue.use(ElementUI)
 window.axios.interceptors.request.use(function(config){
     config.headers['X-CSRF-TOKEN'] = Wemesh.csrfToken
     return config;

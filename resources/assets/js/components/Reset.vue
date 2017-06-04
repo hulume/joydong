@@ -1,65 +1,62 @@
 <template>
-  <div>
-  <div class="form-group">
-      <label class="col-sm-3 control-label"><i class="fa fa-mobile"></i> 手机号码</label>
-      <div class="col-sm-9">
-          <input type="text" class="form-control" v-model="user.mobile" placeholder="输入手机号" required>
-      </div>
-  </div>
-
-  <div class="form-group">
-        <label class="col-sm-3 control-label"><i class="fa fa-commenting-o"></i> 验证短信</label>
-        <div class="col-sm-5">
-            <input type="text" name="authCode" class="form-control" v-model="user.authCode" placeholder="输入您收到的验证码">
-        </div>
-        <div class="col-sm-4">
-            <auth-code :data="{mobile:this.user.mobile}" :disabled="!(validator.mobile)">获取验证码</auth-code>
-        </div>
-      </div>
-
-      <div class="form-group">
-      <label class="col-sm-3 control-label"><i class="fa fa-key"></i> 输入密码</label>
-      <div class="col-sm-9">
-          <input type="password" class="form-control" name="password" v-model="user.password" placeholder="输入不少于6位的密码" required>
-      </div>
-  </div>
-
-  <div class="form-group">
-      <label class="col-sm-3 control-label"><i class="fa fa-key"></i> 密码确认</label>
-      <div class="col-sm-9">
-          <input type="password" class="form-control" v-model="user.repassword" placeholder="再次输入您的密码" required>
-      </div>
-  </div>
-  <button @click.prevent="onSubmit" :disabled="!(validator.passed)" class="btn btn-lg btn-primary margin-bottom-10 btn-block"><i class="fa fa-sign-in"></i> 完成修改</button>
-  </div>
-   
+<el-form :model="user" :rules="rules" ref="user" label-width="100px">
+  <el-form-item label="手机号码" prop="mobile">
+    <el-input v-model="user.mobile" placeholder="输入手机号"></el-input>
+  </el-form-item>
+  <el-row :gutter="10">
+    <el-col :span="19">
+      <el-form-item label="验证短信" prop="authCode">
+        <el-input v-model="user.authCode" placeholder="输入您收到的验证码"></el-input>
+      </el-form-item>
+    </el-col>
+    <el-col :span="5">
+      <auth-code :data="{mobile:this.user.mobile}">获取验证码</auth-code>
+    </el-col>
+  </el-row>
+  <el-form-item label="输入密码" prop="password">
+    <el-input v-model="user.password" placeholder="输入不少于6位的密码"></el-input>
+  </el-form-item>
+  <el-form-item label="密码确认" prop="repassword">
+    <el-input v-model="user.repassword" placeholder="再次输入您的密码"></el-input>
+  </el-form-item>
+  <button @click.prevent="onSubmit"  class="btn btn-primary btn-block" style="margin-bottom: 20px; font-size: 16px"><i class="fa fa-edit"></i> 提交修改</button>
+</el-form>
 </template>
-<script>
+  <script>
   import AuthCode from './AuthCode.vue'
-  import {isMobile, required} from '../utils/validator'
-  // import xhr from '../xhr'
   export default {
     data () {
+      var validatePass = (rule, value, callback) => {
+        if (value === '') {
+          callback(new Error('请输入密码'))
+        } else {
+          if (this.user.repassword !== '') {
+            this.$refs.user.validateField('repassword')
+          }
+          callback()
+        }
+      }
+      var validatePass2 = (rule, value, callback) => {
+        if (value === '') {
+          callback(new Error('请再次输入密码'));
+        } else if (value !== this.user.password) {
+          callback(new Error('两次输入密码不一致!'));
+        } else {
+          callback();
+        }
+      }
       return {
         user: {
           mobile: '',
           authCode: '',
           password: '',
-          repassword: ''
+          repassword: '',
         },
-        message: {
-          alertType: 'swal',
-          success: {
-            redirectUrl: '/login'
-          }
-        }
-      }
-    },
-    computed: {
-      validator () {
-        return {
-          mobile: isMobile(this.user.mobile),
-          passed: isMobile(this.user.mobile) && required(this.user.password) && required(this.user.authCode) && this.user.password === this.user.repassword
+        rules: {
+          mobile: { required: true, message: '请输入手机号码', trigger: 'blur' },
+          authCode: { required: true, message: '请输入短信验证码', trigger: 'blur' },
+          password: { required: true, validator: validatePass, trigger: 'blur'},
+          repassword: { required: true, validator: validatePass2, trigger: 'blur'}
         }
       }
     },
@@ -68,35 +65,25 @@
         const user = {
           mobile: this.user.mobile,
           password: this.user.password,
-          authCode: this.user.authCode
+          authCode: this.user.authCode,
         }
-        // xhr('post', 'signup?findpass', user, this.message)
-        axios.post('signup?findpass', user)
-          this.$store.commit('loading')
-          .then((response) => {
-            this.$store.commit('loaded')
-            swal({
-              title: '密码重置成功',
-              text: '您现在可以使用新的密码登录了',
-              type: 'success',
-              allowOutsideClick: false,
-              confirmButtonText: '返回登录'
-            }, function () {
+        axios.post('signup?findpass', this.user)
+        .then((response) => {
+          this.$alert('您已经成功修改密码，现在可以登录了', '修改密码成功', {
+            confirmButtonText: '继续操作',
+            callback: action => {
               window.location.href = '/login'
-            })
+            }
           })
-          .catch((error) => {
-            this.$store.commit('loaded')
-            swal({
-              title: '操作失败',
-              text: error.response.error,
-              type: 'error',
-              allowOutsideClick: false,
-              confirmButtonText: '返回'
-            }, function () {
+        })
+        .catch((error) => {
+          this.$alert(error.response.data, '修改密码失败', {
+            confirmButtonText: '继续操作',
+            callback: action => {
               window.location.href = '/login'
-            })
+            }
           })
+        })
       }
     },
     components: {
