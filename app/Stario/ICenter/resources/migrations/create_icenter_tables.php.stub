@@ -28,6 +28,7 @@ class CreateIcenterTables extends Migration {
 			$table->string('mobile', 12)->unique();
 			$table->string('email')->nullable();
 			$table->string('im_token')->comment('RongCloud Token')->nullable();
+			$table->json('gw_auth')->comment('若代理公卫系统则寄存公卫系统账号密码')->nullable();
 			$table->string('password');
 			$table->tinyInteger('status')->default(1);
 			$table->rememberToken();

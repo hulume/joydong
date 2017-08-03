@@ -51,7 +51,7 @@
     margin-bottom:20px; 
   }
   .icon-group p {
-    margin-bottom: 0;
+    margin-top: 5px;
   }
   .mint-swipe-item img {
     width: 100%;

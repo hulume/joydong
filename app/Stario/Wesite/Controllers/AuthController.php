@@ -11,7 +11,10 @@ use Star\Wesite\Repository\Eloquent\PatientRepo;
 use Star\Wesite\Requests\AuthRequest;
 
 /**
- * 用于患者在微网站登录验证使用
+ * 对微网站的相关服务进行验证，包括：
+ * 内外网数据服务器上传接口验证(client_credentials)
+ * 微信微网站用户验证是否绑定，并获取相关token
+ * 提供password和client_credentials两种获取token方式，基于Passport
  */
 class AuthController extends Controller {
 	private $loginProxy;
@@ -20,8 +23,11 @@ class AuthController extends Controller {
 		$this->loginProxy = $loginProxy;
 		$this->user = $user;
 	}
-	// 使用了ICenter中的Request
-	// 不存在密码，都是自动登录
+	/**
+	 * 用于获取用户passport password类型的token
+	 * @param  Request $request
+	 * @return string
+	 */
 	public function getToken(Request $request) {
 		$params = [
 			'mobile' => $request->get('mobile'),
@@ -29,12 +35,16 @@ class AuthController extends Controller {
 		];
 		return $this->loginProxy->attemptLogin($params);
 	}
-
+	/**
+	 * 用于刷新用户token
+	 * @param  Request $request
+	 * @return mixed
+	 */
 	public function refreshToken(Request $request) {
 		return $this->loginProxy->attemptRefresh($request);
 	}
 
-	// 查看是否已经绑定
+	// 查看微信微网站访问用户是否已经与数据库绑定
 	public function checkIfBound(Request $request) {
 		$openid = decrypt($request->cookie('wesite_openid'));
 		if (empty($openid)) {
@@ -42,7 +52,7 @@ class AuthController extends Controller {
 		}
 		// 如果已经绑定
 		if ($item = $this->user->findBy('openid', $openid, ['mobile', 'openid'])) {
-			$item = array_flatten($item->toArray());
+			$item = array_flatten($item);
 			return $this->getToken($item[0], $item[1]);
 		}
 	}
@@ -76,6 +86,7 @@ class AuthController extends Controller {
 			return StarJson::create('绑定失败', 403);
 		}
 	}
+	// 用于获取passport client_credentials 类型（如LIS）token
 	public function getClientToken() {
 		return (new ClientProxy)->attemptLogin('null');
 	}

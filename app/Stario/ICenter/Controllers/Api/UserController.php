@@ -20,7 +20,7 @@ class UserController extends ApiController {
 	}
 
 	public function index() {
-		$users = $this->userRepo->dataTableProvider(['unit']);
+		$users = $this->userRepo->dataTableProvider();
 		return $this->respondWithPaginator($users, new UserTransformer());
 	}
 

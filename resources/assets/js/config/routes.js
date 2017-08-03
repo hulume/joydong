@@ -6,6 +6,7 @@ import Event from '../views/Event.vue'
 import Task from '../views/Task.vue'
 import Unit from '../views/Unit.vue'
 import Wesite from '../views/Wesite.vue'
+import WxCard from '../components/WxCard.vue'
 import Aged from '../views/Aged.vue'
 let routes = [
     // {
@@ -74,23 +75,23 @@ let routes = [
     {
         path: '/',
         component: Dashboard,
-        name: '',
+        name: '微网站管理',
         icon: 'weixin',
-        single: true,
         permission: 'manage_wx',
         children: [
-            { path: '/home/wechat', component: Wesite, name: '微网站管理' }
+            { path: '/home/wechat', component: WxCard, name: '公众号概览' },
+            { path: '/home/wechat/create', component: Wesite, name: '微网站修改' }
         ]
     },
     {
         path: '/',
         component: Dashboard,
-        name: '',
+        name: '老年人口管理',
         icon: 'blind',
-        single: true,
         permission: 'manage_aged',
         children: [
-            { path: '/home/aged', component: Aged, name: '老年人口管理' }
+            { path: '/home/resident/', component: require('../views/resident/index.vue'), name: '老年人口概览' },
+            { path: '/home/resident/create', component: require('../views/resident/create.vue'), name: '添加老年人口' }
         ]
     },
     {
@@ -100,9 +101,9 @@ let routes = [
         icon: 'street-view',
         permission: 'manage_pops',
         children: [
-            { path: '/home/pop/', component: require('../views/pop/index.vue'), name: '流动人口概览' },
-            { path: '/home/pop/create', component: require('../views/pop/create.vue'), name: '添加人口管理' },
-            { path: '/home/pop/:id/edit', component: require('../views/pop/index.vue'), name: '编辑流动人口' }
+            { path: '/home/floating/', component: require('../views/floating/index.vue'), name: '流动人口概览' },
+            { path: '/home/floating/create', component: require('../views/floating/create.vue'), name: '添加人口管理' },
+            { path: '/home/floating/:id/edit', component: require('../views/floating/index.vue'), name: '编辑流动人口' }
         ]
     },
     {

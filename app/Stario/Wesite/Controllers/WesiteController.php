@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Cache;
 use Carbon\Carbon;
 use EasyWeChat;
+use GuzzleHttp\Client;
 use Illuminate\Cookie\CookieJar;
 use Illuminate\Http\Request;
 use Star\Services\FileManager\UploadManager;
@@ -151,23 +152,31 @@ class WesiteController extends Controller {
 				$materials[] = array_only($item, ['title', 'author', 'digest', 'thumb_media_id', 'thumb_url', 'url', 'media_id']);
 			}
 		}
-		// 定义缩略图存放路径，如果不存在则创建
 		$path = public_path() . '/upload/wesite/';
-		if (!is_dir($path)) {
-			mkdir($path);
-		}
 		$index = -1;
 		foreach ($materials as $item) {
 			$index++;
-			$thumb = $material->get($item['thumb_media_id']);
+			// try {
+			// 	$thumb = $material->get($item['thumb_media_id']);
+			// } catch (HttpException $e) {
+			// 	$temp = EasyWeChat::material_temporary();
+			// 	$thumb = $temp->getStream($item['thumb_media_id']);
+			// }
+			// file_put_contents($path . $item['thumb_media_id'] . '.' . $type, $thumb);
 			$type = $this->findWxfmt($item['thumb_url']);
-			file_put_contents($path . $item['thumb_media_id'] . '.' . $type, $thumb);
-			$materials[$index]['thumb_url'] = url('upload/wesite/' . $item['thumb_media_id'] . '.' . $type);
 			$id = $this->findId($item['url']);
+			$filename = $id . '.' . $type;
+			$materials[$index]['thumb_url'] = url('upload/wesite/' . $filename);
 			$materials[$index]['id'] = $id;
+			$this->downFile($item['thumb_url'], $path . $filename);
 		}
 		Cache::forever('WeMaterials', $materials);
 		return $materials;
+	}
+
+	private function downFile($fromUrl, $filename) {
+		$http = new Client();
+		$http->request('GET', $fromUrl, ['sink' => $filename]);
 	}
 
 	// 从微信thumb_url中解析出图片格式

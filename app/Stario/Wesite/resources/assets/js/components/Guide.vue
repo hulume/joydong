@@ -1,7 +1,8 @@
 <template>
 	<div class="home">
-		<div :class="'theme bg-'+random" >
-			<p><i :class="'fa fa-'+list.icon"></i> {{list.label}}</p>
+		<div :class="'theme bg-' + random" >
+			<h2><i :class="'fa fa-' + list.icon"></i> {{list.label}}</h2>
+			<h3>Jiaodong Central Hospital</h3>
 		</div>
 		<div class="container">
 			<cell v-for="(item, index) in list.link" :key="index"
@@ -20,7 +21,7 @@
 	export default {
 		data () {
 			return {
-				random: 1
+				random: 3
 			}
 		},
 		computed: {
@@ -44,9 +45,3 @@
     }
   }
 </script>
-<style>
-	.theme p {
-		font-size: 2em;
-		text-shadow: 1px 1px 20px rgba(255, 255, 255, .7);
-	}
-</style>

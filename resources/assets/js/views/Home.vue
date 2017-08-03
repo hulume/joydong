@@ -14,12 +14,10 @@
 				<widget :title="statistics.aged+' 人'" digest="老年人口数量" icon="blind" color="danger"></widget>
 			</el-col>
 		</el-row>
-		<wx-card></wx-card>
 	</div>
 </template>
 <script>
 	import { getStastics } from '../api/api'
-	import WxCard from '../components/WxCard'
 	import Widget from '../components/Widget'
 	export default {
 		data () {
@@ -45,7 +43,7 @@
 			}
 		},
 		components: {
-			WxCard, Widget
+			Widget
 		}
 	}
 </script>

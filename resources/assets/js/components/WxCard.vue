@@ -1,6 +1,9 @@
 <template>
+	<div class="alert alert-danger" v-if="this.alert!==''">
+		{{alert}}
+	</div>
 	<!-- 信息卡片开始 -->
-	<el-row :gutter="15">
+	<el-row :gutter="15" v-else>
 		<el-col :span="12">
 		<div class="box box-primary">
 			<div class="box-body">
@@ -28,6 +31,7 @@
 	export default {
 		data () {
 			return {
+				alert: '',
 				cumulate: {
 					title: {
 						text: '微信近期关注用户数量'
@@ -127,6 +131,9 @@
 					this.summary.xAxis.data = _.map(summary.data.list, 'ref_date')
 					this.$store.commit('loaded')
 				}))
+			.catch((error) => {
+				this.alert = '无法获取微信公众号数据，可能是由于网址变更、年审续费等认证问题引起，错误代码：' + error.response.status 
+			})
 		},
 		components: {
 			ECharts

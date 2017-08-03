@@ -105,7 +105,6 @@ class ApiController extends Controller {
 		$resource = new Collection($paginator->getCollection(), $callback);
 
 		$resource->setPaginator(new IlluminatePaginatorAdapter($paginator));
-
 		$rootScope = $this->fractal->createData($resource);
 
 		return $this->respondWithArray($rootScope->toArray());

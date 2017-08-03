@@ -22,10 +22,10 @@ export const clearNotification = () => { return axios.get('home/notification/cle
 
 // 内部管理
 export const getUserList = params => { return axios.get('user', { params: params }) }
-// export const showUser = id => { return axios.get('user'), { params: { id: id }}}
 export const deleteUser = params => { return axios.post('user/delete', params) }
 export const createUser = params => { return axios.post('user', params) }
-// export const updateUser = params => { return axios.put('user/update', params) }
+
+export const getResidentList = params => { return axios.get('patient', { params: params }) }
 
 // 微网站
 export const getWeMenu = () => { return axios.get('wesite/menu')}

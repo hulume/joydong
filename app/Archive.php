@@ -5,14 +5,24 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 
 class Archive extends Model {
-	protected $fillable = [
-		'result', 'patient_id', 'name',
+
+	protected $guarded = [
+		'id',
 	];
 
 	protected $casts = [
 		'result' => 'array',
+		'abnormal' => 'array',
 	];
-	public function pop() {
+	public function patient() {
 		return $this->belongsTo(Patient::class);
+	}
+
+	public function scopePeriod($query, $from, $to) {
+		return $query->whereBetween('checkdate', [$from, $to]);
+	}
+
+	public function scopeAbnormal($query) {
+		return $query->whereNotNull('abnormal');
 	}
 }

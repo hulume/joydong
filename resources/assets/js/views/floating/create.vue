@@ -1,5 +1,5 @@
 <template>
 	<div>
-		整合中
+		asdf
 	</div>
 </template>

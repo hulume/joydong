@@ -17,10 +17,6 @@ class Patient extends Authenticatable {
 		return $this->hasMany(Archive::class);
 	}
 
-	// public function setPasswordAttribute($password) {
-	// 	$this->attributes['password'] = bcrypt($password);
-	// }
-
 	public function setAgeAttribute($birthday) {
 		$this->attributes['age'] = Carbon::parse($birthday)->age;
 	}
@@ -32,17 +28,27 @@ class Patient extends Authenticatable {
 
 	// 流动人口  App\Patient::floating()->get();
 	public function scopeFloating($query) {
-		return $query->where('livetype', 0);
+		return $query->where('livetype', false);
 	}
 
 	// 常住人口 App\Patient::resident()->get();
+	// 根据目前需求，数据库里的常驻人口都是老年人，暂时不用使用下面的scope统计
+	// 此处分开只为今后扩展考虑
 	public function scopeResident($query) {
-		return $query->where('livetype', 1);
+		return $query->where('livetype', true);
 	}
 
-	// 65岁以上列入老年人统计
-	public function scopeAged($query) {
-		return $query->where('age', '>', 64);
+	// 按年龄
+	public function scopeAgeBetween($query, $start, $end = null) {
+		if (is_null($end)) {
+			$end = $start;
+		}
+		$now = Carbon::now();
+		$start = $now->subYears($start)->format('Y-m-d');
+		$end = $now->subYears($end)->addYear()->subDay()->format('Y-m-d');
+		return $query->where([
+			['birthday', '>=', $end],
+			['birthday', '<', $start],
+		]);
 	}
-
 }

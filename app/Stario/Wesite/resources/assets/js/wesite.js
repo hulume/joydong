@@ -6,7 +6,6 @@ import 'mint-ui/lib/style.css'
 import './style/app.css'
 import 'font-awesome/css/font-awesome.css'
 import App from './App'
-import { getCookie } from './utils'
 
 window.axios.interceptors.response.use(
   response => response,

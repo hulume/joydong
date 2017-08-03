@@ -135,6 +135,7 @@
 					this.$store.commit('loaded')
 				}))
 				.catch((error) => {
+					this.$store.commit('loaded')
 					let data = error.response.data
 					this.$message.error('读取失败，错误代码:' + error.response.status)
 				})
@@ -164,16 +165,12 @@
 
 						axios.put('user/' + this.$route.params.id, { profile: profile, baseInfo:baseInfo, unit: unit, permissions: permissions })
 						.then((response) => {
-
 							this.$store.commit('loaded')
 							this.$message.success('修改成功')
 							this.$router.push({ path: '/home/users' })
-							
 						})
 						.catch((error) => {
-
 							this.$store.commit('loaded')
-
 							this.$alert(error.response.data, '操作错误')
 						})
 					} else {

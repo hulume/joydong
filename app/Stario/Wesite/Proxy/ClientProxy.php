@@ -1,6 +1,7 @@
 <?php
 namespace Star\Wesite\Proxy;
 
+use Illuminate\Support\Facades\Log;
 use Star\ICenter\Proxy\BaseProxy;
 
 class ClientProxy extends BaseProxy {
@@ -14,9 +15,8 @@ class ClientProxy extends BaseProxy {
 	}
 
 	public function attemptLogin($request) {
-		$request = explode(',', env('CLIENT_CREDENTIALS_ALLOWED_IP'));
 
-		if (in_array(request()->ip(), $request)) {
+		if (request()->ip() === env('CLIENT_CREDENTIALS_ALLOWED_IP'))) {
 			return $this->proxy('client_credentials');
 		}
 		return response()->json('操作非法', 200);

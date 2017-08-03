@@ -1,5 +1,6 @@
 import {API_ROOT} from './config'
 import '../../theme-default/index.css'
+import { MessageBox } from 'element-ui'
 
 window._ = require('lodash')
 window.axios = require('axios')
@@ -17,11 +18,8 @@ window.axios.defaults.headers.post = {
 window.axios.interceptors.response.use(
   response => response,
   (error) => {
-    // if (error.response.status === 401) {
-    //   window.location = '/login'
-    // }
-    // if (error.response.status === 404) {
-    // 	window.location = '/home'
-    // }
+    if (error.response.status === 401) {
+      window.location = '/login'
+    }
     return Promise.reject(error)
   })

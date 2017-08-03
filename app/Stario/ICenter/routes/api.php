@@ -43,7 +43,7 @@ Route::group([
 	Route::post('users/excel', 'UserController@export');
 
 	// User
-	Route::resource('user', 'UserController');
+	Route::resource('user', 'UserController', ['except' => ['create', 'show']]);
 	// Unit
 	Route::resource('unit', 'UnitController', ['except' => ['create', 'show']]);
 	// Permission
@@ -51,18 +51,4 @@ Route::group([
 	// 流动人口管理
 	// Route::resource('pop', 'PopController', ['except' => ['create', 'show']]);
 	// Route::post('lis', 'LisController@all');
-});
-
-/**
- * 患者部分
- */
-Route::group([
-	'middleware' => ['auth:api'],
-	'namespace' => 'Api',
-], function () {
-	Route::group(['prefix' => 'patient'], function () {
-		Route::get('/', function () {
-			return 'asdf';
-		});
-	});
 });

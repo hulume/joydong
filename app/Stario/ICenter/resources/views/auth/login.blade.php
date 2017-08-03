@@ -23,6 +23,6 @@
       <el-col :span="12" style="text-align: right;"><a href="reset">找回密码？</a></el-col>
     </el-row>
 
-<button  class="btn btn-primary btn-block" style="margin-bottom: 20px; font-size: 16px"><i class="fa fa-sign-in"></i> 登录系统</button>
+<button  class="btn btn-primary btn-block" style="margin-bottom: 10px; font-size: 16px; line-height: 36px"><i class="fa fa-sign-in"></i> 登录系统</button>
 </form>
 @endsection
